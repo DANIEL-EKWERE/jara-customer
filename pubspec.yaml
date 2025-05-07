@@ -1,0 +1,66 @@
+name: jara_market
+description: A new Flutter project
+version: 1.0.0+1
+
+environment:
+  sdk: ">=3.4.4 <4.0.0"
+
+
+
+dependencies:
+  flutter:
+    sdk: flutter
+  # Add this line
+  shared_preferences: ^2.2.0
+  font_awesome_flutter: ^10.5.0
+  cupertino_icons: ^1.0.2
+  http: ^0.13.3
+  url_launcher: ^6.1.10
+  flutter_sound: ^9.1.8
+  permission_handler: ^12.0.0+1
+  get: ^4.7.2
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_launcher_icons: "^0.14.3"
+
+flutter_launcher_icons:
+  android: "launcher_icon"
+  ios: true
+  image_path: "assets/icons/logo.png"
+
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/images/grilled-turkey.png
+    - assets/images/mama-gold-rice.png
+    - assets/images/grilled-chicken.png
+    - assets/images/live-chicken.png
+    - assets/images/live-turkey.png
+    - assets/images/kings-oil.png
+    - assets/images/jara_market_logo.png
+    - assets/images/clock_illustration.png
+    - assets/images/shopping_cart_illustration.png
+    - assets/images/megaphone_illustration.png
+    - assets/images/meal_prep.png
+    - assets/images/okro.png
+    - assets/images/ewedu.png
+    - assets/images/moringa.png
+    - assets/images/afang.png
+    - assets/images/egusi.png
+    - assets/images/white_soup.png
+    - assets/images/GPay.png
+    - assets/images/Mastercard.png
+    - assets/images/Paypal.png
+    - assets/images/ApplePay.png
+    - assets/images/Visa.png
+    - assets/images/Amex.png
+  fonts:
+    - family: Poppins
+      fonts:
+        - asset: assets/fonts/Poppins-Regular.ttf
+        - asset: assets/fonts/Poppins-Medium.ttf
+          weight: 500
+        - asset: assets/fonts/Poppins-Bold.ttf
+          weight: 700
