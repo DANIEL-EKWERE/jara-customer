@@ -21,7 +21,7 @@ class NewPasswordScreen extends StatefulWidget {
 class _NewPasswordScreenState extends State<NewPasswordScreen> {
   final TextEditingController _newPasswordController = TextEditingController();
   final TextEditingController _confirmPasswordController = TextEditingController();
-  final ApiService _apiService = ApiService(); // Add ApiService
+  ApiService _apiService = ApiService(Duration(seconds: 60 * 5)); // Add ApiService
   bool _isPasswordValid = false;
   bool _isLoading = false; // Add loading state
 

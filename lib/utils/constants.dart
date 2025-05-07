@@ -15,12 +15,14 @@ class AppTextStyles {
     fontSize: 20,
     fontWeight: FontWeight.bold,
     color: AppColors.textPrimary,
+    fontFamily: 'Mont'
   );
 
   static const TextStyle subheading = TextStyle(
     fontSize: 18,
     fontWeight: FontWeight.bold,
     color: AppColors.textPrimary,
+    fontFamily: 'Mont'
   );
 
   static const TextStyle body = TextStyle(
@@ -38,6 +40,7 @@ class AppTextStyles {
     fontSize: 18,
     fontWeight: FontWeight.bold,
     color: AppColors.error,
+    fontFamily: 'Mont'
   );
 }
 

@@ -28,27 +28,93 @@ class _SignupScreenState extends State<SignupScreen> {
   bool _isButtonEnabled = false;
   bool _isLoading = false;
 
-  final TextEditingController _firstNameController = TextEditingController();
-  final TextEditingController _lastNameController = TextEditingController();
-  final TextEditingController _emailController = TextEditingController();
-  final TextEditingController _passwordController = TextEditingController();
-  final TextEditingController _referralCodeController = TextEditingController(); // Add referral code controller
-  final ApiService _apiService = ApiService();
+  // final TextEditingController _firstNameController = TextEditingController();
+  // final TextEditingController _lastNameController = TextEditingController();
+  // final TextEditingController _emailController = TextEditingController();
+  // final TextEditingController _passwordController = TextEditingController();
+  // final TextEditingController _referralCodeController = TextEditingController(); // Add referral code controller
+  // final ApiService _apiService = ApiService();
+  String? _errorFirstName;
+  String? _errorLastName;
+  String? _errorEmail;
+  String? _errorPassword;
+
+void _validateEmail(String value) {
+    setState(() {
+      if (value.isEmpty) {
+        _errorEmail = 'Email is required';
+      } else if (!value.contains('@')) {
+        _errorEmail = 'Enter a valid email';
+      } else {
+        _errorEmail = null;
+      }
+    });
+  }
+  void _validatePassword(String value) {
+    setState(() {
+      if (value.isEmpty) {
+        _errorPassword = 'Password is required';
+      } else if (value.length < 8) {
+        _errorPassword = 'Password must be at least 8 characters';
+      } else {
+        _errorPassword = null;
+      }
+    });
+  }
+  void _validateFirstName(String value) {
+    setState(() {
+      if (value.trim().isEmpty || value == null) {
+        _errorFirstName = 'First name is required';
+      } else if (value.length < 2) {
+        _errorFirstName = 'First name must be at least 2 characters';
+      } else if (!RegExp(r'^[a-zA-Z]+$').hasMatch(value)) {
+        _errorFirstName = 'First name can only contain letters';
+      }
+      else if (value.contains(RegExp(r'\d'))) {
+        _errorFirstName = 'First name cannot contain numbers';
+      } else if (value.contains(RegExp(r'[@!#\$%^&*(),.?":{}|<>]'))) {
+        _errorFirstName = 'First name cannot contain special characters';
+      } 
+      else {
+        _errorFirstName = null;
+      }
+    });
+  }
+  void _validateLastName(String value) {
+    setState(() {
+      if (value.trim().isEmpty || value == null) {
+        _errorLastName = 'Last name is required';
+      } else if (value.length < 2) {
+        _errorLastName = 'Last name must be at least 2 characters';
+      } else if (!RegExp(r'^[a-zA-Z]+$').hasMatch(value)) {
+        _errorLastName = 'Last name can only contain letters';
+      }
+      else if (value.contains(RegExp(r'\d'))) {
+        _errorLastName = 'Last name cannot contain numbers';
+      } else if (value.contains(RegExp(r'[@!#\$%^&*(),.?":{}|<>]'))) {
+        _errorLastName = 'Last name cannot contain special characters';
+      } 
+      else {
+        _errorLastName = null;
+      }
+    });
+  }
+
 
   @override
   void initState() {
     super.initState();
-    _firstNameController.addListener(_validateForm);
-    _lastNameController.addListener(_validateForm);
-    _emailController.addListener(_validateForm);
-    _passwordController.addListener(_validateForm);
+    controller.firstNameController.addListener(_validateForm);
+    controller.lastNameController.addListener(_validateForm);
+    controller.emailController.addListener(_validateForm);
+    controller.passwordController.addListener(_validateForm);
   }
 
   void _validateForm() {
-    final firstName = _firstNameController.text;
-    final lastName = _lastNameController.text;
-    final email = _emailController.text;
-    final password = _passwordController.text;
+    final firstName = controller.firstNameController.text;
+    final lastName = controller.lastNameController.text;
+    final email = controller.emailController.text;
+    final password = controller.passwordController.text;
     final emailValid = RegExp(r'^[^@]+@[^@]+\.[^@]+').hasMatch(email);
     final passwordValid = password.length >= 8;
 
@@ -61,60 +127,60 @@ class _SignupScreenState extends State<SignupScreen> {
     });
   }
 
-  Future<void> _registerCustomer() async {
-    setState(() {
-      _isLoading = true;
-    });
+  // Future<void> _registerCustomer() async {
+  //   setState(() {
+  //     _isLoading = true;
+  //   });
 
-    try {
-      final customerData = {
-        'firstname': _firstNameController.text,
-        'lastname': _lastNameController.text,
-        'email': _emailController.text,
-        'password': _passwordController.text,
-        'referral_code': _referralCodeController.text, // Add referral code to customer data
-      };
+  //   try {
+  //     final customerData = {
+  //       'firstname': _firstNameController.text,
+  //       'lastname': _lastNameController.text,
+  //       'email': _emailController.text,
+  //       'password': _passwordController.text,
+  //       'referral_code': _referralCodeController.text, // Add referral code to customer data
+  //     };
 
-      final response = await _apiService.registerCustomer(customerData);
+  //     final response = await controller.registerCustomer();
 
-      setState(() {
-        _isLoading = false;
-      });
+  //     setState(() {
+  //       _isLoading = false;
+  //     });
 
-      if (response.statusCode == 200 || response.statusCode == 201) {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => EmailVerificationScreen(email: _emailController.text),
-          ),
-        );
-      } else {
-      var  responseBody = jsonDecode(response.body);
-         var message = responseBody['message'] ?? 'something went wrong';
-        ScaffoldMessenger.of(context).showSnackBar(
+  //     if (response.statusCode == 200 || response.statusCode == 201) {
+  //       Navigator.push(
+  //         context,
+  //         MaterialPageRoute(
+  //           builder: (context) => EmailVerificationScreen(email: _emailController.text),
+  //         ),
+  //       );
+  //     } else {
+  //     var  responseBody = jsonDecode(response.body);
+  //        var message = responseBody['message'] ?? 'something went wrong';
+  //       ScaffoldMessenger.of(context).showSnackBar(
          
-          SnackBar(content: Text('Registration failed: ${message}')),
-        );
-      }
-    } catch (e) {
-      setState(() {
-        _isLoading = false;
-      });
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Error: $e')),
-      );
-    }
-  }
+  //         SnackBar(content: Text('Registration failed: ${message}')),
+  //       );
+  //     }
+  //   } catch (e) {
+  //     setState(() {
+  //       _isLoading = false;
+  //     });
+  //     ScaffoldMessenger.of(context).showSnackBar(
+  //       SnackBar(content: Text('Error: $e')),
+  //     );
+  //   }
+  // }
 
-  @override
-  void dispose() {
-    _firstNameController.dispose();
-    _lastNameController.dispose();
-    _emailController.dispose();
-    _passwordController.dispose();
-    _referralCodeController.dispose(); // Dispose referral code controller
-    super.dispose();
-  }
+  // @override
+  // void dispose() {
+  //   _firstNameController.dispose();
+  //   _lastNameController.dispose();
+  //   _emailController.dispose();
+  //   _passwordController.dispose();
+  //   _referralCodeController.dispose(); // Dispose referral code controller
+  //   super.dispose();
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -143,23 +209,39 @@ class _SignupScreenState extends State<SignupScreen> {
               ),
               const SizedBox(height: 40),
               CustomTextField(
-                controller: _firstNameController,
+                onChanged: (p0) {
+                  _validateFirstName(p0);
+                },
+                controller: controller.firstNameController,
+                errorText: _errorFirstName,
                 hint: "First Name",
               ),
               const SizedBox(height: 16),
               CustomTextField(
-                controller: _lastNameController,
+                onChanged: (p0) {
+                  _validateLastName(p0);
+                },
+                errorText: _errorLastName,
+                controller: controller.lastNameController,
                 hint: "Last Name",
               ),
               const SizedBox(height: 16),
               CustomTextField(
-                controller: _emailController,
+                onChanged: (p0) {
+                  _validateEmail(p0);
+                },
+                errorText: _errorEmail,
+                controller: controller.emailController,
                 hint: "Email",
                 keyboardType: TextInputType.emailAddress,
               ),
               const SizedBox(height: 16),
               CustomTextField(
-                controller: _passwordController,
+                onChanged: (p0) {
+                  _validatePassword(p0);
+                },
+                errorText: _errorPassword,
+                controller: controller.passwordController,
                 hint: "Password",
                 isPassword: true,
                 obscureText: !_isPasswordVisible,
@@ -176,7 +258,7 @@ class _SignupScreenState extends State<SignupScreen> {
               ),
               const SizedBox(height: 16),
               CustomTextField(
-                controller: _referralCodeController,
+                controller: controller.referralCodeController,
                 hint: "Referral Code (optional)", // Add referral code input field
               ),
               const SizedBox(height: 16),
@@ -202,10 +284,11 @@ class _SignupScreenState extends State<SignupScreen> {
                             style: TextStyle(color: Theme.of(context).primaryColor),
                             recognizer: TapGestureRecognizer()
                               ..onTap = () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(builder: (context) => const TermsOfServiceScreen()),
-                                );
+                                // Navigator.push(
+                                //   context,
+                                //   MaterialPageRoute(builder: (context) => const TermsOfServiceScreen()),
+                                // );
+                                Get.toNamed('/terms_of_service_screen');
                               },
                           ),
                           const TextSpan(text: " & "),
@@ -214,10 +297,11 @@ class _SignupScreenState extends State<SignupScreen> {
                             style: TextStyle(color: Theme.of(context).primaryColor),
                             recognizer: TapGestureRecognizer()
                               ..onTap = () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(builder: (context) => const PrivacyPolicyScreen()),
-                                );
+                                // Navigator.push(
+                                //   context,
+                                //   MaterialPageRoute(builder: (context) => const PrivacyPolicyScreen()),
+                                // );
+                                Get.toNamed('/privacy_policy_screen');
                               },
                           ),
                         ],
@@ -229,7 +313,7 @@ class _SignupScreenState extends State<SignupScreen> {
               const SizedBox(height: 20),
               RegisterButton(
                 text: _isLoading ? "Processing..." : "Sign Up",
-                onPressed: (_isButtonEnabled && !_isLoading) ? _registerCustomer : null,
+                onPressed: (_isButtonEnabled && !_isLoading) ? controller.registerCustomer : null,
                 color: _isButtonEnabled ? Theme.of(context).primaryColor : Colors.grey,
               ),
               const SizedBox(height: 20),

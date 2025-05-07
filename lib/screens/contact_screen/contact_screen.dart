@@ -21,7 +21,7 @@ class ContactScreen extends StatefulWidget {
 class _ContactScreenState extends State<ContactScreen> {
   final _formKey = GlobalKey<FormState>();
   final ContactFormData _formData = ContactFormData();
-  final ApiService _apiService = ApiService();
+  ApiService _apiService = ApiService(Duration(seconds: 60 * 5));
   bool _isSubmitting = false;
   String? _errorMessage;
   bool _formSubmitted = false;

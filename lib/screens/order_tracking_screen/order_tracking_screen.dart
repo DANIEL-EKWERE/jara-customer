@@ -16,7 +16,7 @@ class OrderTrackingScreen extends StatefulWidget {
 }
 
 class _OrderTrackingScreenState extends State<OrderTrackingScreen> {
-  final ApiService _apiService = ApiService();
+  ApiService _apiService = ApiService(Duration(seconds: 60 * 5));
   Map<String, dynamic>? _trackingInfo;
   bool _isLoading = true;
   String? _errorMessage;

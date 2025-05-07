@@ -19,7 +19,7 @@ class FavoritesScreen extends StatefulWidget {
 }
 
 class _FavoritesScreenState extends State<FavoritesScreen> {
-  final ApiService _apiService = ApiService();
+  ApiService _apiService = ApiService(Duration(seconds: 60 * 5));
   final FavoritesService _favoritesService = FavoritesService();
   final CartService _cartService = CartService();
   List<FoodItem> _favouriteItems = [];

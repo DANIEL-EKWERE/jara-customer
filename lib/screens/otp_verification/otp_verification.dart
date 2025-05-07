@@ -21,7 +21,7 @@ class OTPVerificationScreen extends StatefulWidget {
 
 class _OTPVerificationScreenState extends State<OTPVerificationScreen> {
   final TextEditingController _otpController = TextEditingController();
-  final ApiService _apiService = ApiService();
+  ApiService _apiService = ApiService(Duration(seconds: 60 * 5));
   bool _isVerifying = false;
   bool _showCountdown = false;
   bool _isLoading = false;

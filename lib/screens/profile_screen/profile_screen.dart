@@ -19,7 +19,7 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
-  final ApiService _apiService = ApiService();
+  ApiService _apiService = ApiService(Duration(seconds: 60 * 5));
   bool _isLoading = true;
   Map<String, dynamic> _userProfile = {};
   late String _userEmail; // This should be retrieved from user session/storage

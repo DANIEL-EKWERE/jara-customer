@@ -4,6 +4,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:jara_market/services/api_service.dart';
 
 class CartService {
+  ApiService basepath = ApiService(Duration(seconds: 60 * 5));
   static const String cartsEndpoint = '/carts';
 
   Future<String?> _getToken() async {
@@ -16,13 +17,13 @@ class CartService {
     if (token == null) throw Exception('No authentication token found');
 
     final response = await http.get(
-      Uri.parse('${ApiService.baseUrl}$cartsEndpoint'),
+      Uri.parse('${basepath.baseUrl}$cartsEndpoint'),
       headers: {
         'Authorization': 'Bearer $token',
       },
     );
     print('--------------------------------');
-    print('${ApiService.baseUrl}$cartsEndpoint');
+    print('${basepath.baseUrl}$cartsEndpoint');
     print(response.statusCode);
     print(response.body);
     print(response.headers);
@@ -50,7 +51,7 @@ class CartService {
     if (token == null) throw Exception('No authentication token found');
 
     final response = await http.post(
-      Uri.parse('${ApiService.baseUrl}$cartsEndpoint'),
+      Uri.parse('${basepath.baseUrl}$cartsEndpoint'),
       headers: {
         'Authorization': 'Bearer $token',
         'Content-Type': 'application/json',
@@ -61,7 +62,7 @@ class CartService {
       }),
     );
     print('--------------------------------');
-    print('${ApiService.baseUrl}$cartsEndpoint');
+    print('${basepath.baseUrl}$cartsEndpoint');
     print(response.statusCode);
     print(response.body);
     print(response.headers);
@@ -83,7 +84,7 @@ class CartService {
     if (token == null) throw Exception('No authentication token found');
 
     final response = await http.put(
-      Uri.parse('${ApiService.baseUrl}$cartsEndpoint/$cartId'),
+      Uri.parse('${basepath.baseUrl}$cartsEndpoint/$cartId'),
       headers: {
         'Authorization': 'Bearer $token',
         'Content-Type': 'application/json',
@@ -94,7 +95,7 @@ class CartService {
       }),
     );
     print('--------------------------------');
-    print('${ApiService.baseUrl}$cartsEndpoint');
+    print('${basepath.baseUrl}$cartsEndpoint');
     print(response.statusCode);
     print(response.body);
     print(response.headers);
@@ -113,7 +114,7 @@ class CartService {
     if (token == null) throw Exception('No authentication token found');
 
     final response = await http.delete(
-      Uri.parse('${ApiService.baseUrl}$cartsEndpoint/$cartId'),
+      Uri.parse('${basepath.baseUrl}$cartsEndpoint/$cartId'),
       headers: {
         'Authorization': 'Bearer $token',
         'Content-Type': 'application/json',
@@ -123,7 +124,7 @@ class CartService {
       }),
     );
     print('--------------------------------');
-    print('${ApiService.baseUrl}$cartsEndpoint');
+    print('${basepath.baseUrl}$cartsEndpoint');
     print(response.statusCode);
     print(response.body);
     print(response.headers);

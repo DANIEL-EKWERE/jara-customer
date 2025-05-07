@@ -38,7 +38,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
   String _selectedPaymentMethod = '';
   final TextEditingController _messageController = TextEditingController();
   final FlutterSoundRecorder _recorder = FlutterSoundRecorder();
-  final ApiService _apiService = ApiService();
+  ApiService _apiService = ApiService(Duration(seconds: 60 * 5));
   bool _isRecording = false;
   bool _isPaused = false;
   String? _recordingPath;

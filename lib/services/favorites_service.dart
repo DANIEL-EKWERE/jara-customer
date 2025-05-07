@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:jara_market/services/api_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
+ApiService _apiService = ApiService(Duration(seconds: 60 * 5));
 class FavoritesService {
   static const String favoritesEndpoint = '/favorites';
 
@@ -16,7 +16,7 @@ class FavoritesService {
     if (token == null) throw Exception('No authentication token found');
 
     final response = await http.get(
-      Uri.parse('${ApiService.baseUrl}$favoritesEndpoint'),
+      Uri.parse('${_apiService.baseUrl}$favoritesEndpoint'),
       headers: {
         'Authorization': 'Bearer $token',
       },
@@ -35,7 +35,7 @@ class FavoritesService {
     if (token == null) throw Exception('No authentication token found');
 
     final response = await http.post(
-      Uri.parse('${ApiService.baseUrl}$favoritesEndpoint'),
+      Uri.parse('${_apiService.baseUrl}$favoritesEndpoint'),
       headers: {
         'Authorization': 'Bearer $token',
         'Content-Type': 'application/json',
@@ -53,7 +53,7 @@ class FavoritesService {
     if (token == null) throw Exception('No authentication token found');
 
     final response = await http.delete(
-      Uri.parse('${ApiService.baseUrl}$favoritesEndpoint/$favoriteId'),
+      Uri.parse('${_apiService.baseUrl}$favoritesEndpoint/$favoriteId'),
       headers: {
         'Authorization': 'Bearer $token',
       },

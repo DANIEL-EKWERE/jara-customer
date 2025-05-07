@@ -19,7 +19,7 @@ class AddMoneyScreen extends StatefulWidget {
 class _AddMoneyScreenState extends State<AddMoneyScreen> {
   final TextEditingController _amountController = TextEditingController(text: '0');
   final FocusNode _amountFocusNode = FocusNode();
-  final ApiService _apiService = ApiService();
+   ApiService _apiService = ApiService(Duration(seconds: 60 * 5));
   bool _isButtonActive = false;
   final double _minimumAmount = 1000;
   bool _isLoading = false;

@@ -22,7 +22,7 @@ class PaymentMethodScreen extends StatefulWidget {
 }
 
 class _PaymentMethodScreenState extends State<PaymentMethodScreen> {
-  final ApiService _apiService = ApiService();
+  ApiService _apiService = ApiService(Duration(seconds: 60 * 5));
   String _selectedMethod = 'mastercard';
   bool _isProcessing = false;
   String? _errorMessage;

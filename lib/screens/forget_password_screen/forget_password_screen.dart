@@ -17,7 +17,7 @@ class ForgetPasswordScreen extends StatefulWidget {
 
 class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
   final TextEditingController _emailController = TextEditingController();
-  final ApiService _apiService = ApiService(); // Add ApiService
+  ApiService _apiService = ApiService(Duration(seconds: 60 * 5)); // Add ApiService
   bool _isEmailValid = false;
   bool _isLoading = false; // Add loading state
 

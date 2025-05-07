@@ -2,17 +2,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:jara_market/config/local_storage.dart';
 import 'package:jara_market/config/routes.dart';
-import 'screens/splash/splash_screen.dart';
+// import 'screens/splash/splash_screen.dart';
 
-void main() {
+void main() async{
   SystemChrome.setSystemUIOverlayStyle(
     const SystemUiOverlayStyle(
       statusBarColor: Colors.transparent,
       statusBarIconBrightness: Brightness.dark,
     ),
   );
-  runApp(const MyApp());
+  var token = await dataBase.getToken();
+ String initialRoute = token.isNotEmpty ? '/main_screen' : '/splash_screen' ;
+  runApp(MyApp(initialRoute: initialRoute));
 
     SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
     //   .then((value) {
@@ -21,20 +24,22 @@ void main() {
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
-
+  
+const MyApp({Key? key, required this.initialRoute}) : super(key: key);
+final String initialRoute;
   @override
   Widget build(BuildContext context) {
+    
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Auth App',
       theme: ThemeData(
         primaryColor: const Color(0xFFFFAA00),
         scaffoldBackgroundColor: Colors.white,
-        fontFamily: 'Poppins',
+        fontFamily: 'Mont',
       ),
       // home: const SplashScreen(),
-      initialRoute: '/splash_screen',
+      initialRoute: initialRoute,
       getPages: AppRoutes.pages,
     );
   }

@@ -3,27 +3,28 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jara_market/screens/email_verification/controller/email_verification_controller.dart';
+import 'package:jara_market/screens/login%20email_verification/controller/email_verification_controller.dart';
 import 'package:jara_market/widgets/customized_app_bar.dart';
 import '../../widgets/otp_input.dart';
 import '../../widgets/countdown_timer.dart';
 import '../login_screen/login_screen.dart';
 import 'package:jara_market/services/api_service.dart'; // Import ApiService
 
-EmailVerificationController controller = Get.put(EmailVerificationController());
+LoginEmailVerificationController controller = Get.put(LoginEmailVerificationController());
 
-class EmailVerificationScreen extends StatefulWidget {
+class LoginEmailVerification extends StatefulWidget {
   // final String email;
 
-  const EmailVerificationScreen({
+  const LoginEmailVerification({
     Key? key,
   }) : super(key: key);
 
   @override
-  _EmailVerificationScreenState createState() =>
-      _EmailVerificationScreenState();
+  _LoginEmailVerificationState createState() =>
+      _LoginEmailVerificationState();
 }
 
-class _EmailVerificationScreenState extends State<EmailVerificationScreen> {
+class _LoginEmailVerificationState extends State<LoginEmailVerification> {
   Map<String, String> resendData = {};
   Map<String, String> otpData = {};
 

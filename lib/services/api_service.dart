@@ -1,14 +1,40 @@
 import 'dart:convert';
 import 'dart:async';
+import 'dart:math';
+import 'package:get/get_connect/connect.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/foundation.dart'; // Import foundation for kDebugMode
 import 'package:shared_preferences/shared_preferences.dart';
 
-class ApiService {
-  static String baseUrl = 'https://admin.jaramarket.com.ng/api';
+const API_TIMEOUT_INT_SECONDS = 60 * 5;
+const API_TIMEOUT_DURATION = const Duration(seconds: API_TIMEOUT_INT_SECONDS);
+
+
+class ApiService extends GetConnect {
+    Duration timeout = API_TIMEOUT_DURATION;
+
+  ApiService(this.timeout) : super(timeout: timeout);
+
+   var baseUrl = 'https://admin.jaramarket.com.ng/api';
   static const int maxRetries = 3;
   static const Duration retryDelay = Duration(seconds: 2);
 
+Future<String?> fn_getCurrentBearerToken() async {
+    return await 'dataBase.getToken()';
+  }
+
+  fn_generateCacheBuster([int length = 30]) {
+    // Define the set of characters to use for the string
+    const String chars =
+        'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+
+    // Create an instance of Random
+    final Random randomizer = Random();
+
+    // Generate the string by randomly selecting characters
+    return String.fromCharCodes(Iterable.generate(
+        length, (_) => chars.codeUnitAt(randomizer.nextInt(chars.length))));
+  }
   // Helper function for logging
   void _logRequest(String method, Uri url, {dynamic body}) {
     if (kDebugMode) {
@@ -102,6 +128,7 @@ class ApiService {
       url,
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
+        'Accept': 'application/json',
       },
       body: jsonEncode(otpData),
     );
@@ -133,6 +160,7 @@ class ApiService {
       url,
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
+        'Accept': 'application/json',
       },
       body: jsonEncode(otpData),
     );
@@ -732,3 +760,4 @@ class ApiService {
     return response;
   }
 }
+ApiService apiService = ApiService(API_TIMEOUT_DURATION);

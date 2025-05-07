@@ -26,29 +26,28 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   bool _keepLoggedIn = false;
   bool _isPasswordVisible = false;
-  bool _isButtonEnabled = false;
-  bool _isLoading = false;
+  
+  
 
-  final TextEditingController _emailController = TextEditingController();
-  final TextEditingController _passwordController = TextEditingController();
-  final ApiService _apiService = ApiService();
+
+  ApiService _apiService = ApiService(Duration(seconds: 60 * 5));
   final _formKey = GlobalKey<FormState>();
 
   @override
   void initState() {
     super.initState();
-    _emailController.addListener(_validateForm);
-    _passwordController.addListener(_validateForm);
+    controller.emailController.addListener(_validateForm);
+    controller.passwordController.addListener(_validateForm);
   }
 
   void _validateForm() {
-    final email = _emailController.text;
-    final password = _passwordController.text;
+    final email = controller.emailController.text;
+    final password = controller.passwordController.text;
     final emailValid = RegExp(r'^[^@]+@[^@]+\.[^@]+').hasMatch(email);
     final passwordValid = password.length >= 8;
 
     setState(() {
-      _isButtonEnabled = emailValid && passwordValid;
+      controller.isButtonEnabled.value = emailValid && passwordValid;
     });
   }
 
@@ -74,67 +73,67 @@ class _LoginScreenState extends State<LoginScreen> {
     }
   }
 
-  Future<void> _login() async {
-    // if (!_formKey.currentState!.validate()) {
-    //   return;
-    // }
+  // Future<void> _login() async {
+  //   // if (!_formKey.currentState!.validate()) {
+  //   //   return;
+  //   // }
 
-    setState(() {
-      _isLoading = true;
-    });
+  //   setState(() {
+  //     _isLoading = true;
+  //   });
 
-    try {
-      final response = await _apiService.login({
-        'email': _emailController.text,
-        'password': _passwordController.text,
-      });
+  //   try {
+  //     final response = await _apiService.login({
+  //       'email': _emailController.text,
+  //       'password': _passwordController.text,
+  //     });
 
-      setState(() {
-        _isLoading = false;
-      });
+  //     setState(() {
+  //       _isLoading = false;
+  //     });
 
-      if (response.statusCode == 200 || response.statusCode == 201) {
-        final responseData = jsonDecode(response.body);
+  //     if (response.statusCode == 200 || response.statusCode == 201) {
+  //       final responseData = jsonDecode(response.body);
 
-        // Save user data and token
-        await _saveUserData(responseData);
+  //       // Save user data and token
+  //       await _saveUserData(responseData);
 
-        // Navigate to home screen
-        if (mounted) {
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(builder: (context) => const MainScreen()),
-          );
-        }
-      } else {
-        if (mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text('Login failed: ${response.body}'),
-              backgroundColor: Colors.red,
-            ),
-          );
-        }
-      }
-    } catch (e) {
-      setState(() {
-        _isLoading = false;
-      });
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Error during login: $e'),
-            backgroundColor: Colors.red,
-          ),
-        );
-      }
-    }
-  }
+  //       // Navigate to home screen
+  //       if (mounted) {
+  //         Navigator.pushReplacement(
+  //           context,
+  //           MaterialPageRoute(builder: (context) => const MainScreen()),
+  //         );
+  //       }
+  //     } else {
+  //       if (mounted) {
+  //         ScaffoldMessenger.of(context).showSnackBar(
+  //           SnackBar(
+  //             content: Text('Login failed: ${response.body}'),
+  //             backgroundColor: Colors.red,
+  //           ),
+  //         );
+  //       }
+  //     }
+  //   } catch (e) {
+  //     setState(() {
+  //       _isLoading = false;
+  //     });
+  //     if (mounted) {
+  //       ScaffoldMessenger.of(context).showSnackBar(
+  //         SnackBar(
+  //           content: Text('Error during login: $e'),
+  //           backgroundColor: Colors.red,
+  //         ),
+  //       );
+  //     }
+  //   }
+  // }
 
   @override
   void dispose() {
-    _emailController.dispose();
-    _passwordController.dispose();
+    controller.emailController.dispose();
+    controller.passwordController.dispose();
     super.dispose();
   }
 
@@ -165,13 +164,13 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
               const SizedBox(height: 40),
               CustomTextField(
-                controller: _emailController,
+                controller: controller.emailController,
                 hint: "Email",
                 keyboardType: TextInputType.emailAddress,
               ),
               const SizedBox(height: 16),
               CustomTextField(
-                controller: _passwordController,
+                controller: controller.passwordController,
                 hint: "Password",
                 isPassword: true,
                 obscureText: !_isPasswordVisible,
@@ -203,11 +202,13 @@ class _LoginScreenState extends State<LoginScreen> {
                 ],
               ),
               const SizedBox(height: 20),
-              LoginButton(
-                text: _isLoading ? "Processing..." : "Log In",
-                onPressed: (_isButtonEnabled && !_isLoading) ? _login : null,
-                color: _isButtonEnabled ? Colors.orange : Colors.grey,
-              ),
+              Obx(() {
+                return LoginButton(
+                text: controller.isLoading ? "Processing..." : "Log In",
+                onPressed: (controller.isButtonEnabled.value && !controller.isLoading) ? controller.login : null,
+                color: controller.isButtonEnabled.value ? Colors.orange : Colors.grey,
+              );
+              },),
               const SizedBox(height: 20),
               TextButton(
                 onPressed: () {

@@ -6,7 +6,7 @@ import 'package:get/get.dart';
 import 'package:jara_market/services/api_service.dart';
 
 ApiService _apiService = ApiService(Duration(seconds: 60 * 5));
-class EmailVerificationController extends GetxController {
+class LoginEmailVerificationController extends GetxController {
 RxBool _showCountdown = false.obs;
 RxBool isLoading = false.obs;
 
@@ -79,7 +79,7 @@ Future<void> resendOtp(Map<String, String> resendData) async {
       //   'otp': _otpController.text,
       // };
 
-      final response = await _apiService.validateUserSignupOtp(otpData);
+      final response = await _apiService.validateUserLoginOtp(otpData);
 
       
         isLoading.value = false;
@@ -90,7 +90,7 @@ Future<void> resendOtp(Map<String, String> resendData) async {
         //   Get.context!,
         //   MaterialPageRoute(builder: (context) => const LoginScreen()),
         // );
-        Get.offAllNamed('/login_screen');
+        Get.offAllNamed('/main_screen');
       } else {
         var  responseBody = jsonDecode(response.body);
         var message = responseBody['message'] ?? 'something went wrong';

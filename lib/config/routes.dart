@@ -12,6 +12,7 @@ import 'package:jara_market/screens/category_screen/category_screen.dart';
 import 'package:jara_market/screens/contact_screen/bindings/contact_bindings.dart';
 import 'package:jara_market/screens/contact_screen/contact_screen.dart';
 import 'package:jara_market/screens/egusi_soup_detail_screen/egusi_soup_detail_screen.dart';
+import 'package:jara_market/screens/email_verification/bindings/email_verification_bindings.dart';
 import 'package:jara_market/screens/email_verification/email_verification.dart';
 import 'package:jara_market/screens/faq_screen/bindings/faq_bindings.dart';
 import 'package:jara_market/screens/faq_screen/faq_screen.dart';
@@ -27,6 +28,8 @@ import 'package:jara_market/screens/home_screen/bindings/home_bindings.dart';
 import 'package:jara_market/screens/home_screen/home_screen.dart';
 import 'package:jara_market/screens/legal/privacy_policy_screen.dart';
 import 'package:jara_market/screens/legal/terms_of_service_screen.dart';
+import 'package:jara_market/screens/login%20email_verification/bindings/email_verification_bindings.dart';
+import 'package:jara_market/screens/login%20email_verification/login_email_verification.dart';
 import 'package:jara_market/screens/login_screen/bindings/login_bindings.dart';
 import 'package:jara_market/screens/login_screen/login_screen.dart';
 import 'package:jara_market/screens/main_screen/bindings/main_bindings.dart';
@@ -71,6 +74,7 @@ class AppRoutes {
   static const contactScreen = '/contact_screen';
   static const foodDetailScreen = '/food_detailScreen';
   static const emailVerificationScreen = '/emailVerificationScreen';
+  static const loginEmailVerification = '/loginEmailVerificationScreen';
   static const faqScreen = '/faq_screen';
   static const favoritesScreen = '/favorites_screen';
   static const forgetPasswordScreen = '/forget_password_screen';
@@ -209,6 +213,19 @@ class AppRoutes {
       page: () => const PrivacyPolicyScreen(),
     ),
     GetPage(
-        name: termsOfServiceScreen, page: () => const TermsOfServiceScreen())
+        name: termsOfServiceScreen, page: () => const TermsOfServiceScreen()),
+
+        GetPage(
+          name: emailVerificationScreen,
+          page: () => const EmailVerificationScreen(),
+          bindings: [EmailVerificationBindings()]
+        ),
+        GetPage(
+          name: loginEmailVerification,
+          page: () => const LoginEmailVerification(),
+          bindings: [LoginEmailVerificationBindings()]
+        ),
+
+        
   ];
 }

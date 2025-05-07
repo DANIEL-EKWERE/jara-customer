@@ -68,8 +68,10 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                           child: Text(
                             _contents[index].title,
                             style: const TextStyle(
-                              fontSize: 24,
-                              fontWeight: FontWeight.bold,
+                              fontSize: 22,
+                              //fontWeight: FontWeight.bold,
+                              fontFamily: 'Mont',
+                              fontWeight: FontWeight.w600,
                               height: 1.4,
                             ),
                             textAlign: TextAlign.center,
@@ -120,7 +122,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                             //   context,
                             //   MaterialPageRoute(builder: (context) => const LoginScreen()),
                             // );
-                            Get.offAllNamed('/login');
+                            Get.offAllNamed('/signup_screen');
                           }
                         },
                         child: Text(

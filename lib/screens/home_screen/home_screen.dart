@@ -2,6 +2,7 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:jara_market/config/local_storage.dart';
 import 'package:jara_market/screens/home_screen/controller/home_controller.dart';
 import 'package:jara_market/services/api_service.dart';
 import '../../widgets/category_item.dart';
@@ -22,12 +23,14 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   //int _currentIndex = 0;
-  final ApiService _apiService = ApiService();
+  ApiService _apiService = ApiService(Duration(seconds: 60 * 5));
   List<dynamic> _foodCategories = [];
   List<dynamic> _ingredients = [];
   List<dynamic> _foods = [];
   bool _isLoading = true;
   late Map<String, dynamic> userData;
+
+  String? name;
 
   // Add search controller and filtered lists
   final TextEditingController _searchController = TextEditingController();
@@ -35,9 +38,18 @@ class _HomeScreenState extends State<HomeScreen> {
   List<dynamic> _filteredIngredients = [];
   List<dynamic> _filteredFoods = [];
 
+
+void getUserName() async{
+var name1 = await dataBase.getFirstName() ?? 'N/A';
+setState(() {
+  name = name1;
+});
+}
+
   @override
   void initState() {
     super.initState();
+    getUserName();
     try {
       _fetchFoodCategories();
       _fetchIngredients();
@@ -240,7 +252,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                     MainAxisAlignment.spaceBetween,
                                 children: [
                                   Text(
-                                    'Hello ${userData['name']},',
+                                    'Hello $name,',
                                     style: const TextStyle(
                                       fontSize: 24,
                                       fontWeight: FontWeight.bold,

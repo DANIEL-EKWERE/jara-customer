@@ -18,7 +18,7 @@ class WalletScreen extends StatefulWidget {
 }
 
 class _WalletScreenState extends State<WalletScreen> {
-  final ApiService _apiService = ApiService();
+  ApiService _apiService = ApiService(Duration(seconds: 60 * 5));
   bool _isBalanceVisible = true;
   bool _isLoading = true;
   String _balance = '0.00';
