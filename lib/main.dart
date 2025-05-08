@@ -6,30 +6,29 @@ import 'package:jara_market/config/local_storage.dart';
 import 'package:jara_market/config/routes.dart';
 // import 'screens/splash/splash_screen.dart';
 
-void main() async{
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
   SystemChrome.setSystemUIOverlayStyle(
     const SystemUiOverlayStyle(
       statusBarColor: Colors.transparent,
       statusBarIconBrightness: Brightness.dark,
     ),
   );
+  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
   var token = await dataBase.getToken();
- String initialRoute = token.isNotEmpty ? '/main_screen' : '/splash_screen' ;
+  String initialRoute = token.isNotEmpty ? '/main_screen' : '/splash_screen';
   runApp(MyApp(initialRoute: initialRoute));
 
-    SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
-    //   .then((value) {
-    // Logger.init(kReleaseMode ? LogMode.live : LogMode.debug);
-    ;
+  //   .then((value) {
+  // Logger.init(kReleaseMode ? LogMode.live : LogMode.debug);
+  ;
 }
 
 class MyApp extends StatelessWidget {
-  
-const MyApp({Key? key, required this.initialRoute}) : super(key: key);
-final String initialRoute;
+  const MyApp({Key? key, required this.initialRoute}) : super(key: key);
+  final String initialRoute;
   @override
   Widget build(BuildContext context) {
-    
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Auth App',
