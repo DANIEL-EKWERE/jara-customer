@@ -24,6 +24,10 @@ class CustomBottomNav extends StatelessWidget {
         ],
       ),
       child: BottomNavigationBar(
+        backgroundColor: Colors.white,
+        elevation: 0,
+        showSelectedLabels: true,
+        showUnselectedLabels: true,
         currentIndex: currentIndex,
         onTap: onTap,
         type: BottomNavigationBarType.fixed,

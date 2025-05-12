@@ -7,6 +7,7 @@ import 'package:jara_market/config/routes.dart';
 // import 'screens/splash/splash_screen.dart';
 
 void main() async{
+  WidgetsFlutterBinding.ensureInitialized();
   SystemChrome.setSystemUIOverlayStyle(
     const SystemUiOverlayStyle(
       statusBarColor: Colors.transparent,
