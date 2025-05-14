@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:jara_market/screens/home_screen/controller/home_controller.dart';
 import 'package:jara_market/screens/main_screen/controller/main_controller.dart';
 import '../../widgets/custom_bottom_nav.dart';
 import '../home_screen/home_screen.dart';
@@ -17,6 +18,19 @@ class MainScreen extends StatefulWidget {
 }
 
 class _MainScreenState extends State<MainScreen> {
+
+HomeController controller = Get.put(HomeController());
+
+  initState() {
+    super.initState();
+    controller.fetchFoodCategories();
+    //controller.fetchFoods();
+  }
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
   int _currentIndex = 0;
 
   Widget _getCurrentScreen() {

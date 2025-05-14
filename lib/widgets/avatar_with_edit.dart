@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 
 class AvatarWithEdit extends StatelessWidget {
   final double avatarRadius;
@@ -30,16 +31,18 @@ class AvatarWithEdit extends StatelessWidget {
           child: GestureDetector(
             onTap: onEditPressed,
             child: Container(
-              padding: const EdgeInsets.all(4),
+              padding: const EdgeInsets.all(8),
               decoration: BoxDecoration(
-                color: Theme.of(context).primaryColor,
+                color:Colors.grey[200],
+                border: Border.all(color: Colors.white, width: 5),
                 shape: BoxShape.circle,
               ),
-              child: Icon(
-                Icons.edit,
-                color: Colors.white,
-                size: editIconSize,
-              ),
+              child: SvgPicture.asset('assets/images/edit.svg',height: 20,width: 20,),
+              // Icon(
+              //   Icons.edit,
+              //   color: Colors.black,
+              //   size: editIconSize,
+              // ),
             ),
           ),
         ),

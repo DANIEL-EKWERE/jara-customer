@@ -35,6 +35,8 @@ dev_dependencies:
 flutter:
   uses-material-design: true
   assets:
+    - assets/
+    - assets/images/
     - assets/images/grilled-turkey.png
     - assets/images/mama-gold-rice.png
     - assets/images/grilled-chicken.png
@@ -58,6 +60,7 @@ flutter:
     - assets/images/ApplePay.png
     - assets/images/Visa.png
     - assets/images/Amex.png
+    - assets/images/telephone.svg
   fonts:
     - family: Poppins
       fonts:
@@ -70,6 +73,24 @@ flutter:
           weight: 200
         - asset: assets/fonts/Mont-HeavyDEMO.otf
           weight: 800
+        # - asset: assets/fonts/Mont-ExtraLightDEMO.otf
+        #   weight: 200
+        # - asset: assets/fonts/Mont-ExtraLightDEMO.otf
+        #   weight: 300
+        # - asset: assets/fonts/Mont-ExtraLightDEMO.otf
+        #   weight: 400
+        # - asset: assets/fonts/Mont-ExtraLightDEMO.otf
+        #   weight: 500
+        # - asset: assets/fonts/Mont-HeavyDEMO.otf
+        #   weight: 600
+        # - asset: assets/fonts/Mont-RegularDEMO.otf
+        #   weight: 400
+        # - asset: assets/fonts/Mont-SemiBoldDEMO.otf
+        #   weight: 600
+        # - asset: assets/fonts/Mont-ThinDEMO.otf
+        #         weight: 100
+
+    
 
 launcher_name:
   default: "Jara Market"
