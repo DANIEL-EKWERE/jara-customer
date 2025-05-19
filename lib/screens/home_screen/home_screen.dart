@@ -228,25 +228,45 @@ class _HomeScreenState extends State<HomeScreen> {
                                               decoration: BoxDecoration(
                                                 borderRadius: BorderRadius.circular(15),
                                                   color: Color(0xFFFBBC05)),
+                                                  child: Padding(
+                                                    padding: const EdgeInsets.symmetric(horizontal: 16,vertical: 25),
+                                                    child: Column(
+                                                    mainAxisAlignment: MainAxisAlignment.start,
+                                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                                    children: [
+                                                      Text('MIN 14%\nOFF',style: TextStyle(fontWeight: FontWeight.w700,fontSize: 24,color: Color(0xff3F1405)),),
+                                                      SizedBox(height: 8,),
+                                                      SizedBox(
+                                                        height: 28,
+                                                        width: 90,
+                                                        child: ElevatedButton(
+                                                          style: ElevatedButton.styleFrom(padding: EdgeInsets.symmetric(horizontal: 8,vertical: 6),backgroundColor: Color(0xffCC6522),foregroundColor: Color(0xffffffff),shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4),),),
+                                                          onPressed: (){
+                                                        
+                                                        }, child: Text('SHOP NOW',style: TextStyle(color: Colors.white,fontSize: 8)),)
+                                                      )
+                                                    ],
+                                                                                                    ),
+                                                  ),
                                             ),
                                             Container(
                                             //  height:154,
                                               child: Padding(
-                                                padding: const EdgeInsets.symmetric(horizontal: 16,vertical: 31),
+                                                padding: const EdgeInsets.symmetric(horizontal: 16,vertical: 25),
                                                 child: Column(
                                                   mainAxisAlignment: MainAxisAlignment.start,
                                                   crossAxisAlignment: CrossAxisAlignment.start,
                                                   children: [
                                                     Text('MIN 15%\nOFF',style: TextStyle(fontWeight: FontWeight.w700,fontSize: 24,color: Color(0xff3F1405)),),
-                                                    SizedBox(height: 10,),
+                                                    SizedBox(height: 8,),
                                                     SizedBox(
-                                                      height: 22,
-                                                      width: 70,
+                                                      height: 28,
+                                                      width: 90,
                                                       child: ElevatedButton(
-                                                        style: ElevatedButton.styleFrom(backgroundColor: Color(0xffCC6522),foregroundColor: Color(0xffffffff),shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4),),),
+                                                        style: ElevatedButton.styleFrom(padding: EdgeInsets.symmetric(horizontal: 8,vertical: 6),backgroundColor: Color(0xffCC6522),foregroundColor: Color(0xffffffff),shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4),),),
                                                         onPressed: (){
                                                       
-                                                      }, child: Text('SHOP NOW',style: TextStyle(color: Colors.white,)),)
+                                                      }, child: Text('SHOP NOW',style: TextStyle(color: Colors.white,fontSize: 8)),)
                                                     )
                                                   ],
                                                 ),
@@ -269,6 +289,26 @@ class _HomeScreenState extends State<HomeScreen> {
                                               decoration: BoxDecoration(
                                                 borderRadius: BorderRadius.circular(15),
                                                   color: Color(0xFFFBBC05)),
+                                                  child: Padding(
+                                                    padding: const EdgeInsets.symmetric(horizontal: 16,vertical: 25),
+                                                    child: Column(
+                                                    mainAxisAlignment: MainAxisAlignment.start,
+                                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                                    children: [
+                                                      Text('MIN 16%\nOFF',style: TextStyle(fontWeight: FontWeight.w700,fontSize: 24,color: Color(0xff3F1405)),),
+                                                      SizedBox(height: 8,),
+                                                      SizedBox(
+                                                        height: 28,
+                                                        width: 90,
+                                                        child: ElevatedButton(
+                                                          style: ElevatedButton.styleFrom(padding: EdgeInsets.symmetric(horizontal: 8,vertical: 6),backgroundColor: Color(0xffCC6522),foregroundColor: Color(0xffffffff),shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4),),),
+                                                          onPressed: (){
+                                                        
+                                                        }, child: Text('SHOP NOW',style: TextStyle(color: Colors.white,fontSize: 8)),)
+                                                      )
+                                                    ],
+                                                                                                    ),
+                                                  ),
                                             ),
                                             Container(
                                               width: double.infinity,
@@ -279,6 +319,26 @@ class _HomeScreenState extends State<HomeScreen> {
                                               decoration: BoxDecoration(
                                                 borderRadius: BorderRadius.circular(15),
                                                   color: Color(0xFFFBBC05)),
+                                                  child: Padding(
+                                                    padding: const EdgeInsets.symmetric(horizontal: 16,vertical: 25),
+                                                    child: Column(
+                                                    mainAxisAlignment: MainAxisAlignment.start,
+                                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                                    children: [
+                                                      Text('MIN 17%\nOFF',style: TextStyle(fontWeight: FontWeight.w700,fontSize: 24,color: Color(0xff3F1405)),),
+                                                      SizedBox(height: 8,),
+                                                      SizedBox(
+                                                        height: 28,
+                                                        width: 90,
+                                                        child: ElevatedButton(
+                                                          style: ElevatedButton.styleFrom(padding: EdgeInsets.symmetric(horizontal: 8,vertical: 6),backgroundColor: Color(0xffCC6522),foregroundColor: Color(0xffffffff),shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4),),),
+                                                          onPressed: (){
+                                                        
+                                                        }, child: Text('SHOP NOW',style: TextStyle(color: Colors.white,fontSize: 8)),)
+                                                      )
+                                                    ],
+                                                                                                    ),
+                                                  ),
                                             ),
                                             Container(
                                               width: double.infinity,
@@ -289,6 +349,26 @@ class _HomeScreenState extends State<HomeScreen> {
                                               decoration: BoxDecoration(
                                                 borderRadius: BorderRadius.circular(15),
                                                   color: Color(0xFFFBBC05)),
+                                                  child: Padding(
+                                                    padding: const EdgeInsets.symmetric(horizontal: 16,vertical: 25),
+                                                    child: Column(
+                                                    mainAxisAlignment: MainAxisAlignment.start,
+                                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                                    children: [
+                                                      Text('MIN 18%\nOFF',style: TextStyle(fontWeight: FontWeight.w700,fontSize: 24,color: Color(0xff3F1405)),),
+                                                      SizedBox(height: 8,),
+                                                      SizedBox(
+                                                        height: 28,
+                                                        width: 90,
+                                                        child: ElevatedButton(
+                                                          style: ElevatedButton.styleFrom(padding: EdgeInsets.symmetric(horizontal: 8,vertical: 6),backgroundColor: Color(0xffCC6522),foregroundColor: Color(0xffffffff),shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4),),),
+                                                          onPressed: (){
+                                                        
+                                                        }, child: Text('SHOP NOW',style: TextStyle(color: Colors.white,fontSize: 8)),)
+                                                      )
+                                                    ],
+                                                                                                    ),
+                                                  ),
                                             )
                                           ],
                                         ),
