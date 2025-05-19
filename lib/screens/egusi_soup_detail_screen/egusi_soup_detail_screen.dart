@@ -1,15 +1,19 @@
 // lib/screens/egusi_soup_detail_screen.dart
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:jara_market/screens/cart_screen/cart_screen.dart';
 import 'package:jara_market/screens/egusi_soup_detail_screen/controller/egusi_soup_detail_controller.dart';
+import 'package:jara_market/screens/home_screen/models/food_model.dart';
+import 'package:jara_market/screens/home_screen/models/models.dart';
 import '../../widgets/custom_app_bar.dart';
 import '../../widgets/rating_display.dart';
 
 FoodDetailController controller = Get.put(FoodDetailController());
 
 class FoodDetailScreen extends StatefulWidget {
-  final Map<String, dynamic> item;
+  //final Map<String, dynamic> item;
+  final Product item;
   const FoodDetailScreen({Key? key, required this.item}) : super(key: key);
 
   @override
@@ -30,7 +34,25 @@ class _FoodDetailScreenState extends State<FoodDetailScreen> {
       });
     }
   }
-
+  List<String> imageList = [
+    'assets/images/soup1.png',
+    'assets/images/soup2.png',
+    'assets/images/soup3.png',
+    'assets/images/soup4.png',
+    'assets/images/soup3.png',
+  ];
+List<String> ingredient = [
+  'ingredient 1',
+  'ingredient 2',
+  'ingredient 3',
+  'ingredient 4',
+  'ingredient 5',
+  'ingredient 6',
+  'ingredient 7',
+  'ingredient 8',
+  'ingredient 9',
+  'ingredient 10',
+];
   @override
   Widget build(BuildContext context) {
     int selectedCount = ingredientSelected.where((selected) => selected).length;
@@ -38,7 +60,7 @@ class _FoodDetailScreenState extends State<FoodDetailScreen> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: CustomAppBar(
-        title: widget.item['name'],
+        title: widget.item.name.toString(),
         titleColor: Colors.orange,
         onBackPressed: () {},
       ),
@@ -46,29 +68,32 @@ class _FoodDetailScreenState extends State<FoodDetailScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            SizedBox(height: 24,),
             // Image carousel
             SizedBox(
-              height: 300,
+              height: 200,
               child: PageView.builder(
-                itemCount: 5,
+                itemCount: imageList.length,
                 onPageChanged: (index) {
                   setState(() {
                     currentImageIndex = index;
                   });
                 },
                 itemBuilder: (context, index) {
-                  return Image.network(
-                    widget.item['image_url'],
+                  return Image.asset(
+                    //widget.item.imageUrl,
+                    imageList[index],
                     fit: BoxFit.cover,
                   );
                 },
               ),
             ),
+            SizedBox(height: 14,),
             // Carousel indicators
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: List.generate(
-                5,
+                imageList.length,
                 (index) => Container(
                   margin: const EdgeInsets.all(4),
                   width: 8,
@@ -87,27 +112,29 @@ class _FoodDetailScreenState extends State<FoodDetailScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Column(
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        widget.item['name'],
+                        widget.item.name.toString(),
                         style: const TextStyle(
-                          fontSize: 28,
-                          fontWeight: FontWeight.bold,
+                          fontSize: 24,
+                          fontWeight: FontWeight.w400,
                         ),
                       ),
                       RatingDisplay(
                           rating:
-                              double.parse(widget.item['rating'].toString()),
-                          reviews: 0),
+                              widget.item.rating ?? 2.0,
+                          reviews: 10),
                     ],
                   ),
-                  const SizedBox(height: 24),
+                  const SizedBox(height: 20),
                   const Text(
                     'Ingredients',
                     style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
+                      fontSize: 14,
+                      fontWeight: FontWeight.w400,
+                      color: Color(0xff838383)
                     ),
                   ),
                   const SizedBox(height: 16),
@@ -115,22 +142,23 @@ class _FoodDetailScreenState extends State<FoodDetailScreen> {
                     gridDelegate:
                         const SliverGridDelegateWithFixedCrossAxisCount(
                       crossAxisCount: 2,
-                      childAspectRatio: 4.2,
+                      childAspectRatio: 5.2,
                       mainAxisSpacing: 0,
                       crossAxisSpacing: 0,
                     ),
                     shrinkWrap: true,
                     physics: const NeverScrollableScrollPhysics(),
-                    itemCount: widget.item['ingredients'].length,
+                    itemCount: ingredient.length,
                     itemBuilder: (context, index) {
                       return Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Expanded(
                             child: Text(
-                              '${index + 1}. ${widget.item['ingredients'][index]['name']}',
+                              '${index + 1}. ${ingredient[index]}',
                               style: const TextStyle(
-                                fontSize: 16,
+                                fontSize: 12,
+                                fontWeight: FontWeight.w400,
                                 color: Colors.black,
                               ),
                             ),
@@ -147,7 +175,16 @@ class _FoodDetailScreenState extends State<FoodDetailScreen> {
                       );
                     },
                   ),
-                  const SizedBox(height: 16),
+                  const SizedBox(height: 20),
+                  Divider(thickness: 1,color: Color(0xffECECEC),),
+                  const SizedBox(height: 20),
+                  Text('Steps',style: TextStyle(fontSize: 14,fontFamily: 'Poppins', fontWeight: FontWeight.w400,color: Color(0xff838383)),),
+                  const SizedBox(height: 20),
+                  // ListView.builder(itemBuilder: (context, index) {
+                  //   return Text('${index + 1} ${item.}');
+                  // },),
+                  Text(widget.item.preparationSteps.toString()),
+                  const SizedBox(height: 20),
                   // Row(
                   //   children: [
                   //     Expanded(
@@ -170,35 +207,43 @@ class _FoodDetailScreenState extends State<FoodDetailScreen> {
 
                   Row(
                     children: [
-                      Expanded(
+                      SizedBox(
+                        height: 52,
+                        width: 162.5,
                         child: ElevatedButton.icon(
                           onPressed: () {
                             // TODO: Implement video playback
                           },
-                          icon: const Icon(Icons.play_circle_outline),
-                          label: const Text('Watch Video'),
+                          icon: SvgPicture.asset('assets/images/camera.svg'),
+                          label: const Text('Watch Video',style: TextStyle(fontSize: 14,fontWeight: FontWeight.w400,color: Color(0xff666666)),),
                           style: ElevatedButton.styleFrom(
+                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12),side: BorderSide(width: 1,color: Color(0xff9F9F9F))),
                             foregroundColor: Colors.black,
                             backgroundColor: Colors.grey[300],
                             padding: const EdgeInsets.symmetric(vertical: 16),
                           ),
                         ),
                       ),
-                      const SizedBox(width: 16),
-                      Expanded(
+                      const SizedBox(width: 15),
+                      SizedBox(
+                         height: 52,
+                        width: 162.5,
                         child: ElevatedButton(
-                          onPressed: selectedCount >= 5
-                              ? () {
+                          onPressed: 
+                          //selectedCount >= 5
+                              //?
+                               () {
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
                                         builder: (context) =>
                                             const CartScreen()),
                                   );
-                                }
-                              : null,
-                          child: const Text('Get Ingredients'),
+                                },
+                           //   : null,
+                          child: const Text('Get Ingredients',style: TextStyle(fontSize: 14, fontWeight: FontWeight.w400,color: Color(0xff090909)),),
                           style: ElevatedButton.styleFrom(
+                             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                             backgroundColor: Colors.orange,
                             padding: const EdgeInsets.symmetric(vertical: 16),
                           ),

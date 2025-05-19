@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:jara_market/config/local_storage.dart';
+import 'package:jara_market/screens/egusi_soup_detail_screen/egusi_soup_detail_screen.dart';
 import 'package:jara_market/screens/home_screen/controller/home_controller.dart';
 import 'package:jara_market/services/api_service.dart';
 import 'package:jara_market/widgets/snacknar.dart';
@@ -57,7 +58,7 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
-  Widget dotIndicator(int index,int lenght){
+  Widget dotIndicator(int index, int lenght) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.center,
@@ -65,27 +66,25 @@ class _HomeScreenState extends State<HomeScreen> {
         SizedBox(
           height: 20,
           child: ListView.builder(
-            itemCount: lenght,
-            itemBuilder: (BuildContext,index){
-            return  AnimatedContainer(
-                    duration: const Duration(milliseconds: 300),
-                    curve: Curves.easeInOut,
-                    width: _currentIndex == index ? 18.0 : 10.0,
-                    height: _currentIndex == index ? 10.0 : 10.0,
-                    margin: const EdgeInsets.symmetric(horizontal: 4.0),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(5.0),
-                      color: _currentIndex == index 
-                          ? Colors.blue
-                          : Colors.grey.withValues(alpha: 0.5),
-                    ),
-                  );
-                
-          }),
+              itemCount: lenght,
+              itemBuilder: (BuildContext, index) {
+                return AnimatedContainer(
+                  duration: const Duration(milliseconds: 300),
+                  curve: Curves.easeInOut,
+                  width: _currentIndex == index ? 18.0 : 10.0,
+                  height: _currentIndex == index ? 10.0 : 10.0,
+                  margin: const EdgeInsets.symmetric(horizontal: 4.0),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(5.0),
+                    color: _currentIndex == index
+                        ? Colors.blue
+                        : Colors.grey.withValues(alpha: 0.5),
+                  ),
+                );
+              }),
         )
       ],
     );
-
   }
 
   @override
@@ -125,7 +124,10 @@ class _HomeScreenState extends State<HomeScreen> {
         body: SafeArea(
           child: Obx(() {
             return controller.isLoading.value
-                ? const Center(child: CircularProgressIndicator())
+                ? const Center(
+                    child: CircularProgressIndicator(
+                    color: Color(0xFFFBBC05),
+                  ))
                 : Column(
                     children: [
                       // Header
@@ -177,7 +179,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       // Category sections inside ListView
                       Expanded(
                         child: ListView.separated(
-                          padding: const EdgeInsets.symmetric(horizontal: 16),
+                          //   padding: const EdgeInsets.symmetric(horizontal: 1),
                           itemCount: controller.categories
                               .length, // Only one section for now, you can add more sections as needed
                           separatorBuilder: (context, index) {
@@ -185,7 +187,11 @@ class _HomeScreenState extends State<HomeScreen> {
                                 ? SizedBox(
                                     height: 24,
                                   )
-                                : Divider(height: 24,thickness: 0.5,color: Colors.grey[400],);
+                                : Divider(
+                                    height: 24,
+                                    thickness: 0.5,
+                                    color: Colors.grey[400],
+                                  );
                           },
 
                           itemBuilder: (context, sectionIndex) {
@@ -196,7 +202,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                       SizedBox(
                                         height: 154,
                                         child: CarouselSlider(
-                                          carouselController: carouselController,
+                                          carouselController:
+                                              carouselController,
                                           options: CarouselOptions(
                                             height: 200.0,
                                             viewportFraction: 0.8,
@@ -226,48 +233,129 @@ class _HomeScreenState extends State<HomeScreen> {
                                                       .height *
                                                   154,
                                               decoration: BoxDecoration(
-                                                borderRadius: BorderRadius.circular(15),
+                                                  borderRadius:
+                                                      BorderRadius.circular(15),
                                                   color: Color(0xFFFBBC05)),
-                                                  child: Padding(
-                                                    padding: const EdgeInsets.symmetric(horizontal: 16,vertical: 25),
-                                                    child: Column(
-                                                    mainAxisAlignment: MainAxisAlignment.start,
-                                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                                    children: [
-                                                      Text('MIN 14%\nOFF',style: TextStyle(fontWeight: FontWeight.w700,fontSize: 24,color: Color(0xff3F1405)),),
-                                                      SizedBox(height: 8,),
-                                                      SizedBox(
+                                              child: Padding(
+                                                padding:
+                                                    const EdgeInsets.symmetric(
+                                                        horizontal: 16,
+                                                        vertical: 25),
+                                                child: Column(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.start,
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: [
+                                                    Text(
+                                                      'MIN 14%\nOFF',
+                                                      style: TextStyle(
+                                                          fontWeight:
+                                                              FontWeight.w700,
+                                                          fontSize: 24,
+                                                          color: Color(
+                                                              0xff3F1405)),
+                                                    ),
+                                                    SizedBox(
+                                                      height: 8,
+                                                    ),
+                                                    SizedBox(
                                                         height: 28,
                                                         width: 90,
                                                         child: ElevatedButton(
-                                                          style: ElevatedButton.styleFrom(padding: EdgeInsets.symmetric(horizontal: 8,vertical: 6),backgroundColor: Color(0xffCC6522),foregroundColor: Color(0xffffffff),shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4),),),
-                                                          onPressed: (){
-                                                        
-                                                        }, child: Text('SHOP NOW',style: TextStyle(color: Colors.white,fontSize: 8)),)
-                                                      )
-                                                    ],
-                                                                                                    ),
-                                                  ),
+                                                          style: ElevatedButton
+                                                              .styleFrom(
+                                                            padding: EdgeInsets
+                                                                .symmetric(
+                                                                    horizontal:
+                                                                        8,
+                                                                    vertical:
+                                                                        6),
+                                                            backgroundColor:
+                                                                Color(
+                                                                    0xffCC6522),
+                                                            foregroundColor:
+                                                                Color(
+                                                                    0xffffffff),
+                                                            shape:
+                                                                RoundedRectangleBorder(
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          4),
+                                                            ),
+                                                          ),
+                                                          onPressed: () {},
+                                                          child: Text(
+                                                              'SHOP NOW',
+                                                              style: TextStyle(
+                                                                  color: Colors
+                                                                      .white,
+                                                                  fontSize: 8)),
+                                                        ))
+                                                  ],
+                                                ),
+                                              ),
                                             ),
                                             Container(
-                                            //  height:154,
+                                              //  height:154,
                                               child: Padding(
-                                                padding: const EdgeInsets.symmetric(horizontal: 16,vertical: 25),
+                                                padding:
+                                                    const EdgeInsets.symmetric(
+                                                        horizontal: 16,
+                                                        vertical: 25),
                                                 child: Column(
-                                                  mainAxisAlignment: MainAxisAlignment.start,
-                                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.start,
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
                                                   children: [
-                                                    Text('MIN 15%\nOFF',style: TextStyle(fontWeight: FontWeight.w700,fontSize: 24,color: Color(0xff3F1405)),),
-                                                    SizedBox(height: 8,),
+                                                    Text(
+                                                      'MIN 15%\nOFF',
+                                                      style: TextStyle(
+                                                          fontWeight:
+                                                              FontWeight.w700,
+                                                          fontSize: 24,
+                                                          color: Color(
+                                                              0xff3F1405)),
+                                                    ),
                                                     SizedBox(
-                                                      height: 28,
-                                                      width: 90,
-                                                      child: ElevatedButton(
-                                                        style: ElevatedButton.styleFrom(padding: EdgeInsets.symmetric(horizontal: 8,vertical: 6),backgroundColor: Color(0xffCC6522),foregroundColor: Color(0xffffffff),shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4),),),
-                                                        onPressed: (){
-                                                      
-                                                      }, child: Text('SHOP NOW',style: TextStyle(color: Colors.white,fontSize: 8)),)
-                                                    )
+                                                      height: 8,
+                                                    ),
+                                                    SizedBox(
+                                                        height: 28,
+                                                        width: 90,
+                                                        child: ElevatedButton(
+                                                          style: ElevatedButton
+                                                              .styleFrom(
+                                                            padding: EdgeInsets
+                                                                .symmetric(
+                                                                    horizontal:
+                                                                        8,
+                                                                    vertical:
+                                                                        6),
+                                                            backgroundColor:
+                                                                Color(
+                                                                    0xffCC6522),
+                                                            foregroundColor:
+                                                                Color(
+                                                                    0xffffffff),
+                                                            shape:
+                                                                RoundedRectangleBorder(
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          4),
+                                                            ),
+                                                          ),
+                                                          onPressed: () {},
+                                                          child: Text(
+                                                              'SHOP NOW',
+                                                              style: TextStyle(
+                                                                  color: Colors
+                                                                      .white,
+                                                                  fontSize: 8)),
+                                                        ))
                                                   ],
                                                 ),
                                               ),
@@ -277,7 +365,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                                       .height *
                                                   154,
                                               decoration: BoxDecoration(
-                                                borderRadius: BorderRadius.circular(15),
+                                                  borderRadius:
+                                                      BorderRadius.circular(15),
                                                   color: Color(0xFFFBBC05)),
                                             ),
                                             Container(
@@ -287,28 +376,69 @@ class _HomeScreenState extends State<HomeScreen> {
                                                       .height *
                                                   154,
                                               decoration: BoxDecoration(
-                                                borderRadius: BorderRadius.circular(15),
+                                                  borderRadius:
+                                                      BorderRadius.circular(15),
                                                   color: Color(0xFFFBBC05)),
-                                                  child: Padding(
-                                                    padding: const EdgeInsets.symmetric(horizontal: 16,vertical: 25),
-                                                    child: Column(
-                                                    mainAxisAlignment: MainAxisAlignment.start,
-                                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                                    children: [
-                                                      Text('MIN 16%\nOFF',style: TextStyle(fontWeight: FontWeight.w700,fontSize: 24,color: Color(0xff3F1405)),),
-                                                      SizedBox(height: 8,),
-                                                      SizedBox(
+                                              child: Padding(
+                                                padding:
+                                                    const EdgeInsets.symmetric(
+                                                        horizontal: 16,
+                                                        vertical: 25),
+                                                child: Column(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.start,
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: [
+                                                    Text(
+                                                      'MIN 16%\nOFF',
+                                                      style: TextStyle(
+                                                          fontWeight:
+                                                              FontWeight.w700,
+                                                          fontSize: 24,
+                                                          color: Color(
+                                                              0xff3F1405)),
+                                                    ),
+                                                    SizedBox(
+                                                      height: 8,
+                                                    ),
+                                                    SizedBox(
                                                         height: 28,
                                                         width: 90,
                                                         child: ElevatedButton(
-                                                          style: ElevatedButton.styleFrom(padding: EdgeInsets.symmetric(horizontal: 8,vertical: 6),backgroundColor: Color(0xffCC6522),foregroundColor: Color(0xffffffff),shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4),),),
-                                                          onPressed: (){
-                                                        
-                                                        }, child: Text('SHOP NOW',style: TextStyle(color: Colors.white,fontSize: 8)),)
-                                                      )
-                                                    ],
-                                                                                                    ),
-                                                  ),
+                                                          style: ElevatedButton
+                                                              .styleFrom(
+                                                            padding: EdgeInsets
+                                                                .symmetric(
+                                                                    horizontal:
+                                                                        8,
+                                                                    vertical:
+                                                                        6),
+                                                            backgroundColor:
+                                                                Color(
+                                                                    0xffCC6522),
+                                                            foregroundColor:
+                                                                Color(
+                                                                    0xffffffff),
+                                                            shape:
+                                                                RoundedRectangleBorder(
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          4),
+                                                            ),
+                                                          ),
+                                                          onPressed: () {},
+                                                          child: Text(
+                                                              'SHOP NOW',
+                                                              style: TextStyle(
+                                                                  color: Colors
+                                                                      .white,
+                                                                  fontSize: 8)),
+                                                        ))
+                                                  ],
+                                                ),
+                                              ),
                                             ),
                                             Container(
                                               width: double.infinity,
@@ -317,28 +447,69 @@ class _HomeScreenState extends State<HomeScreen> {
                                                       .height *
                                                   154,
                                               decoration: BoxDecoration(
-                                                borderRadius: BorderRadius.circular(15),
+                                                  borderRadius:
+                                                      BorderRadius.circular(15),
                                                   color: Color(0xFFFBBC05)),
-                                                  child: Padding(
-                                                    padding: const EdgeInsets.symmetric(horizontal: 16,vertical: 25),
-                                                    child: Column(
-                                                    mainAxisAlignment: MainAxisAlignment.start,
-                                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                                    children: [
-                                                      Text('MIN 17%\nOFF',style: TextStyle(fontWeight: FontWeight.w700,fontSize: 24,color: Color(0xff3F1405)),),
-                                                      SizedBox(height: 8,),
-                                                      SizedBox(
+                                              child: Padding(
+                                                padding:
+                                                    const EdgeInsets.symmetric(
+                                                        horizontal: 16,
+                                                        vertical: 25),
+                                                child: Column(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.start,
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: [
+                                                    Text(
+                                                      'MIN 17%\nOFF',
+                                                      style: TextStyle(
+                                                          fontWeight:
+                                                              FontWeight.w700,
+                                                          fontSize: 24,
+                                                          color: Color(
+                                                              0xff3F1405)),
+                                                    ),
+                                                    SizedBox(
+                                                      height: 8,
+                                                    ),
+                                                    SizedBox(
                                                         height: 28,
                                                         width: 90,
                                                         child: ElevatedButton(
-                                                          style: ElevatedButton.styleFrom(padding: EdgeInsets.symmetric(horizontal: 8,vertical: 6),backgroundColor: Color(0xffCC6522),foregroundColor: Color(0xffffffff),shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4),),),
-                                                          onPressed: (){
-                                                        
-                                                        }, child: Text('SHOP NOW',style: TextStyle(color: Colors.white,fontSize: 8)),)
-                                                      )
-                                                    ],
-                                                                                                    ),
-                                                  ),
+                                                          style: ElevatedButton
+                                                              .styleFrom(
+                                                            padding: EdgeInsets
+                                                                .symmetric(
+                                                                    horizontal:
+                                                                        8,
+                                                                    vertical:
+                                                                        6),
+                                                            backgroundColor:
+                                                                Color(
+                                                                    0xffCC6522),
+                                                            foregroundColor:
+                                                                Color(
+                                                                    0xffffffff),
+                                                            shape:
+                                                                RoundedRectangleBorder(
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          4),
+                                                            ),
+                                                          ),
+                                                          onPressed: () {},
+                                                          child: Text(
+                                                              'SHOP NOW',
+                                                              style: TextStyle(
+                                                                  color: Colors
+                                                                      .white,
+                                                                  fontSize: 8)),
+                                                        ))
+                                                  ],
+                                                ),
+                                              ),
                                             ),
                                             Container(
                                               width: double.infinity,
@@ -347,167 +518,422 @@ class _HomeScreenState extends State<HomeScreen> {
                                                       .height *
                                                   154,
                                               decoration: BoxDecoration(
-                                                borderRadius: BorderRadius.circular(15),
+                                                  borderRadius:
+                                                      BorderRadius.circular(15),
                                                   color: Color(0xFFFBBC05)),
-                                                  child: Padding(
-                                                    padding: const EdgeInsets.symmetric(horizontal: 16,vertical: 25),
-                                                    child: Column(
-                                                    mainAxisAlignment: MainAxisAlignment.start,
-                                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                                    children: [
-                                                      Text('MIN 18%\nOFF',style: TextStyle(fontWeight: FontWeight.w700,fontSize: 24,color: Color(0xff3F1405)),),
-                                                      SizedBox(height: 8,),
-                                                      SizedBox(
+                                              child: Padding(
+                                                padding:
+                                                    const EdgeInsets.symmetric(
+                                                        horizontal: 16,
+                                                        vertical: 25),
+                                                child: Column(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.start,
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: [
+                                                    Text(
+                                                      'MIN 18%\nOFF',
+                                                      style: TextStyle(
+                                                          fontWeight:
+                                                              FontWeight.w700,
+                                                          fontSize: 24,
+                                                          color: Color(
+                                                              0xff3F1405)),
+                                                    ),
+                                                    SizedBox(
+                                                      height: 8,
+                                                    ),
+                                                    SizedBox(
                                                         height: 28,
                                                         width: 90,
                                                         child: ElevatedButton(
-                                                          style: ElevatedButton.styleFrom(padding: EdgeInsets.symmetric(horizontal: 8,vertical: 6),backgroundColor: Color(0xffCC6522),foregroundColor: Color(0xffffffff),shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4),),),
-                                                          onPressed: (){
-                                                        
-                                                        }, child: Text('SHOP NOW',style: TextStyle(color: Colors.white,fontSize: 8)),)
-                                                      )
-                                                    ],
-                                                                                                    ),
-                                                  ),
+                                                          style: ElevatedButton
+                                                              .styleFrom(
+                                                            padding: EdgeInsets
+                                                                .symmetric(
+                                                                    horizontal:
+                                                                        8,
+                                                                    vertical:
+                                                                        6),
+                                                            backgroundColor:
+                                                                Color(
+                                                                    0xffCC6522),
+                                                            foregroundColor:
+                                                                Color(
+                                                                    0xffffffff),
+                                                            shape:
+                                                                RoundedRectangleBorder(
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          4),
+                                                            ),
+                                                          ),
+                                                          onPressed: () {},
+                                                          child: Text(
+                                                              'SHOP NOW',
+                                                              style: TextStyle(
+                                                                  color: Colors
+                                                                      .white,
+                                                                  fontSize: 8)),
+                                                        ))
+                                                  ],
+                                                ),
+                                              ),
                                             )
                                           ],
                                         ),
-
-                                     
                                       ),
-                                      SizedBox(height: 10,),
-                                     // dotIndicator(_currentIndex,5)
-                                     Row(
-                                       mainAxisAlignment: MainAxisAlignment.center,
-                                       children: List.generate(
-                                         5,
-                                         (index) => GestureDetector(
-                                          onTap: () {
-                                           carouselController.animateToPage(index);
-                                          },
-                                           child: AnimatedContainer(
-                                             duration: const Duration(milliseconds: 300),
-                                             curve: Curves.easeInOut,
-                                             width: _currentIndex == index ? 18.0 : 10.0,
-                                             height: 10.0,
-                                             margin: const EdgeInsets.symmetric(horizontal: 4.0),
-                                             decoration: BoxDecoration(
-                                               borderRadius: BorderRadius.circular(5.0),
-                                               color: _currentIndex == index
-                                                   ? Colors.blue
-                                                   : Colors.grey.withValues(alpha:0.5),
-                                             ),
-                                           ),
-                                         ),
-                                       ),
-                                     )
+                                      SizedBox(
+                                        height: 10,
+                                      ),
+                                      // dotIndicator(_currentIndex,5)
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: List.generate(
+                                          5,
+                                          (index) => GestureDetector(
+                                            onTap: () {
+                                              carouselController
+                                                  .animateToPage(index);
+                                            },
+                                            child: AnimatedContainer(
+                                              duration: const Duration(
+                                                  milliseconds: 300),
+                                              curve: Curves.easeInOut,
+                                              width: _currentIndex == index
+                                                  ? 12.0
+                                                  : 7.0,
+                                              height: 7.0,
+                                              margin:
+                                                  const EdgeInsets.symmetric(
+                                                      horizontal: 4.0),
+                                              decoration: BoxDecoration(
+                                                borderRadius:
+                                                    BorderRadius.circular(5.0),
+                                                color: _currentIndex == index
+                                                    ? Colors.blue
+                                                    : Colors.grey
+                                                        .withValues(alpha: 0.5),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      )
                                     ],
                                   )
-                                : Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Padding(
-                                        padding:
-                                            EdgeInsets.symmetric(vertical: 8.0),
-                                        child: Text(
-                                          controller
-                                              .categories[sectionIndex].name
-                                              .toString(),
-                                          style: TextStyle(
-                                            fontSize: 14,
-                                            fontFamily: 'Poppins',
-                                            fontWeight: FontWeight.w600,
+                                : Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 16),
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Padding(
+                                          padding: EdgeInsets.symmetric(
+                                              vertical: 8.0),
+                                          child: Text(
+                                            controller
+                                                .categories[sectionIndex].name
+                                                .toString(),
+                                            style: TextStyle(
+                                              fontSize: 14,
+                                              fontFamily: 'Poppins',
+                                              fontWeight: FontWeight.w600,
+                                            ),
                                           ),
                                         ),
-                                      ),
-                                      // Fixed height container for the grid
-                                      SizedBox(
-                                        // Calculate height based on number of rows needed
-                                        height:
-                                            (controller.categories[sectionIndex]
-                                                            .products!.length /
-                                                        4)
-                                                    .ceil() *
-                                                100.0,
-                                        child: GridView.builder(
-                                          physics:
-                                              NeverScrollableScrollPhysics(), // Disable grid scrolling
-                                          itemCount: controller
-                                              .categories[sectionIndex]
-                                              .products!
-                                              .length,
-                                          gridDelegate:
-                                              const SliverGridDelegateWithFixedCrossAxisCount(
-                                            crossAxisCount: 4,
-                                            crossAxisSpacing: 10.0,
-                                            mainAxisSpacing: 10.0,
-                                            childAspectRatio: 1.5,
-                                          ),
-                                          itemBuilder: (context, index) {
-                                            final category = controller
-                                                .categories[sectionIndex]
-                                                .products;
-                                            return GestureDetector(
-                                              onTap: () {
-                                                // Handle category tap
-                                                print(
-                                                    'Tapped on category: $category');
-                                                myLog.log(
-                                                    'product image ${category[sectionIndex].imageUrl}');
-                                                //  Get.toNamed('/soupList_screen');
-                                                // CupertinoPageRoute(builder: (context) => const SoupListScreen(item: {}),);
+                                        // Fixed height container for the grid
+                                        controller.categories[sectionIndex]
+                                                .products!.isEmpty
+                                            ? Center(
+                                                child: Padding(
+                                                padding:
+                                                    const EdgeInsets.all(8.0),
+                                                child: Text(
+                                                  'Food Not Availabe for this Category!!!',
+                                                  style: TextStyle(
+                                                      color: Colors.grey[400],
+                                                      fontFamily: 'Poppins',
+                                                      fontWeight:
+                                                          FontWeight.w200),
+                                                ),
+                                              ))
+                                            : SizedBox(
+                                                // Calculate height based on number of rows needed
+                                                height: (controller
+                                                                .categories[
+                                                                    sectionIndex]
+                                                                .products!
+                                                                .length /
+                                                            4)
+                                                        .ceil() *
+                                                    100.0,
+                                                child: GridView.builder(
+                                                  physics:
+                                                      NeverScrollableScrollPhysics(), // Disable grid scrolling
+                                                  itemCount: controller
+                                                      .categories[sectionIndex]
+                                                      .products!
+                                                      .length,
+                                                  gridDelegate:
+                                                      const SliverGridDelegateWithFixedCrossAxisCount(
+                                                    crossAxisCount: 4,
+                                                    crossAxisSpacing: 10.0,
+                                                    mainAxisSpacing: 10.0,
+                                                    childAspectRatio: 1.5,
+                                                  ),
+                                                  itemBuilder:
+                                                      (context, index) {
+                                                    final category = controller
+                                                        .categories[
+                                                            sectionIndex]
+                                                        .products;
+                                                    return GestureDetector(
+                                                      onTap: () {
+                                                        showDialog(
+                                                          context: context,
+                                                          builder: (BuildContext
+                                                              context) {
+                                                            return AlertDialog(
+                                                              
+                                                              // icon: Align(
+                                                              //   alignment: Alignment.topRight,
+                                                              //   child: Icon(Icons.cancel_presentation_rounded)),
+                                                              backgroundColor: Colors.grey[100],
+                                                              title: Row(
+                                                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                                children: [
+                                                                  Align(
+                                                                    alignment: Alignment.topLeft,
+                                                                    child: Text(
+                                                                      category[index]
+                                                                          .name
+                                                                          .toString(),
+                                                                      style:
+                                                                          TextStyle(
+                                                                        fontSize: 14,
+                                                                        fontFamily:
+                                                                            'Poppins',
+                                                                        fontWeight:
+                                                                            FontWeight
+                                                                                .w600,
+                                                                      ),
+                                                                    ),
+                                                                  ),
+                                                                  Align(
+                                                                alignment: Alignment.topRight,
+                                                                child: GestureDetector(
+                                                                  onTap: () {
+                                                                    Navigator.of(context).pop();
+                                                                  },
+                                                                  child: Icon(Icons.cancel_presentation_rounded))),
+                                                                ],
+                                                              ),
+                                                              content:
+                                                                  // Text(
+                                                                  //     "This is a popup modal!"),
+                                                                  Container(
+                                                                height: 253,
+                                                                decoration:
+                                                                    BoxDecoration(
+                                                                    //  color: Colors.grey[400]
+                                                                    ),
+                                                                child: Column(
+                                                                  children: [
+                                                                    Row(
+                                                                      children: [
+                                                                        Align(
+                                                                          alignment: Alignment.topLeft,
+                                                                          child: Text("\u20A6 ${category[index]
+                                                                          .price}",
+                                                                                                                                          style:
+                                                                          TextStyle(
+                                                                                                                                            fontSize: 14,
+                                                                                                                                            fontFamily:
+                                                                            'Poppins',
+                                                                                                                                            fontWeight:
+                                                                            FontWeight
+                                                                                .w600,
+                                                                                                                                          ),
+                                                                                                                                        ),
+                                                                        ),
+                                                                        Text(' Per Portion', style: TextStyle(color: Colors.grey[400], fontSize: 10),)
+                                                                      ],
+                                                                    ),
+                                                                    Align(
+                                                                          alignment: Alignment.topLeft,
+                                                                          child: Text("${category[index]
+                                                                          .stock} Portion Available",
+                                                                                                                                          style:
+                                                                          TextStyle(
+                                                                                                                                            fontSize: 14,
+                                                                                                                                            fontFamily:
+                                                                            'Poppins',
+                                                                                                                                            fontWeight:
+                                                                            FontWeight
+                                                                                .w200,
+                                                                                                                                          ),
+                                                                                                                                        ),
+                                                                        ),
+                                                                    Container(
+                                                                      height:
+                                                                          150,
+                                                                      decoration: BoxDecoration(
+                                                                          borderRadius: BorderRadius.all(Radius.circular(
+                                                                              20)),
+                                                                          border: Border.all(
+                                                                              width: 10,
+                                                                              color: Colors.white)),
+                                                                      child:
+                                                                          Center(
+                                                                        // widthFactor: 10.5,
+                                                                        // heightFactor: 10.5,
+                                                                        child: category[index].imageUrl !=
+                                                                                null
+                                                                            ? Image.network(
+                                                                                category[index].imageUrl,
+                                                                                fit: BoxFit.contain,
+                                                                              )
+                                                                            : SvgPicture.asset('assets/images/product_image.svg'),
+                                                                      ),
+                                                                    ),
+                                                                    SizedBox(height: 10,),
+                                                                    Container(
+                                                                      padding: EdgeInsets.all(8),
+                                                                      height: 53,
+                                                                      decoration: BoxDecoration(
+                                                                        borderRadius: BorderRadius.all(Radius.circular(
+                                                                              12)),
+                                                                        color: Colors.amber[50]
+                                                                      ),
+                                                                      child: Text('*${category[index].description}\n We also Offer meal prep as well!!!'),
+                                                                    )
+                                                                  ],
+                                                                ),
+                                                              ),
+                                                              actions: [
+                                                                // TextButton(
+                                                                //   child: Text(
+                                                                //       "Close"),
+                                                                //   onPressed: () =>
+                                                                //       Navigator.of(
+                                                                //               context)
+                                                                //           .pop(),
+                                                                // )
+                                                                SizedBox(
+                                                        height: 40,
+                                                        width: double.infinity,
+                                                        child: ElevatedButton(
+                                                          style: ElevatedButton
+                                                              .styleFrom(
+                                                            padding: EdgeInsets
+                                                                .symmetric(
+                                                                    horizontal:
+                                                                        8,
+                                                                    vertical:
+                                                                        6),
+                                                            backgroundColor:
+                                                                Color(
+                                                                    0xffCC6522),
+                                                            foregroundColor:
+                                                                Color(
+                                                                    0xffffffff),
+                                                            shape:
+                                                                RoundedRectangleBorder(
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          4),
+                                                            ),
+                                                          ),
+                                                          onPressed: () {
+                                                            Navigator.of(context).pop();
+                                                            Navigator.of(context).push(CupertinoPageRoute(builder: (context) => FoodDetailScreen(item: category[index],)));
+                                                          },
+                                                          child: Text(
+                                                              'SEE FOOD CONTENT',
+                                                              style: TextStyle(
+                                                                  color: Colors
+                                                                      .white,
+                                                                  fontSize: 12)),
+                                                        ))
+                                                              ],
+                                                            );
+                                                          },
+                                                        );
+                                                        // Handle category tap
+                                                        print(
+                                                            'Tapped on category: $category');
+                                                        myLog.log(
+                                                            'product image ${category[sectionIndex].imageUrl}');
+                                                        //  Get.toNamed('/soupList_screen');
+                                                        // CupertinoPageRoute(builder: (context) => const SoupListScreen(item: {}),);
 
-                                                //       Navigator.push(
-                                                // Get.context!,
-                                                // CupertinoPageRoute(
-                                                //   builder: (context) => const SoupListScreen(item: {}),
-                                                // ),);
-                                              },
-                                              child: Column(
-                                                children: [
-                                                  Container(
-                                                    //  margin: EdgeInsets.all(5),
-                                                    padding: EdgeInsets.all(5),
-                                                    decoration: BoxDecoration(
-                                                      shape: BoxShape.circle,
-                                                      color: Colors.grey[200],
-                                                      // borderRadius: BorderRadius.circular(12),
-                                                    ),
-                                                    child: Center(
-                                                      child: category![index]
-                                                                  .imageUrl !=
-                                                              null
-                                                          ? Image.network(
-                                                              category[index]
-                                                                  .imageUrl,
-                                                              fit: BoxFit
-                                                                  .contain,
-                                                            )
-                                                          : SvgPicture.asset(
-                                                              'assets/images/product_image.svg'),
-                                                    ),
-                                                  ),
-                                                  SizedBox(
-                                                    height: 5,
-                                                  ),
-                                                  Text(
-                                                    category[index]
-                                                        .name
-                                                        .toString(),
-                                                    style: TextStyle(
-                                                        fontSize: 12,
-                                                        fontWeight:
-                                                            FontWeight.w400,
-                                                        fontFamily: 'Poppins'),
-                                                  )
-                                                ],
+                                                        //       Navigator.push(
+                                                        // Get.context!,
+                                                        // CupertinoPageRoute(
+                                                        //   builder: (context) => const SoupListScreen(item: {}),
+                                                        // ),);
+                                                      },
+                                                      child: Column(
+                                                        children: [
+                                                          Container(
+                                                            //  margin: EdgeInsets.all(5),
+                                                            padding:
+                                                                EdgeInsets.all(
+                                                                    5),
+                                                            decoration:
+                                                                BoxDecoration(
+                                                              shape: BoxShape
+                                                                  .circle,
+                                                              color: Colors
+                                                                  .grey[200],
+                                                              // borderRadius: BorderRadius.circular(12),
+                                                            ),
+                                                            child: Center(
+                                                              child: category![
+                                                                              index]
+                                                                          .imageUrl !=
+                                                                      null
+                                                                  ? Image
+                                                                      .network(
+                                                                      category[
+                                                                              index]
+                                                                          .imageUrl,
+                                                                      fit: BoxFit
+                                                                          .contain,
+                                                                    )
+                                                                  : SvgPicture
+                                                                      .asset(
+                                                                          'assets/images/product_image.svg'),
+                                                            ),
+                                                          ),
+                                                          SizedBox(
+                                                            height: 5,
+                                                          ),
+                                                          Text(
+                                                            category[index]
+                                                                .name
+                                                                .toString(),
+                                                            style: TextStyle(
+                                                                fontSize: 10,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w400,
+                                                                fontFamily:
+                                                                    'Poppins'),
+                                                          )
+                                                        ],
+                                                      ),
+                                                    );
+                                                  },
+                                                ),
                                               ),
-                                            );
-                                          },
-                                        ),
-                                      ),
-                                    ],
+                                      ],
+                                    ),
                                   );
                           },
                         ),

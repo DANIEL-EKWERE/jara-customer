@@ -45,6 +45,7 @@ RxList<Ingredient> ingredient = <Ingredient>[].obs;
 
 
  Future<void> fetchFoodCategories() async {
+      isLoading.value = true;
     try {
       final response = await apiService.fetchFoodCategory();
       if (response.statusCode == 200 || response.statusCode == 201) {

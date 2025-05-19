@@ -23,6 +23,7 @@ dependencies:
   flutter_launcher_icons: ^0.14.3
   flutter_svg: ^2.0.9
   carousel_slider: ^5.0.0
+  flutter_native_splash: ^2.4.6
 
 dev_dependencies:
   flutter_test:
@@ -131,3 +132,10 @@ flutter_launcher_icons:
     image_path: "assets/images/jaralogo.png"
     background_color: "#ffffff"
     theme_color: "#ffffff"
+
+flutter_native_splash:
+  color: "#F5A623"  # Match your Flutter splash background
+  image: assets/images/jara_market_logo.png  # Should be centered and big enough
+  android: true
+  ios: true
+  web: true
