@@ -241,7 +241,7 @@ List<String> ingredient = [
                                   );
                                 },
                            //   : null,
-                          child: const Text('Get Ingredients',style: TextStyle(fontSize: 14, fontWeight: FontWeight.w400,color: Color(0xff090909)),),
+                          child: const Text('Buy Ingredients',style: TextStyle(fontSize: 14, fontWeight: FontWeight.w400,color: Color(0xff090909)),),
                           style: ElevatedButton.styleFrom(
                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                             backgroundColor: Colors.orange,
