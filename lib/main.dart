@@ -36,6 +36,7 @@ class MyApp extends StatelessWidget {
         primaryColor: const Color(0xFFFFAA00),
         scaffoldBackgroundColor: Colors.white,
         fontFamily: 'Poppins',
+        fontFamilyFallback: ['Roboto'],
       ),
       // home: const SplashScreen(),
       initialRoute: initialRoute,

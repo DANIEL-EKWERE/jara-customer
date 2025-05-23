@@ -806,6 +806,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                   child: Column(
                                                                     children: [
                                                                       Row(
+                                                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                                        crossAxisAlignment: CrossAxisAlignment.center,
                                                                         children: [
                                                                           Align(
                                                                             alignment:
