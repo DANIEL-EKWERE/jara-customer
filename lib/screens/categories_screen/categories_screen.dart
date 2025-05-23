@@ -139,17 +139,17 @@ class CategoriesScreen extends StatelessWidget {
                     label: 'Soup',
                     backgroundColor: Colors.green.shade50,
                     onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const SoupListScreen(
-                                  item: {
-                                    'name': 'Soup',
-                                    'image_url':
-                                        'https://via.placeholder.com/150',
-                                  },
-                                )),
-                      );
+                      // Navigator.push(
+                      //   context,
+                      //   MaterialPageRoute(
+                      //       builder: (context) => const SoupListScreen(
+                      //             item: {
+                      //               'name': 'Soup',
+                      //               'image_url':
+                      //                   'https://via.placeholder.com/150',
+                      //             },
+                      //           )),
+                      // );
                     },
                   ),
                   CategoryIcon(

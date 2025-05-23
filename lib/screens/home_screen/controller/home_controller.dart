@@ -9,8 +9,9 @@ import 'package:jara_market/widgets/snacknar.dart';
 class HomeController extends GetxController {
 
 ApiService apiService = ApiService(Duration(seconds: 60 * 5));
-List<Categories> categories = <Categories>[];
-RxList<Product> product = <Product>[].obs;
+Categories categories = Categories(data: [],message: 'success');
+List<Category> category = <Category>[];
+RxList<Products> product = <Products>[].obs;
 
 List<Food> foods = <Food>[];
 RxList<Ingredient> ingredient = <Ingredient>[].obs;
@@ -53,6 +54,7 @@ RxList<Ingredient> ingredient = <Ingredient>[].obs;
           final decodedData = jsonDecode(response.body);
           
         categories = categoriesFromJson(response.body);
+        category = categories.data!;
           myLog.log('Decoded Data: $decodedData', name: 'HomeController');
         
           // setState(() {

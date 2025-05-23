@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:jara_market/config/local_storage.dart';
+import 'package:jara_market/screens/categories_screen/categories_screen.dart';
 import 'package:jara_market/screens/egusi_soup_detail_screen/egusi_soup_detail_screen.dart';
 import 'package:jara_market/screens/home_screen/controller/home_controller.dart';
 import 'package:jara_market/services/api_service.dart';
@@ -32,6 +33,7 @@ class _HomeScreenState extends State<HomeScreen> {
   // List<dynamic> _foods = [];
   // bool _isLoading = true;
   late Map<String, dynamic> userData;
+  bool isSet = false;
   int _currentIndex = 0;
 
   // Controller for the carousel
@@ -180,7 +182,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       Expanded(
                         child: ListView.separated(
                           //   padding: const EdgeInsets.symmetric(horizontal: 1),
-                          itemCount: controller.categories
+                          itemCount: controller.category
                               .length, // Only one section for now, you can add more sections as needed
                           separatorBuilder: (context, index) {
                             return index == 2
@@ -634,19 +636,64 @@ class _HomeScreenState extends State<HomeScreen> {
                                         Padding(
                                           padding: EdgeInsets.symmetric(
                                               vertical: 8.0),
-                                          child: Text(
-                                            controller
-                                                .categories[sectionIndex].name
-                                                .toString(),
-                                            style: TextStyle(
-                                              fontSize: 14,
-                                              fontFamily: 'Poppins',
-                                              fontWeight: FontWeight.w600,
-                                            ),
+                                          child: Row(
+                                            children: [
+                                              Text(
+                                                controller
+                                                    .category[sectionIndex]
+                                                    .name
+                                                    .toString(),
+                                                style: TextStyle(
+                                                  fontSize: 14,
+                                                  fontFamily: 'Poppins',
+                                                  fontWeight: FontWeight.w600,
+                                                ),
+                                              ),
+                                              Spacer(),
+                                              controller.category[sectionIndex]
+                                                      .products!
+                                                      .length <= 3
+                                                  ? SizedBox.shrink()
+                                                  : InkWell(
+                                                    onTap: () {
+                                                      // Handle "See All" tap
+                                                      print(
+                                                          'Tapped on See All for category: ${controller.category[sectionIndex].name}');
+                                                      // Navigate to the next screen or perform any action
+                                                      Get.to(() => SoupListScreen(item: controller.category[sectionIndex]));
+                                                    },
+                                                    child: Row(
+                                                        children: [
+                                                          Text(
+                                                            'See All',
+                                                            style: TextStyle(
+                                                              fontSize: 10,
+                                                              fontFamily: 'Poppins',
+                                                              fontWeight:
+                                                                  FontWeight.w400,
+                                                              color: Color(
+                                                                  0xffCC6522),
+                                                            ),
+                                                          ),
+                                                          Icon(
+                                                            Icons
+                                                                .arrow_forward_ios,
+                                                            size: 10,
+                                                            color:
+                                                                Color(0xffCC6522),
+                                                          )
+                                                        ],
+                                                      ),
+                                                  ),
+                                    
+                                            ],
                                           ),
                                         ),
+                                        SizedBox(
+                                          height: 10,
+                                        ),
                                         // Fixed height container for the grid
-                                        controller.categories[sectionIndex]
+                                        controller.category[sectionIndex]
                                                 .products!.isEmpty
                                             ? Center(
                                                 child: Padding(
@@ -658,37 +705,41 @@ class _HomeScreenState extends State<HomeScreen> {
                                                       color: Colors.grey[400],
                                                       fontFamily: 'Poppins',
                                                       fontWeight:
-                                                          FontWeight.w200),
+                                                          FontWeight.w400),
                                                 ),
                                               ))
                                             : SizedBox(
                                                 // Calculate height based on number of rows needed
                                                 height: (controller
-                                                                .categories[
+                                                                .category[
                                                                     sectionIndex]
                                                                 .products!
                                                                 .length /
                                                             4)
                                                         .ceil() *
-                                                    100.0,
+                                                    60.0,
                                                 child: GridView.builder(
                                                   physics:
                                                       NeverScrollableScrollPhysics(), // Disable grid scrolling
-                                                  itemCount: controller
-                                                      .categories[sectionIndex]
+                                                  itemCount: 
+                                                  controller
+                                                      .category[sectionIndex]
+                                                      .products!
+                                                      .length - 1 > 8 ? 8 : controller
+                                                      .category[sectionIndex]
                                                       .products!
                                                       .length,
                                                   gridDelegate:
                                                       const SliverGridDelegateWithFixedCrossAxisCount(
                                                     crossAxisCount: 4,
                                                     crossAxisSpacing: 10.0,
-                                                    mainAxisSpacing: 10.0,
+                                                    mainAxisSpacing: 15.0,
                                                     childAspectRatio: 1.5,
                                                   ),
                                                   itemBuilder:
                                                       (context, index) {
                                                     final category = controller
-                                                        .categories[
+                                                        .category[
                                                             sectionIndex]
                                                         .products;
                                                     return GestureDetector(
@@ -697,91 +748,30 @@ class _HomeScreenState extends State<HomeScreen> {
                                                           context: context,
                                                           builder: (BuildContext
                                                               context) {
-                                                            return AlertDialog(
-                                                              // icon: Align(
-                                                              //   alignment: Alignment.topRight,
-                                                              //   child: Icon(Icons.cancel_presentation_rounded)),
-                                                              backgroundColor:
-                                                                  Colors.grey[
-                                                                      100],
-                                                              title: Row(
-                                                                mainAxisAlignment:
-                                                                    MainAxisAlignment
-                                                                        .spaceBetween,
-                                                                children: [
-                                                                  Align(
-                                                                    alignment:
-                                                                        Alignment
-                                                                            .topLeft,
-                                                                    child: Text(
-                                                                      category[
-                                                                              index]
-                                                                          .name
-                                                                          .toString(),
-                                                                      style:
-                                                                          TextStyle(
-                                                                        fontSize:
-                                                                            14,
-                                                                        fontFamily:
-                                                                            'Poppins',
-                                                                        fontWeight:
-                                                                            FontWeight.w600,
-                                                                      ),
-                                                                    ),
-                                                                  ),
-                                                                  Align(
-                                                                      alignment:
-                                                                          Alignment
-                                                                              .topRight,
-                                                                      child: GestureDetector(
-                                                                          onTap: () {
-                                                                            Navigator.of(context).pop();
-                                                                          },
-                                                                          child: Icon(Icons.cancel_presentation_rounded))),
-                                                                ],
-                                                              ),
-                                                              content:
-                                                                  // Text(
-                                                                  //     "This is a popup modal!"),
-                                                                  Container(
-                                                                height: 253,
-                                                                decoration:
-                                                                    BoxDecoration(
-                                                                        //  color: Colors.grey[400]
-                                                                        ),
-                                                                child: Column(
+                                                            return StatefulBuilder(
+
+                                                              builder: (context,setState){
+                                                                return AlertDialog(
+                                                                // icon: Align(
+                                                                //   alignment: Alignment.topRight,
+                                                                //   child: Icon(Icons.cancel_presentation_rounded)),
+                                                                backgroundColor:
+                                                                    Colors.grey[
+                                                                        100],
+                                                                title: Row(
+                                                                  mainAxisAlignment:
+                                                                      MainAxisAlignment
+                                                                          .spaceBetween,
                                                                   children: [
-                                                                    Row(
-                                                                      children: [
-                                                                        Align(
-                                                                          alignment:
-                                                                              Alignment.topLeft,
-                                                                          child:
-                                                                              Text(
-                                                                            "\u20A6 ${category[index].price}",
-                                                                            style:
-                                                                                TextStyle(
-                                                                              fontSize: 14,
-                                                                              fontFamily: 'Poppins',
-                                                                              fontWeight: FontWeight.w600,
-                                                                            ),
-                                                                          ),
-                                                                        ),
-                                                                        Text(
-                                                                          ' Per Portion',
-                                                                          style: TextStyle(
-                                                                              color: Colors.grey[400],
-                                                                              fontSize: 10),
-                                                                        )
-                                                                      ],
-                                                                    ),
                                                                     Align(
                                                                       alignment:
                                                                           Alignment
                                                                               .topLeft,
-                                                                      child:
-                                                                          Text(
-                                                                        "${category[index].stock} Portion Available",
+                                                                      child: Text(
+                                                                        category[
+                                                                                index]
+                                                                            .name
+                                                                            .toString(),
                                                                         style:
                                                                             TextStyle(
                                                                           fontSize:
@@ -789,101 +779,173 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                           fontFamily:
                                                                               'Poppins',
                                                                           fontWeight:
-                                                                              FontWeight.w200,
+                                                                              FontWeight.w600,
                                                                         ),
                                                                       ),
                                                                     ),
-                                                                    Container(
-                                                                      height:
-                                                                          150,
-                                                                      decoration: BoxDecoration(
-                                                                          borderRadius: BorderRadius.all(Radius.circular(
-                                                                              20)),
-                                                                          border: Border.all(
-                                                                              width: 10,
-                                                                              color: Colors.white)),
-                                                                      child:
-                                                                          Center(
-                                                                        // widthFactor: 10.5,
-                                                                        // heightFactor: 10.5,
-                                                                        child: category[index].imageUrl !=
-                                                                                null
-                                                                            ? Image.network(
-                                                                                category[index].imageUrl,
-                                                                                fit: BoxFit.contain,
-                                                                              )
-                                                                            : SvgPicture.asset('assets/images/product_image.svg'),
-                                                                      ),
-                                                                    ),
-                                                                    SizedBox(
-                                                                      height:
-                                                                          10,
-                                                                    ),
-                                                                    Container(
-                                                                      padding:
-                                                                          EdgeInsets.all(
-                                                                              8),
-                                                                      height:
-                                                                          53,
-                                                                      decoration: BoxDecoration(
-                                                                          borderRadius: BorderRadius.all(Radius.circular(
-                                                                              12)),
-                                                                          color:
-                                                                              Colors.amber[50]),
-                                                                      child: Text(
-                                                                          '*${category[index].description}\n We also Offer meal prep as well!!!'),
-                                                                    )
+                                                                    Align(
+                                                                        alignment:
+                                                                            Alignment
+                                                                                .topRight,
+                                                                        child: GestureDetector(
+                                                                            onTap: () {
+                                                                              Navigator.of(context).pop();
+                                                                            },
+                                                                            child: Icon(Icons.cancel_presentation_rounded))),
                                                                   ],
                                                                 ),
-                                                              ),
-                                                              actions: [
-                                                                // TextButton(
-                                                                //   child: Text(
-                                                                //       "Close"),
-                                                                //   onPressed: () =>
-                                                                //       Navigator.of(
-                                                                //               context)
-                                                                //           .pop(),
-                                                                // )
-                                                                SizedBox(
-                                                                    height: 40,
-                                                                    width: double
-                                                                        .infinity,
-                                                                    child:
-                                                                        ElevatedButton(
-                                                                      style: ElevatedButton
-                                                                          .styleFrom(
-                                                                        padding: EdgeInsets.symmetric(
-                                                                            horizontal:
-                                                                                8,
-                                                                            vertical:
-                                                                                6),
-                                                                        backgroundColor:
-                                                                            Color(0xffCC6522),
-                                                                        foregroundColor:
-                                                                            Color(0xffffffff),
-                                                                        shape:
-                                                                            RoundedRectangleBorder(
-                                                                          borderRadius:
-                                                                              BorderRadius.circular(4),
+                                                                content:
+                                                                    // Text(
+                                                                    //     "This is a popup modal!"),
+                                                                    Container(
+                                                                  height: 273,
+                                                                  decoration:
+                                                                      BoxDecoration(
+                                                                          //  color: Colors.grey[400]
+                                                                          ),
+                                                                  child: Column(
+                                                                    children: [
+                                                                      Row(
+                                                                        children: [
+                                                                          Align(
+                                                                            alignment:
+                                                                                Alignment.topLeft,
+                                                                            child:
+                                                                                Text(
+                                                                              "\u20A6 ${category[index].price}",
+                                                                              style:
+                                                                                  TextStyle(
+                                                                                fontSize: 14,
+                                                                                fontFamily: 'Poppins',
+                                                                                fontWeight: FontWeight.w600,
+                                                                              ),
+                                                                            ),
+                                                                          ),
+                                                                          Text(
+                                                                            ' Per Portion',
+                                                                            style: TextStyle(
+                                                                                color: Colors.grey[400],
+                                                                                fontSize: 10),
+                                                                          ),
+                                                                          Spacer(),
+                                                                          IconButton(onPressed: (){
+                                                                            setState(() {
+                                                                              isSet = !isSet;
+                                                                            });
+                                                                          }, icon: isSet ? Icon(Icons.favorite_rounded) : Icon(Icons.favorite_border_rounded))
+                                                                        ],
+                                                                      ),
+                                                                      Align(
+                                                                        alignment:
+                                                                            Alignment
+                                                                                .topLeft,
+                                                                        child:
+                                                                            Text(
+                                                                          "${category[index].stock} Portion Available",
+                                                                          style:
+                                                                              TextStyle(
+                                                                            fontSize:
+                                                                                14,
+                                                                            fontFamily:
+                                                                                'Poppins',
+                                                                            fontWeight:
+                                                                                FontWeight.w200,
+                                                                          ),
                                                                         ),
                                                                       ),
-                                                                      onPressed:
-                                                                          () {
-                                                                        Navigator.of(context)
-                                                                            .pop();
-                                                                        Navigator.of(context).push(CupertinoPageRoute(
-                                                                            builder: (context) => FoodDetailScreen(
-                                                                                  item: category[index],
-                                                                                )));
-                                                                      },
-                                                                      child: Text(
-                                                                          'GET INGREDIENT',
-                                                                          style: TextStyle(
-                                                                              color: Colors.white,
-                                                                              fontSize: 12)),
-                                                                    ))
-                                                              ],
+                                                                      Container(
+                                                                        height:
+                                                                            150,
+                                                                        decoration: BoxDecoration(
+                                                                            borderRadius: BorderRadius.all(Radius.circular(
+                                                                                20)),
+                                                                            border: Border.all(
+                                                                                width: 10,
+                                                                                color: Colors.white)),
+                                                                        child:
+                                                                            Container(
+                                                                          // widthFactor: 10.5,
+                                                                          // heightFactor: 10.5,
+                                                                          child: category[index].imageUrl !=
+                                                                                  null
+                                                                              ? Image.network(
+                                                                                  category[index].imageUrl.toString(),
+                                                                                  fit: BoxFit.contain,
+                                                                                )
+                                                                              : SvgPicture.asset('assets/images/product_image.svg'),
+                                                                        ),
+                                                                      ),
+                                                                      SizedBox(
+                                                                        height:
+                                                                            10,
+                                                                      ),
+                                                                      Container(
+                                                                        padding:
+                                                                            EdgeInsets.all(
+                                                                                8),
+                                                                        height:
+                                                                            53,
+                                                                        decoration: BoxDecoration(
+                                                                            borderRadius: BorderRadius.all(Radius.circular(
+                                                                                12)),
+                                                                            color:
+                                                                                Colors.amber[50]),
+                                                                        child: Text(
+                                                                            '*${category[index].description}\n We also Offer meal prep as well!!!'),
+                                                                      )
+                                                                    ],
+                                                                  ),
+                                                                ),
+                                                                actions: [
+                                                                  // TextButton(
+                                                                  //   child: Text(
+                                                                  //       "Close"),
+                                                                  //   onPressed: () =>
+                                                                  //       Navigator.of(
+                                                                  //               context)
+                                                                  //           .pop(),
+                                                                  // )
+                                                                  SizedBox(
+                                                                      height: 40,
+                                                                      width: double
+                                                                          .infinity,
+                                                                      child:
+                                                                          ElevatedButton(
+                                                                        style: ElevatedButton
+                                                                            .styleFrom(
+                                                                          padding: EdgeInsets.symmetric(
+                                                                              horizontal:
+                                                                                  8,
+                                                                              vertical:
+                                                                                  6),
+                                                                          backgroundColor:
+                                                                              Color(0xffCC6522),
+                                                                          foregroundColor:
+                                                                              Color(0xffffffff),
+                                                                          shape:
+                                                                              RoundedRectangleBorder(
+                                                                            borderRadius:
+                                                                                BorderRadius.circular(4),
+                                                                          ),
+                                                                        ),
+                                                                        onPressed:
+                                                                            () {
+                                                                          Navigator.of(context)
+                                                                              .pop();
+                                                                          Navigator.of(context).push(CupertinoPageRoute(
+                                                                              builder: (context) => FoodDetailScreen(
+                                                                                    item: category[index],
+                                                                                  )));
+                                                                        },
+                                                                        child: Text(
+                                                                            'GET INGREDIENT',
+                                                                            style: TextStyle(
+                                                                                color: Colors.white,
+                                                                                fontSize: 12)),
+                                                                      ))
+                                                                ],
+                                                              );
+                                                              },
                                                             );
                                                           },
                                                         );
@@ -907,7 +969,10 @@ class _HomeScreenState extends State<HomeScreen> {
                                                             //  margin: EdgeInsets.all(5),
                                                             padding:
                                                                 EdgeInsets.all(
-                                                                    5),
+                                                                   category![
+                                                                              index]
+                                                                          .imageUrl !=
+                                                                      null ? 0 : 5),
                                                             decoration:
                                                                 BoxDecoration(
                                                               shape: BoxShape
@@ -917,18 +982,26 @@ class _HomeScreenState extends State<HomeScreen> {
                                                               // borderRadius: BorderRadius.circular(12),
                                                             ),
                                                             child: Center(
-                                                              child: category![
+                                                              child: category[
                                                                               index]
                                                                           .imageUrl !=
                                                                       null
-                                                                  ? Image
-                                                                      .network(
-                                                                      category[
+                                                                  ? CircleAvatar(
+                                                                      radius: 16,
+                                                                      child: ClipOval(
+                                                                        child: Image
+                                                                            .network(
+                                                                          category[
                                                                               index]
-                                                                          .imageUrl,
-                                                                      fit: BoxFit
-                                                                          .contain,
-                                                                    )
+                                                                              .imageUrl
+                                                                              .toString(),
+                                                                          fit: BoxFit
+                                                                              .contain,
+                                                                          // width: 30,
+                                                                          // height: 30,
+                                                                        ),
+                                                                      ),
+                                                                  )
                                                                   : SvgPicture
                                                                       .asset(
                                                                           'assets/images/product_image.svg'),

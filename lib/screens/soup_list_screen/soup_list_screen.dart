@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jara_market/screens/egusi_soup_detail_screen/egusi_soup_detail_screen.dart';
+import 'package:jara_market/screens/home_screen/models/models.dart';
 import 'package:jara_market/screens/soup_list_screen/controller/soup_list_controller.dart';
 import 'package:jara_market/services/favorites_service.dart';
 import 'package:jara_market/widgets/app_header.dart';
@@ -10,7 +11,7 @@ import 'package:jara_market/widgets/food_card.dart';
 SoupListController controller = Get.put(SoupListController());
 
 class SoupListScreen extends StatefulWidget {
-  final Map<String, dynamic> item;
+  final Category item;
   const SoupListScreen({Key? key, required this.item}) : super(key: key);
 
   @override
@@ -65,14 +66,14 @@ class _SoupListScreenState extends State<SoupListScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final List<dynamic> foods = widget.item['products'] ?? [];
+    final List<Products> foods = widget.item.products ?? [];
 
     return Scaffold(
       body: SafeArea(
         child: Column(
           children: [
             AppHeader(
-              title: widget.item['name']?.toString() ?? 'Food List',
+              title: widget.item.name?.toString() ?? 'Food List',
               onBackPressed: () => Navigator.pop(context),
             ),
             Expanded(
@@ -87,19 +88,21 @@ class _SoupListScreenState extends State<SoupListScreen> {
                       crossAxisSpacing: 1,
                       children: foods
                           .map((food) => FoodCard(
-                                imageUrl: food['image_url']?.toString() ??
+                                imageUrl: food.imageUrl?.toString() ??
                                     'https://via.placeholder.com/150',
                                 name:
-                                    food['name']?.toString() ?? 'Unnamed Food',
-                                rating: (food['rating'] is num)
-                                    ? (food['rating'] as num).toDouble()
+                                    food.name?.toString() ?? 'Unnamed Food',
+                                rating: (food.rating is num)
+                                    ? (food.rating as num).toDouble()
                                     : 0.0,
                                 reviews:
                                     0, // Since reviews count is not in the API response
-                                isFavorite: _isFavorite(food['id']),
+                                isFavorite: _isFavorite(food.id!
+                                ),
                                 onFavoritePressed: () => _toggleFavorite(
-                                  food['id'],
-                                  _isFavorite(food['id']),
+                                  food.id!,
+                                  _isFavorite(food.id!
+                                  ),
                                 ),
                                 onTap: () {
                                   Navigator.push(
