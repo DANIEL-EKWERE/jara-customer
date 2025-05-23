@@ -231,15 +231,19 @@ List<String> ingredient = [
                   const SizedBox(height: 20),
                   Text('Steps',style: TextStyle(fontSize: 14,fontFamily: 'Poppins', fontWeight: FontWeight.w400,color: Color(0xff838383)),),
                   const SizedBox(height: 20),
-                  ListView.builder(
+                  ListView.separated(
                     itemCount: widget.item.preparationSteps!.length,
                     shrinkWrap: true,
                     physics: const NeverScrollableScrollPhysics(),
                     itemBuilder: (context, index) {
-                    return Text('${index + 1}. ${widget.item.preparationSteps![index]}' + '${(widget.item.preparationSteps!.length - 1 == index ? '.' : ',')}',style: TextStyle(height: 2),);
+                    return Text(
+                      textAlign: TextAlign.justify,
+                      '${index + 1}. ${widget.item.preparationSteps![index]}' + '${(widget.item.preparationSteps!.length - 1 == index ? '.' : ',')}',style: TextStyle(height: 2,),);
+                  }, separatorBuilder: (context, index) {
+                    return const SizedBox(height: 20,);
                   },),
                 //  Text(widget.item.preparationSteps.toString()),
-                  const SizedBox(height: 20),
+                  const SizedBox(height: 50),
                   // Row(
                   //   children: [
                   //     Expanded(

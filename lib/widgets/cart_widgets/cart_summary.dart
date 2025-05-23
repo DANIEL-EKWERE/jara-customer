@@ -3,17 +3,86 @@ import 'package:flutter/material.dart';
 class CartSummary extends StatelessWidget {
   final double shippingCost;
   final double totalAmount;
+  final double itemsCost;
+  final double mealCost;
+  final double serviceCharge;
 
   const CartSummary({
     super.key,
     required this.shippingCost,
     required this.totalAmount,
+    required this.itemsCost,
+    required this.mealCost,
+    required this.serviceCharge,
   });
 
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
+        //items cost row
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            const Text(
+              'Items',
+              style: TextStyle(
+                fontSize: 12,
+                fontFamily: 'Poppins',
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+            Text(
+              '\u20A6${itemsCost.toStringAsFixed(2)}',
+              style: TextStyle(
+                fontSize: 12,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+          ],
+        ),
+        //meal cost row
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            const Text(
+              'Meal Preparation',
+              style: TextStyle(
+                fontSize: 12,
+                fontFamily: 'Poppins',
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+            Text(
+              '\u20A6${mealCost.toStringAsFixed(2)}',
+              style: TextStyle(
+                fontSize: 12,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+          ],
+        ),
+        // service charge row
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            const Text(
+              'Service Charge',
+              style: TextStyle(
+                fontSize: 12,
+                fontFamily: 'Poppins',
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+            Text(
+              '\u20A6${serviceCharge.toStringAsFixed(2)}',
+              style: TextStyle(
+                fontSize: 12,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+          ],
+        ),
         // Shipping cost row
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -21,20 +90,21 @@ class CartSummary extends StatelessWidget {
             const Text(
               'Shipping',
               style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
+                fontSize: 12,
+                fontFamily: 'Poppins',
+                fontWeight: FontWeight.w500,
               ),
             ),
             Text(
-              'N${shippingCost.toStringAsFixed(2)}',
-              style: const TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
+              '\u20A6${shippingCost.toStringAsFixed(2)}',
+              style: TextStyle(
+                fontSize: 12,
+                fontWeight: FontWeight.w500,
               ),
             ),
           ],
         ),
-        const SizedBox(height: 8),
+        const SizedBox(height: 4),
 
         // Total amount row
         Row(
@@ -43,29 +113,34 @@ class CartSummary extends StatelessWidget {
             const Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
+                Row(children: [
+                  Text(
                   'Total',
                   style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
+                    fontSize: 14,
+                    fontWeight: FontWeight.w700,
+                    fontFamily: 'Poppins',
                   ),
                 ),
                 Text(
-                  'TVA included',
+                  ' VAT included',
                   style: TextStyle(
-                    fontSize: 14,
+                    fontSize: 12,
                     color: Colors.grey,
                   ),
                 ),
+                ],)
               ],
             ),
             Text(
-              'N${totalAmount.toInt()}',
+              '\u20A6${totalAmount.toInt()}',
               style: const TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
+                fontSize: 14,
+                fontWeight: FontWeight.w700,
+                fontFamily: 'Poppins',
               ),
-            ),
+              ),
+            
           ],
         ),
       ],

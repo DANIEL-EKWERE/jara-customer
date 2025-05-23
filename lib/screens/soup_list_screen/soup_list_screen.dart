@@ -76,6 +76,43 @@ class _SoupListScreenState extends State<SoupListScreen> {
               title: widget.item.name?.toString() ?? 'Food List',
               onBackPressed: () => Navigator.pop(context),
             ),
+            Padding(
+              padding: const EdgeInsets.only(left: 16, right: 16, top: 8,bottom: 10),
+              child: TextField(
+                decoration: InputDecoration(
+                  
+                  hintText: 'Search...',
+                  prefixIcon: const Icon(Icons.search),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8),
+                    borderSide: BorderSide(style: BorderStyle.solid,
+                        color: const Color(0xffE0E0E0),
+                        width: 1,
+                    ),
+                  //  (
+                     // color: Color(0xffE0E0E0),
+                    //  width: 1,
+                //    ),
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8),
+                    borderSide: const BorderSide(
+                      color: Color(0x1919190D),
+                      width: 1,
+                    ),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8),
+                    borderSide: const BorderSide(
+                      color: Color(0xffE0E0E0),
+                      width: 1,
+                    ),
+                  ),
+                  filled: true,
+                  fillColor: Color(0xffF4F4F6),
+                ),
+              ),
+            ),
             Expanded(
               child: foods.isEmpty
                   ? const Center(
@@ -84,12 +121,13 @@ class _SoupListScreenState extends State<SoupListScreen> {
                   : GridView.count(
                       crossAxisCount: 2,
                       padding: const EdgeInsets.all(8),
-                      mainAxisSpacing: 1,
-                      crossAxisSpacing: 1,
+                      mainAxisSpacing: 3,
+                      crossAxisSpacing: 3,
+                      childAspectRatio: 1.2,
                       children: foods
                           .map((food) => FoodCard(
                                 imageUrl: food.imageUrl?.toString() ??
-                                    'https://via.placeholder.com/150',
+                                    'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTG3jTszSflQt-SjZGIWqJRegF0GrAVzpCQtg&s',
                                 name:
                                     food.name?.toString() ?? 'Unnamed Food',
                                 rating: (food.rating is num)

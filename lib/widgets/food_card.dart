@@ -27,6 +27,9 @@ class FoodCard extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Card(
+        elevation: 0.3,
+        surfaceTintColor: Colors.white,
+        color: Colors.white,
         child: Stack(
           children: [
             Column(
@@ -45,20 +48,23 @@ class FoodCard extends StatelessWidget {
                 ),
                 Padding(
                   padding: const EdgeInsets.all(8),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        name,
+                        name.length > 10
+                            ? '${name.substring(0, 10)}...'
+                            : name,
                         style: const TextStyle(
-                          fontSize: 16,
+                          fontSize: 12,
                           fontWeight: FontWeight.w500,
                         ),
                       ),
                       Row(
                         children: [
                           const Icon(Icons.star,
-                              color: Colors.orange, size: 16),
+                              color: Colors.orange, size: 12),
                           Text(' $rating'),
                           Text(' ($reviews)'),
                         ],
@@ -70,8 +76,8 @@ class FoodCard extends StatelessWidget {
             ),
             if (showMostOrdered)
               Positioned(
-                top: 8,
-                left: 8,
+                top: 4,
+                left: 4,
                 child: Container(
                   padding: const EdgeInsets.symmetric(
                     horizontal: 8,
@@ -82,7 +88,7 @@ class FoodCard extends StatelessWidget {
                     borderRadius: BorderRadius.circular(4),
                   ),
                   child: const Text(
-                    'Most Ordered',
+                    '3.5k Ordered',
                     style: TextStyle(
                       color: Colors.white,
                       fontSize: 12,
@@ -91,14 +97,21 @@ class FoodCard extends StatelessWidget {
                 ),
               ),
             Positioned(
-              top: 8,
-              right: 8,
-              child: IconButton(
-                icon: Icon(
-                  isFavorite ? Icons.favorite : Icons.favorite_border,
-                  color: isFavorite ? Colors.red : Colors.white,
+              top: 1,
+              right: 1,
+              child: Container(
+
+                decoration: BoxDecoration(
+                  color: Color(0xffFFFFFF).withValues(alpha: .64),
+                  borderRadius: BorderRadius.circular(20),
                 ),
-                onPressed: onFavoritePressed,
+                child: IconButton(
+                  icon: Icon(
+                    isFavorite ? Icons.favorite : Icons.favorite_border,
+                    color: isFavorite ? Colors.red : Color(0xff6B7280),
+                  ),
+                  onPressed: onFavoritePressed,
+                ),
               ),
             ),
           ],

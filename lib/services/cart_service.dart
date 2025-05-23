@@ -13,31 +13,40 @@ class CartService {
   }
 
   Future<Map<String, dynamic>> getActiveCart() async {
-    final token = await _getToken();
-    if (token == null) throw Exception('No authentication token found');
+  final token = await _getToken();
+  if (token == null) throw Exception('No authentication token found');
 
-    final response = await http.get(
-      Uri.parse('${basepath.baseUrl}$cartsEndpoint'),
-      headers: {
-        'Authorization': 'Bearer $token',
-      },
-    );
-    print('--------------------------------');
-    print('${basepath.baseUrl}$cartsEndpoint');
-    print(response.statusCode);
-    print(response.body);
-    print(response.headers);
-    print(response.request);
-    print('--------------------------------');
-    if (response.statusCode == 200) {
-      final data = json.decode(response.body);
-      final carts = data['data'] as List;
+  final response = await http.get(
+    Uri.parse('${basepath.baseUrl}$cartsEndpoint'),
+    headers: {
+      'Authorization': 'Bearer $token',
+      'Content-Type': 'application/json',
+    },
+  );
 
-      return carts.first;
+  print('--------------------------------');
+  print('${basepath.baseUrl}$cartsEndpoint');
+  print(response.statusCode);
+  print(response.body);
+  print(response.headers);
+  print(response.request);
+  print('--------------------------------');
+
+  if (response.statusCode == 200) {
+    final data = json.decode(response.body);
+    final carts = data['data'] as List;
+
+    if (carts.isNotEmpty) {
+      return carts.first as Map<String, dynamic>;
     } else {
-      throw Exception('Failed to load cart');
+      //throw Exception('No active cart found'); // or return {} or null if preferred
+      return {}; // Return an empty map if no active cart is found
     }
+  } else {
+    throw Exception('Failed to load cart');
   }
+}
+
 
   Future<Map<String, dynamic>> addItemToCart({
     required int productId,

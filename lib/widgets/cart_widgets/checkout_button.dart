@@ -42,10 +42,11 @@ class CheckoutButton extends StatelessWidget {
           elevation: 0,
         ),
         child: const Text(
-          'Checkout',
+          'Pay',
           style: TextStyle(
-            fontSize: 18,
-            fontWeight: FontWeight.bold,
+            fontSize: 14,
+            fontFamily: 'Poppins',
+            fontWeight: FontWeight.w400,
           ),
         ),
       ),

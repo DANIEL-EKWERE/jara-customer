@@ -126,73 +126,79 @@ class _CartScreenState extends State<CartScreen> {
           ? const Center(child: CircularProgressIndicator())
           : _errorMessage != null && _cartItems.isEmpty
               ? Center(child: Text(_errorMessage!))
-              : Column(
-                  children: [
-                    const Padding(
-                      padding: EdgeInsets.symmetric(vertical: 16),
-                      child: Text(
-                        'Cart',
-                        style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
+              : Scaffold(
+                body: Column(
+                    children: [
+                      const Padding(
+                        padding: EdgeInsets.symmetric(vertical: 16),
+                        child: Text(
+                          'Cart',
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.w700,
+                            fontFamily: 'Poppins',
+                          ),
+                          textAlign: TextAlign.center,
                         ),
-                        textAlign: TextAlign.center,
                       ),
-                    ),
-                    Expanded(
-                      child: isCartEmpty
-                          ? const Center(
-                              child: Text(
-                                'Your cart is empty',
-                                style: TextStyle(fontSize: 18),
+                      Expanded(
+                        child: _cartItems.isEmpty
+                            ? const Center(
+                                child: Text(
+                                  'Your cart is empty',
+                                  style: TextStyle(fontSize: 14),
+                                ),
+                              )
+                            : ListView.separated(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 16),
+                                itemCount: _cartItems.length,
+                                separatorBuilder: (context, index) =>
+                                    const Divider(height: 1),
+                                itemBuilder: (context, index) {
+                                  final item = _cartItems[index];
+                                  return CartItemCard(
+                                    name: item.name,
+                                    unit: item.description,
+                                    basePrice: item.price,
+                                    quantity: item.quantity,
+                                    onQuantityChanged: (newQuantity) =>
+                                        _updateQuantity(item.id, newQuantity),
+                                    onDeleteConfirmed: () => _removeItem(item.id),
+                                    textController: TextEditingController(
+                                        text: item.quantity.toString()),
+                                    isSelected: false,
+                                    onCheckboxChanged: (bool? value) {},
+                                  );
+                                },
                               ),
-                            )
-                          : ListView.separated(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 16),
-                              itemCount: _cartItems.length,
-                              separatorBuilder: (context, index) =>
-                                  const Divider(height: 1),
-                              itemBuilder: (context, index) {
-                                final item = _cartItems[index];
-                                return CartItemCard(
-                                  name: item.name,
-                                  unit: item.description,
-                                  basePrice: item.price,
-                                  quantity: item.quantity,
-                                  onQuantityChanged: (newQuantity) =>
-                                      _updateQuantity(item.id, newQuantity),
-                                  onDeleteConfirmed: () => _removeItem(item.id),
-                                  textController: TextEditingController(
-                                      text: item.quantity.toString()),
-                                  isSelected: false,
-                                  onCheckboxChanged: (bool? value) {},
-                                );
-                              },
-                            ),
-                    ),
-                    const Divider(height: 1),
-                    Container(
-                      padding: const EdgeInsets.all(16),
-                      child: Column(
-                        children: [
-                          CartSummary(
-                            shippingCost: 0.00,
-                            totalAmount: _totalAmount,
-                          ),
-                          const SizedBox(height: 16),
-                          CheckoutButton(
-                            isEnabled: isCheckoutEnabled,
-                            totalAmount: _totalAmount,
-                            cartItems: _cartItems,
-                          ),
-                          const SizedBox(height: 16),
-                          const PaymentMethods(),
-                        ],
                       ),
-                    ),
-                  ],
-                ),
+                      const Divider(height: 1),
+                      Container(
+                        padding: const EdgeInsets.all(16),
+                        child: Column(
+                          children: [
+                            CartSummary(
+                              itemsCost: 0.0,
+                              mealCost: 0.00,
+                              serviceCharge: 0.00,
+                              shippingCost: 0.00,
+                              totalAmount: _totalAmount,
+                            ),
+                            const SizedBox(height: 16),
+                            CheckoutButton(
+                              isEnabled: isCheckoutEnabled,
+                              totalAmount: _totalAmount,
+                              cartItems: _cartItems,
+                            ),
+                            const SizedBox(height: 16),
+                            const PaymentMethods(),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+              ),
     );
   }
 }

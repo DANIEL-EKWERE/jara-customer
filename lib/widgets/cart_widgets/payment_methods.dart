@@ -8,6 +8,7 @@ class PaymentMethods extends StatelessWidget {
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
       child: Row(
+        spacing: 10,
         children: [
           _buildPaymentMethodIcon('assets/images/Paypal.png', 'PayPal'),
           _buildPaymentMethodIcon('assets/images/Visa.png', 'Visa'),

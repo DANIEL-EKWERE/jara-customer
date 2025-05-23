@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 
 class AppHeader extends StatelessWidget {
   final String title;
@@ -20,7 +21,7 @@ class AppHeader extends StatelessWidget {
         children: [
           if (onBackPressed != null)
             IconButton(
-              icon: const Icon(Icons.arrow_back),
+              icon: const Icon(Icons.close),
               onPressed: onBackPressed,
             ),
           Text(
@@ -33,7 +34,7 @@ class AppHeader extends StatelessWidget {
           const Spacer(),
           if (showSearch)
             IconButton(
-              icon: const Icon(Icons.search),
+              icon: SvgPicture.asset('assets/images/bag.svg'),
               onPressed: () {
                 // Implement search
               },
