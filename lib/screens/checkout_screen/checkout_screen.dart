@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_sound/flutter_sound.dart';
 import 'package:get/get.dart';
+import 'package:jara_market/screens/cart_screen/controller/cart_controller.dart';
 import 'package:jara_market/screens/checkout_screen/controller/checkout_controller.dart';
 import 'package:permission_handler/permission_handler.dart';
 // import 'package:http/http.dart' as http;
@@ -19,7 +20,7 @@ import '../wallet_screen/wallet_screen.dart';
 import '../../models/cart_item.dart';
 
 CheckoutController controller = Get.put(CheckoutController()) ;
-
+var cartController = Get.find<CartController>();
 class CheckoutScreen extends StatefulWidget {
   final double totalAmount;
   final List<CartItem> cartItems;
@@ -271,15 +272,20 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                     separatorBuilder: (context, index) =>
                         const Divider(height: 1),
                     itemBuilder: (context, index) {
-                      final item = widget.cartItems[index];
+                      final item = cartController.cartItems[index];
+                      final ingredients = item.ingredients;
                       return CartItemCard(
+                        ingredients: ingredients,
                         name: item.name ?? 'Unknown',
                         unit: item.description ?? 'No description',
                         basePrice: item.price ?? 0.0,
-                        quantity: item.quantity ?? 1,
-                        onQuantityChanged: (qty) {
+                        quantity: item.quantity,
+                      //  onQuantityChanged: (qty) {
                           // Handle quantity change if needed
-                        },
+                          //removeQuantity: cartController.removeFromCart(item.id as int),
+                          removeQuantity: () => cartController.removeFromCart(item.id as int),
+                          addQuantity: () => cartController.updateItemQuantity(item.id as int, (item.quantity.value ?? 1) + 1),
+                       // },
                         onDeleteConfirmed: () {},
                         textController: TextEditingController(
                           text: (item.quantity ?? 1).toString(),

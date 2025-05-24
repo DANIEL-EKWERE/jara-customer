@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jara_market/screens/cart_screen/controller/cart_controller.dart';
+import 'package:jara_market/screens/home_screen/models/food_model.dart';
+import 'package:jara_market/widgets/cart_widgets/cart_ingredient.dart';
 import '../../models/cart_item.dart';
 import '../../widgets/cart_widgets/cart_item_card.dart';
 import '../../widgets/cart_widgets/checkout_button.dart';
@@ -8,7 +10,7 @@ import '../../widgets/cart_widgets/payment_methods.dart';
 import '../../widgets/cart_widgets/cart_summary.dart';
 import '../../services/cart_service.dart';
 
-CartController controller = Get.put(CartController());
+var controller = Get.find<CartController>();
 
 class CartScreen extends StatefulWidget {
   const CartScreen({super.key});
@@ -142,36 +144,57 @@ class _CartScreenState extends State<CartScreen> {
                         ),
                       ),
                       Expanded(
-                        child: _cartItems.isEmpty
+                        child: controller.cartItems.length == 0
                             ? const Center(
                                 child: Text(
                                   'Your cart is empty',
                                   style: TextStyle(fontSize: 14),
                                 ),
                               )
-                            : ListView.separated(
+                            : Obx((){
+                              return ListView.separated(
                                 padding:
                                     const EdgeInsets.symmetric(horizontal: 16),
-                                itemCount: _cartItems.length,
+                                itemCount: controller.cartItems.length,
                                 separatorBuilder: (context, index) =>
-                                    const Divider(height: 1),
+                                    const Divider(height: 0.5,color: Color.fromARGB(57, 228, 228, 228),),
                                 itemBuilder: (context, index) {
-                                  final item = _cartItems[index];
-                                  return CartItemCard(
+                                  final item = controller.cartItems[index];
+                                  final ingredient = controller.cartItems[index].ingredients;
+                                  // return CartItemCard(
+                                  //   name: item.name,
+                                  //   unit: item.description,
+                                  //   basePrice: item.price,
+                                  //   quantity: item.quantity,
+                                  //   // onQuantityChanged: (newQuantity) =>
+                                  //   //     _updateQuantity(item.id.toString(), newQuantity),
+                                  //   addQuantity: () => controller.updateItemQuantity(item.id, item.quantity.value + 1),
+                                  //   removeQuantity: () => controller.updateItemQuantity(item.id, item.quantity.value - 1),
+                                  //   onDeleteConfirmed: () => controller.removeFromCart(item.id),
+                                  //   textController: TextEditingController(
+                                  //       text: item.quantity.toString()),
+                                  //   isSelected: false,
+                                  //   onCheckboxChanged: (bool? value) {},
+                                  // );
+                                  return CartItemCard1(
+                                    ingredients: ingredient,
                                     name: item.name,
                                     unit: item.description,
                                     basePrice: item.price,
                                     quantity: item.quantity,
-                                    onQuantityChanged: (newQuantity) =>
-                                        _updateQuantity(item.id, newQuantity),
-                                    onDeleteConfirmed: () => _removeItem(item.id),
+                                    // onQuantityChanged: (newQuantity) =>
+                                    //     _updateQuantity(item.id.toString(), newQuantity),
+                                    addQuantity: () => controller.updateItemQuantity(item.id, item.quantity.value + 1),
+                                    removeQuantity: () => controller.updateItemQuantity(item.id, item.quantity.value - 1),
+                                    onDeleteConfirmed: () => controller.removeFromCart(item.id),
                                     textController: TextEditingController(
                                         text: item.quantity.toString()),
                                     isSelected: false,
                                     onCheckboxChanged: (bool? value) {},
                                   );
                                 },
-                              ),
+                              );
+                            })
                       ),
                       const Divider(height: 1),
                       Container(
@@ -179,7 +202,10 @@ class _CartScreenState extends State<CartScreen> {
                         child: Column(
                           children: [
                             CartSummary(
-                              itemsCost: 0.0,
+                              itemsCost: controller.cartItems.fold(
+                                  0.0,
+                                  (sum, item) =>
+                                      sum + (item.price * item.quantity.value)),
                               mealCost: 0.00,
                               serviceCharge: 0.00,
                               shippingCost: 0.00,

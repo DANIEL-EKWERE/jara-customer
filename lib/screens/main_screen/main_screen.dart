@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:jara_market/screens/cart_screen/controller/cart_controller.dart';
 import 'package:jara_market/screens/home_screen/controller/home_controller.dart';
 import 'package:jara_market/screens/main_screen/controller/main_controller.dart';
 import '../../widgets/custom_bottom_nav.dart';
@@ -20,10 +21,12 @@ class MainScreen extends StatefulWidget {
 class _MainScreenState extends State<MainScreen> {
 
 HomeController controller = Get.put(HomeController());
+late CartController cartController;
 
   initState() {
     super.initState();
     controller.fetchFoodCategories();
+    cartController = Get.put(CartController());
     //controller.fetchFoods();
   }
   @override

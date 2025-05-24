@@ -1,23 +1,27 @@
 import 'dart:async';
 import 'dart:developer' as myLog;
 // lib/screens/home_screen.dart
-import 'dart:convert';
+// import 'dart:convert';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:jara_market/config/local_storage.dart';
-import 'package:jara_market/screens/categories_screen/categories_screen.dart';
+import 'package:jara_market/screens/cart_screen/models/models.dart';
+import 'package:jara_market/screens/cart_screen/controller/cart_controller.dart';
+//import 'package:jara_market/screens/categories_screen/categories_screen.dart';
 import 'package:jara_market/screens/egusi_soup_detail_screen/egusi_soup_detail_screen.dart';
 import 'package:jara_market/screens/home_screen/controller/home_controller.dart';
-import 'package:jara_market/services/api_service.dart';
-import 'package:jara_market/widgets/snacknar.dart';
-import '../../widgets/category_item.dart';
+// import 'package:jara_market/services/api_service.dart';
+// import 'package:jara_market/widgets/custom_button.dart';
+// import 'package:jara_market/widgets/snacknar.dart';
+// import '../../widgets/category_item.dart';
 import '../soup_list_screen/soup_list_screen.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+//import 'package:shared_preferences/shared_preferences.dart';
 
 HomeController controller = Get.put(HomeController());
+var cartController = Get.put(CartController());
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -640,37 +644,41 @@ class _HomeScreenState extends State<HomeScreen> {
                                             children: [
                                               Text(
                                                 controller
-                                                    .category[sectionIndex]
-                                                    .name
+                                                    .category[sectionIndex].name
                                                     .toString(),
                                                 style: TextStyle(
                                                   fontSize: 14,
-                                                  fontFamily: 'Poppins',
+                                                  fontFamily: 'Roboto',
                                                   fontWeight: FontWeight.w600,
                                                 ),
                                               ),
                                               Spacer(),
                                               controller.category[sectionIndex]
-                                                      .products!
-                                                      .length <= 3
+                                                          .products!.length <=
+                                                      3
                                                   ? SizedBox.shrink()
                                                   : InkWell(
-                                                    onTap: () {
-                                                      // Handle "See All" tap
-                                                      print(
-                                                          'Tapped on See All for category: ${controller.category[sectionIndex].name}');
-                                                      // Navigate to the next screen or perform any action
-                                                      Get.to(() => SoupListScreen(item: controller.category[sectionIndex]));
-                                                    },
-                                                    child: Row(
+                                                      onTap: () {
+                                                        // Handle "See All" tap
+                                                        print(
+                                                            'Tapped on See All for category: ${controller.category[sectionIndex].name}');
+                                                        // Navigate to the next screen or perform any action
+                                                        Get.to(() => SoupListScreen(
+                                                            item: controller
+                                                                    .category[
+                                                                sectionIndex]));
+                                                      },
+                                                      child: Row(
                                                         children: [
                                                           Text(
                                                             'See All',
                                                             style: TextStyle(
                                                               fontSize: 10,
-                                                              fontFamily: 'Poppins',
+                                                              fontFamily:
+                                                                  'Roboto',
                                                               fontWeight:
-                                                                  FontWeight.w400,
+                                                                  FontWeight
+                                                                      .w400,
                                                               color: Color(
                                                                   0xffCC6522),
                                                             ),
@@ -679,13 +687,12 @@ class _HomeScreenState extends State<HomeScreen> {
                                                             Icons
                                                                 .arrow_forward_ios,
                                                             size: 10,
-                                                            color:
-                                                                Color(0xffCC6522),
+                                                            color: Color(
+                                                                0xffCC6522),
                                                           )
                                                         ],
                                                       ),
-                                                  ),
-                                    
+                                                    ),
                                             ],
                                           ),
                                         ),
@@ -703,7 +710,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                   'Food Not Availabe for this Category!!!',
                                                   style: TextStyle(
                                                       color: Colors.grey[400],
-                                                      fontFamily: 'Poppins',
+                                                      fontFamily: 'Roboto',
                                                       fontWeight:
                                                           FontWeight.w400),
                                                 ),
@@ -721,14 +728,19 @@ class _HomeScreenState extends State<HomeScreen> {
                                                 child: GridView.builder(
                                                   physics:
                                                       NeverScrollableScrollPhysics(), // Disable grid scrolling
-                                                  itemCount: 
-                                                  controller
-                                                      .category[sectionIndex]
-                                                      .products!
-                                                      .length - 1 > 8 ? 8 : controller
-                                                      .category[sectionIndex]
-                                                      .products!
-                                                      .length,
+                                                  itemCount: controller
+                                                                  .category[
+                                                                      sectionIndex]
+                                                                  .products!
+                                                                  .length -
+                                                              1 >
+                                                          8
+                                                      ? 8
+                                                      : controller
+                                                          .category[
+                                                              sectionIndex]
+                                                          .products!
+                                                          .length,
                                                   gridDelegate:
                                                       const SliverGridDelegateWithFixedCrossAxisCount(
                                                     crossAxisCount: 4,
@@ -739,214 +751,255 @@ class _HomeScreenState extends State<HomeScreen> {
                                                   itemBuilder:
                                                       (context, index) {
                                                     final category = controller
-                                                        .category[
-                                                            sectionIndex]
+                                                        .category[sectionIndex]
                                                         .products;
                                                     return GestureDetector(
                                                       onTap: () {
                                                         showDialog(
+                                                          barrierDismissible:
+                                                              false,
                                                           context: context,
                                                           builder: (BuildContext
                                                               context) {
                                                             return StatefulBuilder(
-
-                                                              builder: (context,setState){
+                                                              builder: (context,
+                                                                  setState) {
                                                                 return AlertDialog(
-                                                                // icon: Align(
-                                                                //   alignment: Alignment.topRight,
-                                                                //   child: Icon(Icons.cancel_presentation_rounded)),
-                                                                backgroundColor:
-                                                                    Colors.grey[
-                                                                        100],
-                                                                title: Row(
-                                                                  mainAxisAlignment:
-                                                                      MainAxisAlignment
-                                                                          .spaceBetween,
-                                                                  children: [
-                                                                    Align(
-                                                                      alignment:
-                                                                          Alignment
-                                                                              .topLeft,
-                                                                      child: Text(
-                                                                        category[
-                                                                                index]
-                                                                            .name
-                                                                            .toString(),
-                                                                        style:
-                                                                            TextStyle(
-                                                                          fontSize:
-                                                                              14,
-                                                                          fontFamily:
-                                                                              'Poppins',
-                                                                          fontWeight:
-                                                                              FontWeight.w600,
-                                                                        ),
-                                                                      ),
-                                                                    ),
-                                                                    Align(
-                                                                        alignment:
-                                                                            Alignment
-                                                                                .topRight,
-                                                                        child: GestureDetector(
-                                                                            onTap: () {
-                                                                              Navigator.of(context).pop();
-                                                                            },
-                                                                            child: Icon(Icons.cancel_presentation_rounded))),
-                                                                  ],
-                                                                ),
-                                                                content:
-                                                                    // Text(
-                                                                    //     "This is a popup modal!"),
-                                                                    Container(
-                                                                  height: 273,
-                                                                  decoration:
-                                                                      BoxDecoration(
-                                                                          //  color: Colors.grey[400]
-                                                                          ),
-                                                                  child: Column(
+                                                                  insetPadding:
+                                                                      EdgeInsets
+                                                                          .zero,
+                                                                  contentPadding:
+                                                                      EdgeInsets.only(
+                                                                          right:
+                                                                              16,
+                                                                          left:
+                                                                              24,
+                                                                          top:
+                                                                              0,
+                                                                          bottom:
+                                                                              16),
+                                                                  backgroundColor:
+                                                                      Colors.grey[
+                                                                          100],
+                                                                  title: Row(
+                                                                    mainAxisAlignment:
+                                                                        MainAxisAlignment
+                                                                            .spaceBetween,
                                                                     children: [
-                                                                      Row(
-                                                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                                                        crossAxisAlignment: CrossAxisAlignment.center,
-                                                                        children: [
-                                                                          Align(
-                                                                            alignment:
-                                                                                Alignment.topLeft,
-                                                                            child:
-                                                                                Text(
-                                                                              "\u20A6 ${category[index].price}",
-                                                                              style:
-                                                                                  TextStyle(
-                                                                                fontSize: 14,
-                                                                                fontFamily: 'Poppins',
-                                                                                fontWeight: FontWeight.w600,
-                                                                              ),
-                                                                            ),
-                                                                          ),
-                                                                          Text(
-                                                                            ' Per Portion',
-                                                                            style: TextStyle(
-                                                                                color: Colors.grey[400],
-                                                                                fontSize: 10),
-                                                                          ),
-                                                                          Spacer(),
-                                                                          IconButton(onPressed: (){
-                                                                            setState(() {
-                                                                              isSet = !isSet;
-                                                                            });
-                                                                          }, icon: isSet ? Icon(Icons.favorite_rounded) : Icon(Icons.favorite_border_rounded))
-                                                                        ],
-                                                                      ),
                                                                       Align(
                                                                         alignment:
-                                                                            Alignment
-                                                                                .topLeft,
+                                                                            Alignment.topLeft,
                                                                         child:
                                                                             Text(
-                                                                          "${category[index].stock} Portion Available",
+                                                                          category[index]
+                                                                              .name
+                                                                              .toString(),
                                                                           style:
                                                                               TextStyle(
                                                                             fontSize:
                                                                                 14,
                                                                             fontFamily:
-                                                                                'Poppins',
+                                                                                'Roboto',
                                                                             fontWeight:
-                                                                                FontWeight.w200,
+                                                                                FontWeight.w600,
                                                                           ),
                                                                         ),
                                                                       ),
-                                                                      Container(
-                                                                        height:
-                                                                            150,
-                                                                        decoration: BoxDecoration(
-                                                                            borderRadius: BorderRadius.all(Radius.circular(
-                                                                                20)),
-                                                                            border: Border.all(
-                                                                                width: 10,
-                                                                                color: Colors.white)),
-                                                                        child:
-                                                                            Container(
-                                                                          // widthFactor: 10.5,
-                                                                          // heightFactor: 10.5,
-                                                                          child: category[index].imageUrl !=
-                                                                                  null
-                                                                              ? Image.network(
-                                                                                  category[index].imageUrl.toString(),
-                                                                                  fit: BoxFit.contain,
-                                                                                )
-                                                                              : SvgPicture.asset('assets/images/product_image.svg'),
-                                                                        ),
-                                                                      ),
-                                                                      SizedBox(
-                                                                        height:
-                                                                            10,
-                                                                      ),
-                                                                      Container(
-                                                                        padding:
-                                                                            EdgeInsets.all(
-                                                                                8),
-                                                                        height:
-                                                                            53,
-                                                                        decoration: BoxDecoration(
-                                                                            borderRadius: BorderRadius.all(Radius.circular(
-                                                                                12)),
-                                                                            color:
-                                                                                Colors.amber[50]),
-                                                                        child: Text(
-                                                                            '*${category[index].description}\n We also Offer meal prep as well!!!'),
-                                                                      )
+                                                                      Align(
+                                                                          alignment:
+                                                                              Alignment.topRight,
+                                                                          child: GestureDetector(
+                                                                              onTap: () {
+                                                                                Navigator.of(context).pop();
+                                                                              },
+                                                                              child: Icon(Icons.cancel_presentation_rounded))),
                                                                     ],
                                                                   ),
-                                                                ),
-                                                                actions: [
-                                                                  // TextButton(
-                                                                  //   child: Text(
-                                                                  //       "Close"),
-                                                                  //   onPressed: () =>
-                                                                  //       Navigator.of(
-                                                                  //               context)
-                                                                  //           .pop(),
-                                                                  // )
-                                                                  SizedBox(
-                                                                      height: 40,
-                                                                      width: double
-                                                                          .infinity,
-                                                                      child:
-                                                                          ElevatedButton(
-                                                                        style: ElevatedButton
-                                                                            .styleFrom(
-                                                                          padding: EdgeInsets.symmetric(
-                                                                              horizontal:
-                                                                                  8,
-                                                                              vertical:
-                                                                                  6),
-                                                                          backgroundColor:
-                                                                              Color(0xffCC6522),
-                                                                          foregroundColor:
-                                                                              Color(0xffffffff),
-                                                                          shape:
-                                                                              RoundedRectangleBorder(
-                                                                            borderRadius:
-                                                                                BorderRadius.circular(4),
+                                                                  content:
+                                                                      // Text(
+                                                                      //     "This is a popup modal!"),
+                                                                      Container(
+                                                                    height: 273,
+                                                                    decoration:
+                                                                        BoxDecoration(
+                                                                            //  color: Colors.grey[400]
+                                                                            ),
+                                                                    child:
+                                                                        Column(
+                                                                      mainAxisAlignment:
+                                                                          MainAxisAlignment
+                                                                              .start,
+                                                                      children: [
+                                                                        Row(
+                                                                          mainAxisAlignment:
+                                                                              MainAxisAlignment.spaceBetween,
+                                                                          crossAxisAlignment:
+                                                                              CrossAxisAlignment.center,
+                                                                          children: [
+                                                                            Align(
+                                                                              alignment: Alignment.topLeft,
+                                                                              child: Text(
+                                                                                "\u20A6${category[index].price}",
+                                                                                style: TextStyle(
+                                                                                  fontSize: 14,
+                                                                                  fontFamily: 'Roboto',
+                                                                                  fontWeight: FontWeight.w600,
+                                                                                ),
+                                                                              ),
+                                                                            ),
+                                                                            Text(
+                                                                              ' Per Portion',
+                                                                              style: TextStyle(color: Colors.grey[400], fontSize: 10),
+                                                                            ),
+                                                                            Spacer(),
+                                                                            Align(
+                                                                              alignment: Alignment.topRight,
+                                                                              child: IconButton(
+                                                                                  onPressed: () {
+                                                                                    setState(() {
+                                                                                      isSet = !isSet;
+                                                                                    });
+                                                                                  },
+                                                                                  icon: isSet ? Icon(Icons.favorite_rounded) : Icon(Icons.favorite_border_rounded)),
+                                                                            )
+                                                                          ],
+                                                                        ),
+                                                                        Align(
+                                                                          alignment:
+                                                                              Alignment.topLeft,
+                                                                          child:
+                                                                              Text(
+                                                                            //"${category[index].stock} Portion Available",
+                                                                            "${category[index].ingredients!.length} Ingredients in food",
+
+                                                                            style:
+                                                                                TextStyle(
+                                                                              color: Colors.grey[600],
+                                                                              fontSize: 14,
+                                                                              fontFamily: 'Roboto',
+                                                                              fontWeight: FontWeight.w400,
+                                                                            ),
                                                                           ),
                                                                         ),
-                                                                        onPressed:
-                                                                            () {
-                                                                          Navigator.of(context)
-                                                                              .pop();
-                                                                          Navigator.of(context).push(CupertinoPageRoute(
-                                                                              builder: (context) => FoodDetailScreen(
-                                                                                    item: category[index],
-                                                                                  )));
-                                                                        },
-                                                                        child: Text(
-                                                                            'GET INGREDIENT',
-                                                                            style: TextStyle(
-                                                                                color: Colors.white,
-                                                                                fontSize: 12)),
-                                                                      ))
-                                                                ],
-                                                              );
+                                                                        Container(
+                                                                          height:
+                                                                              150,
+                                                                          decoration: BoxDecoration(
+                                                                              borderRadius: BorderRadius.all(Radius.circular(20)),
+                                                                              border: Border.all(width: 10, color: Colors.white)),
+                                                                          child:
+                                                                              Container(
+                                                                            // widthFactor: 10.5,
+                                                                            // heightFactor: 10.5,
+                                                                            child: category[index].imageUrl != null
+                                                                                ? Image.network(
+                                                                                    category[index].imageUrl.toString(),
+                                                                                    fit: BoxFit.contain,
+                                                                                  )
+                                                                                : SvgPicture.asset('assets/images/product_image.svg'),
+                                                                          ),
+                                                                        ),
+                                                                        SizedBox(
+                                                                          height:
+                                                                              10,
+                                                                        ),
+                                                                        Container(
+                                                                          padding:
+                                                                              EdgeInsets.all(8),
+                                                                          height:
+                                                                              53,
+                                                                          decoration: BoxDecoration(
+                                                                              borderRadius: BorderRadius.all(Radius.circular(12)),
+                                                                              color: Colors.amber[50]),
+                                                                          child:
+                                                                              Text('*${category[index].description}\n We also Offer meal prep as well!!!'),
+                                                                        )
+                                                                      ],
+                                                                    ),
+                                                                  ),
+                                                                  actions: [
+                                                                    // TextButton(
+                                                                    //   child: Text(
+                                                                    //       "Close"),
+                                                                    //   onPressed: () =>
+                                                                    //       Navigator.of(
+                                                                    //               context)
+                                                                    //           .pop(),
+                                                                    // )
+                                                                    Row(
+                                                                      spacing:
+                                                                          context.width *
+                                                                              0.02,
+                                                                      children: [
+                                                                        SizedBox(
+                                                                            height:
+                                                                                40,
+                                                                            width:
+                                                                                60,
+                                                                            child: ElevatedButton(
+                                                                                style: ElevatedButton.styleFrom(
+                                                                                  elevation: 0,
+                                                                                  padding: EdgeInsets.symmetric(horizontal: 8, vertical: 6),
+                                                                                  backgroundColor: Colors.white,
+                                                                                  foregroundColor: Color(0xffffffff),
+                                                                                  shape: RoundedRectangleBorder(
+                                                                                    borderRadius: BorderRadius.circular(4),
+                                                                                    side: BorderSide(color: Colors.blueGrey),
+                                                                                  ),
+                                                                                ),
+                                                                                onPressed: () {
+                                                                                  // Navigator.of(context).pop();
+                                                                                  // Navigator.of(context).push(CupertinoPageRoute(
+                                                                                  //     builder: (context) => FoodDetailScreen(
+                                                                                  //           item: category[index],
+                                                                                  //         )));
+                                                                                  print('Add to cart pressed ${category[index].id}');
+
+                                                                                  cartController.addToCart(CartItem(
+                                                                                    id: category[index].id!,
+                                                                                    name: category[index].name!,
+                                                                                    description: category[index].description ?? 'N/A',
+                                                                                    price: double.tryParse(category[index].price!.toString()) ?? 0.0,
+                                                                                    originalPrice: double.tryParse(category[index].price!.toString()) ?? 0.0,
+                                                                                    ingredients: category[index].ingredients!,
+                                                                                  ));
+                                                                                  // print(category[index].id!);
+                                                                                  // print(category[index].name!);
+                                                                                  // print(category[index].description!);
+                                                                                  // print(category[index].price!);
+                                                                                  // Add your add to cart logic here
+                                                                                },
+                                                                                child: Icon(
+                                                                                  Icons.shopping_cart_outlined,
+                                                                                  color: Colors.blueGrey,
+                                                                                  size: 16,
+                                                                                ))),
+                                                                        Expanded(
+                                                                          child: SizedBox(
+                                                                              height: 40,
+                                                                              child: ElevatedButton(
+                                                                                style: ElevatedButton.styleFrom(
+                                                                                  padding: EdgeInsets.symmetric(horizontal: 8, vertical: 6),
+                                                                                  backgroundColor: Color(0xffCC6522),
+                                                                                  foregroundColor: Color(0xffffffff),
+                                                                                  shape: RoundedRectangleBorder(
+                                                                                    borderRadius: BorderRadius.circular(4),
+                                                                                  ),
+                                                                                ),
+                                                                                onPressed: () {
+                                                                                  Navigator.of(context).pop();
+                                                                                  Navigator.of(context).push(CupertinoPageRoute(
+                                                                                      builder: (context) => FoodDetailScreen(
+                                                                                            item: category[index],
+                                                                                          )));
+                                                                                },
+                                                                                child: Text('GET INGREDIENT', style: TextStyle(color: Colors.white, fontSize: 12)),
+                                                                              )),
+                                                                        )
+                                                                      ],
+                                                                    )
+                                                                  ],
+                                                                );
                                                               },
                                                             );
                                                           },
@@ -969,12 +1022,12 @@ class _HomeScreenState extends State<HomeScreen> {
                                                         children: [
                                                           Container(
                                                             //  margin: EdgeInsets.all(5),
-                                                            padding:
-                                                                EdgeInsets.all(
-                                                                   category![
-                                                                              index]
-                                                                          .imageUrl !=
-                                                                      null ? 0 : 5),
+                                                            padding: EdgeInsets.all(
+                                                                category![index]
+                                                                            .imageUrl !=
+                                                                        null
+                                                                    ? 0
+                                                                    : 5),
                                                             decoration:
                                                                 BoxDecoration(
                                                               shape: BoxShape
@@ -984,17 +1037,17 @@ class _HomeScreenState extends State<HomeScreen> {
                                                               // borderRadius: BorderRadius.circular(12),
                                                             ),
                                                             child: Center(
-                                                              child: category[
-                                                                              index]
+                                                              child: category[index]
                                                                           .imageUrl !=
                                                                       null
                                                                   ? CircleAvatar(
-                                                                      radius: 16,
-                                                                      child: ClipOval(
+                                                                      radius:
+                                                                          16,
+                                                                      child:
+                                                                          ClipOval(
                                                                         child: Image
                                                                             .network(
-                                                                          category[
-                                                                              index]
+                                                                          category[index]
                                                                               .imageUrl
                                                                               .toString(),
                                                                           fit: BoxFit
@@ -1003,7 +1056,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                           // height: 30,
                                                                         ),
                                                                       ),
-                                                                  )
+                                                                    )
                                                                   : SvgPicture
                                                                       .asset(
                                                                           'assets/images/product_image.svg'),
@@ -1012,26 +1065,29 @@ class _HomeScreenState extends State<HomeScreen> {
                                                           SizedBox(
                                                             height: 5,
                                                           ),
-                                                          Text( category[index]
-                                                                .name
-                                                                .toString().length > 10 ? '${category[index]
-                                                                .name!.substring(0,7)}...':
-                                                            // softWrap: true,
-                                                            // maxLines:
-                                                            //     2, // Set to any number of lines you want
-                                                            // overflow: TextOverflow
-                                                            //     .ellipsis, // Optional: adds "..." at the end
+                                                          Text(
                                                             category[index]
-                                                                .name
-                                                                .toString(),
-                                                                
+                                                                        .name
+                                                                        .toString()
+                                                                        .length >
+                                                                    10
+                                                                ? '${category[index].name!.substring(0, 7)}...'
+                                                                :
+                                                                // softWrap: true,
+                                                                // maxLines:
+                                                                //     2, // Set to any number of lines you want
+                                                                // overflow: TextOverflow
+                                                                //     .ellipsis, // Optional: adds "..." at the end
+                                                                category[index]
+                                                                    .name
+                                                                    .toString(),
                                                             style: TextStyle(
                                                                 fontSize: 10,
                                                                 fontWeight:
                                                                     FontWeight
                                                                         .w400,
                                                                 fontFamily:
-                                                                    'Poppins'),
+                                                                    'Roboto'),
                                                           )
                                                         ],
                                                       ),

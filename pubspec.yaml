@@ -24,6 +24,7 @@ dependencies:
   flutter_svg: ^2.0.9
   carousel_slider: ^5.0.0
   flutter_native_splash: ^2.4.6
+  badges: ^3.1.2
 
 dev_dependencies:
   flutter_test:
@@ -75,6 +76,32 @@ flutter:
           weight: 200
         - asset: assets/fonts/Mont-HeavyDEMO.otf
           weight: 800
+    - family: Roboto
+      fonts:
+        - asset: assets/fonts/RobotoRomanBold.ttf
+          weight: 700
+        - asset: assets/fonts/RobotoRomanRegular.ttf
+          weight: 400
+        - asset: assets/fonts/RobotoRomanMedium.ttf
+          weight: 500
+        - asset: assets/fonts/RobotoRegular.ttf
+          weight: 400
+        - asset: assets/fonts/RobotoRomanSemiBold.ttf
+          weight: 600
+        - asset: assets/fonts/RobotoItalicSemiBold.ttf
+          weight: 600
+    - family: Inter
+      fonts:
+        - asset: assets/fonts/InterRegular.ttf
+          weight: 400
+    - family: Montserrat
+      fonts:
+        - asset: assets/fonts/MontserratMedium.ttf
+          weight: 500
+    - family: Source Sans Pro
+      fonts:
+        - asset: assets/fonts/SourceSansProRegular.ttf
+          weight: 400
         # - asset: assets/fonts/Mont-ExtraLightDEMO.otf
         #   weight: 200
         # - asset: assets/fonts/Mont-ExtraLightDEMO.otf

@@ -1,3 +1,14 @@
+class CartItems {
+  final String name;
+  final List<CartItem> cartItems;
+
+  CartItems({required this.name, required this.cartItems});
+
+
+}
+
+
+
 class CartItem {
   final String id;
   final String name;

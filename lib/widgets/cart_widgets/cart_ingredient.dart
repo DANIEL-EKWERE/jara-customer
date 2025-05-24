@@ -5,7 +5,7 @@ import 'package:get/get.dart';
 import 'package:jara_market/screens/home_screen/models/models.dart';
 import 'package:jara_market/widgets/custom_text_field.dart';
 
-class CartItemCard extends StatefulWidget {
+class CartItemCard1 extends StatefulWidget {
   final String name;
   final String unit;
   final double basePrice;
@@ -20,8 +20,17 @@ class CartItemCard extends StatefulWidget {
   final bool isSelected;
   final Function(bool?) onCheckboxChanged;
   final List<Ingredients> ingredients;
+// int? id;
+//   String? name;
+//   String? description;
+//   String? price;
+//   String? unit;
+//   String? stock;
+//   String? imageUrl;
+//   String? createdAt;
 
-  const CartItemCard({
+
+  const CartItemCard1({
     Key? key,
     required this.name,
     required this.unit,
@@ -38,10 +47,10 @@ class CartItemCard extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  State<CartItemCard> createState() => _CartItemCardState();
+  State<CartItemCard1> createState() => _CartItemCardState();
 }
 
-class _CartItemCardState extends State<CartItemCard> {
+class _CartItemCardState extends State<CartItemCard1> {
   double get totalPrice => widget.isSelected
       ? double.tryParse(widget.textController.text) ?? 0
       : widget.basePrice * widget.quantity.value;
@@ -76,7 +85,9 @@ class _CartItemCardState extends State<CartItemCard> {
  bool isSelected = false;
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return 
+    
+    Container(
       padding: const EdgeInsets.symmetric(vertical:10),
       decoration: BoxDecoration(
         border: Border(
@@ -251,8 +262,24 @@ class _CartItemCardState extends State<CartItemCard> {
               ),
             ],
           ),
-         
           
+          // ListView.builder(
+          // itemCount: widget.ingredients.length, shrinkWrap: true, physics: NeverScrollableScrollPhysics(),
+          // itemBuilder: (context, index) {
+          //   final ingredient = widget.ingredients[index];
+          //   return Padding(
+          //     padding: const EdgeInsets.symmetric(vertical: 4),
+          //     child: Text(
+          //       '${ingredient.name} - \u20A6${ingredient.price}',
+          //       style: const TextStyle(
+          //         fontSize: 12,
+          //         fontFamily: 'Inter',
+          //         fontWeight: FontWeight.w400,
+          //       ),
+          //     ),
+          //   );
+          // }
+          // ),
         ],
       ),
     );
