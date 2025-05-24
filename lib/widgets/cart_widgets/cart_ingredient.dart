@@ -24,7 +24,7 @@ class CartItemCard1 extends StatefulWidget {
   final TextEditingController textController;
   final bool isSelected;
   final Function(bool?) onCheckboxChanged;
-  final List<Ingredients> ingredients;
+  final RxList<Ingredients> ingredients;
 // int? id;
 //   String? name;
 //   String? description;
@@ -110,7 +110,8 @@ class _CartItemCardState extends State<CartItemCard1> {
             ))),
         Container(
           height: (widget.ingredients.length / 1).ceil() * 100,
-          child: ListView.builder(
+          child: Obx((){
+            return ListView.builder(
               itemCount: widget.ingredients.length,
               itemBuilder: (context, index) {
                 
@@ -359,7 +360,8 @@ class _CartItemCardState extends State<CartItemCard1> {
                     ],
                   ),
                 );
-              }),
+              });
+          })
         ),
       ],
     );

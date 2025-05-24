@@ -20,7 +20,7 @@ class CartItem {
   final String description;
   final double price;
   final double? originalPrice;
-  final List<Ingredients> ingredients;
+  final RxList<Ingredients> ingredients;
   RxInt quantity;
   
 
@@ -29,10 +29,11 @@ class CartItem {
     required this.name,
     required this.description,
     required this.price,
-    required this.ingredients,
+    required List<Ingredients> ingredients,
+
     this.originalPrice,
     int quantity = 1,
-  }) : quantity = RxInt(quantity);
+  }) : quantity = RxInt(quantity), ingredients = ingredients.obs;
 
   
 }

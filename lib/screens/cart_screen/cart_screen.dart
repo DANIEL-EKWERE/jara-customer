@@ -167,7 +167,7 @@ class _CartScreenState extends State<CartScreen> {
                                     ),
                                     itemBuilder: (context, index) {
                                       final item = controller.cartItems[index];
-                                      final ingredient = controller
+                                      final RxList<Ingredients> ingredients = controller
                                           .cartItems[index].ingredients;
                                       // return CartItemCard(
                                       //   name: item.name,
@@ -186,22 +186,22 @@ class _CartScreenState extends State<CartScreen> {
                                       // );
                                       return CartItemCard1(
                                         id: item.id,
-                                        ingredients: ingredient,
+                                        ingredients: ingredients,
                                         name: item.name,
                                         unit: item.description,
                                         basePrice: item.price,
                                         quantity: item.quantity,
                                         // onQuantityChanged: (newQuantity) =>
                                         //     _updateQuantity(item.id.toString(), newQuantity),
-                                        addQuantity: () => controller
-                                            .incrementIngredientQuantity(
-                                                item.id,
-                                                ingredient
-                                                    .length), //controller.updateItemQuantity(item.id, item.quantity.value + 1),
-                                        removeQuantity:
-                                            () {}, // => controller.decrementIngredientQuantity(item.id, ingredient.length),   //controller.updateItemQuantity(item.id, item.quantity.value - 1),
-                                        onDeleteConfirmed:
-                                            () {}, // => controller.removeFromCart(item.id),
+                                        addQuantity: () {
+                                          controller.updateItemQuantity(item.id, item.quantity.value + 1);
+                                        },
+                                        removeQuantity: () {
+                                          controller.updateItemQuantity(item.id, item.quantity.value - 1);
+                                        },
+                                        onDeleteConfirmed: () {
+                                          controller.removeFromCart(item.id);
+                                        },
                                         textController: TextEditingController(
                                             text: item.quantity.toString()),
                                         isSelected: false,
