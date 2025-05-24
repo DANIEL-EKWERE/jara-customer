@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:jara_market/screens/cart_screen/models/models.dart';
 import '../../screens/checkout_screen/checkout_screen.dart';
-import '../../models/cart_item.dart';
+// import '../../models/cart_item.dart';
 
 class CheckoutButton extends StatelessWidget {
   final bool isEnabled;

@@ -1,14 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jara_market/screens/cart_screen/controller/cart_controller.dart';
+import 'package:jara_market/screens/checkout_screen/checkout_screen.dart';
 import 'package:jara_market/screens/home_screen/models/food_model.dart';
+import 'package:jara_market/screens/cart_screen/models/models.dart';
 import 'package:jara_market/widgets/cart_widgets/cart_ingredient.dart';
-import '../../models/cart_item.dart';
+// import '../../models/cart_item.dart';
 import '../../widgets/cart_widgets/cart_item_card.dart';
 import '../../widgets/cart_widgets/checkout_button.dart';
 import '../../widgets/cart_widgets/payment_methods.dart';
 import '../../widgets/cart_widgets/cart_summary.dart';
 import '../../services/cart_service.dart';
+// import 'package:jara_market/screens/cart_screen/models/models.dart';
 
 var controller = Get.find<CartController>();
 
@@ -62,7 +65,8 @@ class _CartScreenState extends State<CartScreen> {
           }
 
           return CartItem(
-            id: (item['id'] ?? '').toString(),
+            ingredients: [],
+            id: item.id,
             name: product['name']?.toString() ?? 'Unknown Product',
             description: product['description']?.toString() ?? '',
             price: parsePrice(item['price']),
@@ -115,7 +119,7 @@ class _CartScreenState extends State<CartScreen> {
 
   double get _totalAmount {
     return _cartItems.fold(
-        0, (sum, item) => sum + (item.price * item.quantity));
+        0, (sum, item) => sum + (item.price * item.quantity.value));
   }
 
   @override
@@ -129,7 +133,7 @@ class _CartScreenState extends State<CartScreen> {
           : _errorMessage != null && _cartItems.isEmpty
               ? Center(child: Text(_errorMessage!))
               : Scaffold(
-                body: Column(
+                  body: Column(
                     children: [
                       const Padding(
                         padding: EdgeInsets.symmetric(vertical: 16),
@@ -144,58 +148,68 @@ class _CartScreenState extends State<CartScreen> {
                         ),
                       ),
                       Expanded(
-                        child: controller.cartItems.length == 0
-                            ? const Center(
-                                child: Text(
-                                  'Your cart is empty',
-                                  style: TextStyle(fontSize: 14),
-                                ),
-                              )
-                            : Obx((){
-                              return ListView.separated(
-                                padding:
-                                    const EdgeInsets.symmetric(horizontal: 16),
-                                itemCount: controller.cartItems.length,
-                                separatorBuilder: (context, index) =>
-                                    const Divider(height: 0.5,color: Color.fromARGB(57, 228, 228, 228),),
-                                itemBuilder: (context, index) {
-                                  final item = controller.cartItems[index];
-                                  final ingredient = controller.cartItems[index].ingredients;
-                                  // return CartItemCard(
-                                  //   name: item.name,
-                                  //   unit: item.description,
-                                  //   basePrice: item.price,
-                                  //   quantity: item.quantity,
-                                  //   // onQuantityChanged: (newQuantity) =>
-                                  //   //     _updateQuantity(item.id.toString(), newQuantity),
-                                  //   addQuantity: () => controller.updateItemQuantity(item.id, item.quantity.value + 1),
-                                  //   removeQuantity: () => controller.updateItemQuantity(item.id, item.quantity.value - 1),
-                                  //   onDeleteConfirmed: () => controller.removeFromCart(item.id),
-                                  //   textController: TextEditingController(
-                                  //       text: item.quantity.toString()),
-                                  //   isSelected: false,
-                                  //   onCheckboxChanged: (bool? value) {},
-                                  // );
-                                  return CartItemCard1(
-                                    ingredients: ingredient,
-                                    name: item.name,
-                                    unit: item.description,
-                                    basePrice: item.price,
-                                    quantity: item.quantity,
-                                    // onQuantityChanged: (newQuantity) =>
-                                    //     _updateQuantity(item.id.toString(), newQuantity),
-                                    addQuantity: () => controller.updateItemQuantity(item.id, item.quantity.value + 1),
-                                    removeQuantity: () => controller.updateItemQuantity(item.id, item.quantity.value - 1),
-                                    onDeleteConfirmed: () => controller.removeFromCart(item.id),
-                                    textController: TextEditingController(
-                                        text: item.quantity.toString()),
-                                    isSelected: false,
-                                    onCheckboxChanged: (bool? value) {},
+                          child: controller.cartItems.length == 0
+                              ? const Center(
+                                  child: Text(
+                                    'Your cart is empty',
+                                    style: TextStyle(fontSize: 14),
+                                  ),
+                                )
+                              : Obx(() {
+                                  return ListView.separated(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 16),
+                                    itemCount: controller.cartItems.length,
+                                    separatorBuilder: (context, index) =>
+                                        const Divider(
+                                      height: 0.5,
+                                      color: Color.fromARGB(57, 228, 228, 228),
+                                    ),
+                                    itemBuilder: (context, index) {
+                                      final item = controller.cartItems[index];
+                                      final ingredient = controller
+                                          .cartItems[index].ingredients;
+                                      // return CartItemCard(
+                                      //   name: item.name,
+                                      //   unit: item.description,
+                                      //   basePrice: item.price,
+                                      //   quantity: item.quantity,
+                                      //   // onQuantityChanged: (newQuantity) =>
+                                      //   //     _updateQuantity(item.id.toString(), newQuantity),
+                                      //   addQuantity: () => controller.updateItemQuantity(item.id, item.quantity.value + 1),
+                                      //   removeQuantity: () => controller.updateItemQuantity(item.id, item.quantity.value - 1),
+                                      //   onDeleteConfirmed: () => controller.removeFromCart(item.id),
+                                      //   textController: TextEditingController(
+                                      //       text: item.quantity.toString()),
+                                      //   isSelected: false,
+                                      //   onCheckboxChanged: (bool? value) {},
+                                      // );
+                                      return CartItemCard1(
+                                        id: item.id,
+                                        ingredients: ingredient,
+                                        name: item.name,
+                                        unit: item.description,
+                                        basePrice: item.price,
+                                        quantity: item.quantity,
+                                        // onQuantityChanged: (newQuantity) =>
+                                        //     _updateQuantity(item.id.toString(), newQuantity),
+                                        addQuantity: () => controller
+                                            .incrementIngredientQuantity(
+                                                item.id,
+                                                ingredient
+                                                    .length), //controller.updateItemQuantity(item.id, item.quantity.value + 1),
+                                        removeQuantity:
+                                            () {}, // => controller.decrementIngredientQuantity(item.id, ingredient.length),   //controller.updateItemQuantity(item.id, item.quantity.value - 1),
+                                        onDeleteConfirmed:
+                                            () {}, // => controller.removeFromCart(item.id),
+                                        textController: TextEditingController(
+                                            text: item.quantity.toString()),
+                                        isSelected: false,
+                                        onCheckboxChanged: (bool? value) {},
+                                      );
+                                    },
                                   );
-                                },
-                              );
-                            })
-                      ),
+                                })),
                       const Divider(height: 1),
                       Container(
                         padding: const EdgeInsets.all(16),
@@ -203,9 +217,19 @@ class _CartScreenState extends State<CartScreen> {
                           children: [
                             CartSummary(
                               itemsCost: controller.cartItems.fold(
-                                  0.0,
-                                  (sum, item) =>
-                                      sum + (item.price * item.quantity.value)),
+                                0.0,
+                                (sum, item) =>
+                                    sum +
+                                    (item.price * item.quantity.value) +
+                                    item.ingredients.fold(
+                                      0.0,
+                                      (ingredientSum, ingredient) =>
+                                          ingredientSum +
+                                          ((ingredient.price ?? 0.0) *
+                                              (ingredient.quantity?.value ??
+                                                  1)),
+                                    ),
+                              ),
                               mealCost: 0.00,
                               serviceCharge: 0.00,
                               shippingCost: 0.00,
@@ -215,7 +239,7 @@ class _CartScreenState extends State<CartScreen> {
                             CheckoutButton(
                               isEnabled: isCheckoutEnabled,
                               totalAmount: _totalAmount,
-                              cartItems: _cartItems,
+                              cartItems: controller.cartItems,
                             ),
                             const SizedBox(height: 16),
                             const PaymentMethods(),
@@ -224,7 +248,7 @@ class _CartScreenState extends State<CartScreen> {
                       ),
                     ],
                   ),
-              ),
+                ),
     );
   }
 }

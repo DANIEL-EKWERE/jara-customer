@@ -7,6 +7,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+
 import 'package:jara_market/config/local_storage.dart';
 import 'package:jara_market/screens/cart_screen/models/models.dart';
 import 'package:jara_market/screens/cart_screen/controller/cart_controller.dart';
@@ -961,7 +962,12 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                                     description: category[index].description ?? 'N/A',
                                                                                     price: double.tryParse(category[index].price!.toString()) ?? 0.0,
                                                                                     originalPrice: double.tryParse(category[index].price!.toString()) ?? 0.0,
-                                                                                    ingredients: category[index].ingredients!,
+                                                                                    ingredients: category[index].ingredients!.map((ingredient) => Ingredients(
+                                                                                      id: ingredient.id!,
+                                                                                      name: ingredient.name,
+                                                                                      description: ingredient.description,
+                                                                                      price: double.tryParse(ingredient.price.toString()) ?? 0.0,
+                                                                                    )).toList(),
                                                                                   ));
                                                                                   // print(category[index].id!);
                                                                                   // print(category[index].name!);

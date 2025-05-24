@@ -1,5 +1,5 @@
 import 'package:get/get.dart';
-import 'package:jara_market/screens/home_screen/models/models.dart';
+// import 'package:jara_market/screens/home_screen/models/models.dart';
 
 class CartItems {
   final String name;
@@ -22,6 +22,7 @@ class CartItem {
   final double? originalPrice;
   final List<Ingredients> ingredients;
   RxInt quantity;
+  
 
   CartItem({
     required this.id,
@@ -36,37 +37,30 @@ class CartItem {
   
 }
 
-// class Ingredients {
-//   int? id;
-//   String? name;
-//   String? description;
-//   String? price;
-//   String? unit;
-//   String? stock;
-//   String? imageUrl;
-//   String? createdAt;
+class Ingredients {
+  final int id;
+  String? name;
+  String? description;
+  double? price;
+  String? unit;
+  String? stock;
+  String? imageUrl;
+  String? createdAt;
+  RxInt? quantity;
+  RxBool isSelected;
 
-//   Ingredients(
-//       {this.id,
-//       this.name,
-//       this.description,
-//       this.price,
-//       this.unit,
-//       this.stock,
-//       this.imageUrl,
-//       this.createdAt});
-
-//   Ingredients.fromJson(Map<String, dynamic> json) {
-//     id = json['id'];
-//     name = json['name'];
-//     description = json['description'];
-//     price = json['price'];
-//     unit = json['unit'];
-//     stock = json['stock'];
-//     imageUrl = json['image_url'];
-//     createdAt = json['created_at'];
-//   }
-//}
+  Ingredients(
+      {required this.id,
+      this.name,
+      this.description,
+      this.price,
+      this.unit,
+      this.stock,
+      this.imageUrl,
+      this.createdAt,
+      quantity = 1,
+  }) : quantity = RxInt(quantity), isSelected = RxBool(false);
+}
 
 // class Cart {
 //   final int id;

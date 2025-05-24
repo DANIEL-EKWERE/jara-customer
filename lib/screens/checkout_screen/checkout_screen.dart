@@ -3,6 +3,7 @@ import 'package:flutter_sound/flutter_sound.dart';
 import 'package:get/get.dart';
 import 'package:jara_market/screens/cart_screen/controller/cart_controller.dart';
 import 'package:jara_market/screens/checkout_screen/controller/checkout_controller.dart';
+import 'package:jara_market/widgets/cart_widgets/cart_ingredient.dart';
 import 'package:permission_handler/permission_handler.dart';
 // import 'package:http/http.dart' as http;
 // import 'dart:convert';
@@ -17,7 +18,8 @@ import '../../widgets/address_card.dart';
 import '../../widgets/summary_breakdown_card.dart';
 import '../../widgets/message_box.dart';
 import '../wallet_screen/wallet_screen.dart';
-import '../../models/cart_item.dart';
+// import '../../models/cart_item.dart';
+import 'package:jara_market/screens/cart_screen/models/models.dart';
 
 CheckoutController controller = Get.put(CheckoutController()) ;
 var cartController = Get.find<CartController>();
@@ -274,7 +276,8 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                     itemBuilder: (context, index) {
                       final item = cartController.cartItems[index];
                       final ingredients = item.ingredients;
-                      return CartItemCard(
+                      return CartItemCard1(
+                        id: item.id,
                         ingredients: ingredients,
                         name: item.name ?? 'Unknown',
                         unit: item.description ?? 'No description',
