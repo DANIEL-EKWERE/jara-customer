@@ -57,7 +57,7 @@ class Ingredients {
       this.price,
       this.unit,
       this.stock,
-      this.imageUrl,
+      this.imageUrl, 
       this.createdAt,
       quantity = 1,
   }) : quantity = RxInt(quantity), isSelected = RxBool(false);
