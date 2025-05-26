@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
+import 'package:jara_market/screens/cart_screen/controller/cart_controller.dart';
+var controller = Get.find<CartController>();
 class CartSummary extends StatelessWidget {
   final double shippingCost;
-  final double totalAmount;
-  final double itemsCost;
+  final RxDouble totalAmount;
+  final RxDouble itemsCost;
   final double mealCost;
   final double serviceCharge;
 
@@ -32,13 +35,16 @@ class CartSummary extends StatelessWidget {
                 fontWeight: FontWeight.w500,
               ),
             ),
-            Text(
-              '\u20A6${itemsCost.toStringAsFixed(2)}',
+            Obx((){
+              return Text(
+              '\u20A6${controller.totalIngredientPrice.toStringAsFixed(2)}',
+            //  '\u20A6${itemsCost.toStringAsFixed(2)}',
               style: TextStyle(
                 fontSize: 12,
                 fontWeight: FontWeight.w500,
               ),
-            ),
+            );
+            })
           ],
         ),
         //meal cost row
@@ -74,13 +80,15 @@ class CartSummary extends StatelessWidget {
                 fontWeight: FontWeight.w500,
               ),
             ),
-            Text(
-              '\u20A6${serviceCharge.toStringAsFixed(2)}',
+            Obx((){
+              return Text(
+              '\u20A6${controller.calculatedServiceCharge.toStringAsFixed(2)}',
               style: TextStyle(
                 fontSize: 12,
                 fontWeight: FontWeight.w500,
               ),
-            ),
+            );
+            })
           ],
         ),
         // Shipping cost row
@@ -132,14 +140,17 @@ class CartSummary extends StatelessWidget {
                 ],)
               ],
             ),
-            Text(
-              '\u20A6${totalAmount.toInt()}',
+
+            Obx((){
+              return Text(
+              '\u20A6${controller.total.toInt()}',
               style: const TextStyle(
                 fontSize: 14,
                 fontWeight: FontWeight.w700,
-                fontFamily: 'Poppins',
+                fontFamily: 'Roboto',
               ),
-              ),
+              );
+            })
             
           ],
         ),

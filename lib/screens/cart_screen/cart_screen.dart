@@ -28,6 +28,7 @@ class _CartScreenState extends State<CartScreen> {
   bool _isLoading = true;
   String? _errorMessage;
   int? _currentCartId;
+  
 
   @override
   void initState() {
@@ -124,13 +125,13 @@ class _CartScreenState extends State<CartScreen> {
 
   @override
   Widget build(BuildContext context) {
-    bool isCartEmpty = _cartItems.isEmpty;
-    bool isCheckoutEnabled = !isCartEmpty && _totalAmount > 0;
+    bool isCartEmpty = controller.cartItems.isEmpty;
+    bool isCheckoutEnabled = !isCartEmpty && controller.total > 0;
 
     return SafeArea(
       child: _isLoading
           ? const Center(child: CircularProgressIndicator())
-          : _errorMessage != null && _cartItems.isEmpty
+          : _errorMessage != null && controller.cartItems.isEmpty
               ? Center(child: Text(_errorMessage!))
               : Scaffold(
                   body: Column(
@@ -159,16 +160,77 @@ class _CartScreenState extends State<CartScreen> {
                                   return ListView.separated(
                                     padding: const EdgeInsets.symmetric(
                                         horizontal: 16),
-                                    itemCount: controller.cartItems.length,
+                                    itemCount: controller.cartItems.length + 1,
                                     separatorBuilder: (context, index) =>
                                         const Divider(
                                       height: 0.5,
                                       color: Color.fromARGB(57, 228, 228, 228),
                                     ),
                                     itemBuilder: (context, index) {
+                                      if (index ==
+                                          controller.cartItems.length) {
+                                        return Padding(
+                                          padding: const EdgeInsets.symmetric(
+                                              vertical: 16),
+                                          child: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.start,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Checkbox(
+                                                activeColor: Colors.green,
+                                                checkColor: Colors.white,
+                                                side: const BorderSide(
+                                                  color: Color(
+                                                      0xff868D94), // Change this to your desired stroke color
+                                                  width:
+                                                      2, // Optional: stroke thickness
+                                                ),
+                                                value: controller.mealPrep.value,
+                                                onChanged: (bool? value) {
+                                                  //controller.toggleSelectAll(value!);
+                                                  setState(() {
+                                                    controller.mealPrep.value = value!;
+                                                    print(value);
+                                                    print(controller.mealPrep.value);
+                                                  });
+                                                },
+                                              ),
+                                              Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  Text(
+                                                    'Meal Preparation',
+                                                    style: TextStyle(
+                                                      fontSize: 14,
+                                                      fontWeight:
+                                                          FontWeight.w600,
+                                                      color: Colors.grey[400],
+                                                      fontFamily: 'Roboto',
+                                                    ),
+                                                  ),
+                                                  Text(
+                                                    'Lorem ipsum dolor sit amet, consectetur adipiscing elit\ntempor incididunt ut labore et dolore magna aliqua.',
+                                                    style: TextStyle(
+                                                      fontSize: 9,
+                                                      color: Colors.grey[400],
+                                                      fontWeight:
+                                                          FontWeight.w400,
+                                                      fontFamily: 'Roboto',
+                                                    ),
+                                                  )
+                                                ],
+                                              ),
+                                            ],
+                                          ),
+                                        );
+                                      }
                                       final item = controller.cartItems[index];
-                                      final RxList<Ingredients> ingredients = controller
-                                          .cartItems[index].ingredients;
+                                      final RxList<Ingredients> ingredients =
+                                          controller
+                                              .cartItems[index].ingredients;
                                       // return CartItemCard(
                                       //   name: item.name,
                                       //   unit: item.description,
@@ -194,10 +256,12 @@ class _CartScreenState extends State<CartScreen> {
                                         // onQuantityChanged: (newQuantity) =>
                                         //     _updateQuantity(item.id.toString(), newQuantity),
                                         addQuantity: () {
-                                          controller.updateItemQuantity(item.id, item.quantity.value + 1);
+                                          controller.updateItemQuantity(
+                                              item.id, item.quantity.value + 1);
                                         },
                                         removeQuantity: () {
-                                          controller.updateItemQuantity(item.id, item.quantity.value - 1);
+                                          controller.updateItemQuantity(
+                                              item.id, item.quantity.value - 1);
                                         },
                                         onDeleteConfirmed: () {
                                           controller.removeFromCart(item.id);
@@ -216,29 +280,29 @@ class _CartScreenState extends State<CartScreen> {
                         child: Column(
                           children: [
                             CartSummary(
-                              itemsCost: controller.cartItems.fold(
-                                0.0,
-                                (sum, item) =>
-                                    sum +
-                                    (item.price * item.quantity.value) +
-                                    item.ingredients.fold(
-                                      0.0,
-                                      (ingredientSum, ingredient) =>
-                                          ingredientSum +
-                                          ((ingredient.price ?? 0.0) *
-                                              (ingredient.quantity?.value ??
-                                                  1)),
-                                    ),
-                              ),
-                              mealCost: 0.00,
-                              serviceCharge: 0.00,
-                              shippingCost: 0.00,
-                              totalAmount: _totalAmount,
+                              itemsCost: controller.totalIngredientPrice,
+                              // .cartItems.fold(
+                              //   // 0.0,
+                              //   // (sum, item) =>
+                              //   //     sum +
+                              //   //     (item.price * item.quantity.value) +
+                              //   //     item.ingredients.fold(
+                              //   0.0,
+                              //   (ingredientSum, ingredient) =>
+                              //       ingredientSum +
+                              //       ((ingredient.price) *
+                              //           (ingredient.quantity.value)),
+                                // ),
+                            //  ),
+                              mealCost: controller.mealPrepPrice,
+                              serviceCharge: controller.calculatedServiceCharge,
+                              shippingCost: controller.shippingCost.value,
+                              totalAmount: controller.total.obs,
                             ),
                             const SizedBox(height: 16),
                             CheckoutButton(
                               isEnabled: isCheckoutEnabled,
-                              totalAmount: _totalAmount,
+                              totalAmount: controller.total,
                               cartItems: controller.cartItems,
                             ),
                             const SizedBox(height: 16),

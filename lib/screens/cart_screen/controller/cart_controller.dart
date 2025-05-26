@@ -8,6 +8,28 @@ class CartController extends GetxController {
 
   RxList<CartItem> cartItems = <CartItem>[].obs;
 
+   var itemsCost = 0.0.obs;
+  var mealCost = 0.0.obs;
+  var serviceChargeValue = 0.0.obs;
+  var shippingCost = 2000.0.obs;
+  var totalAmount = 0.0.obs;
+
+  RxBool mealPrep = true.obs;
+
+  void updateCosts({
+    double? items,
+    double? meal,
+    double? service,
+    double? shipping,
+    double? total,
+  }) {
+    if (items != null) itemsCost.value = items;
+    if (meal != null) mealCost.value = meal;
+    if (service != null) serviceChargeValue.value = service;
+    if (shipping != null) shippingCost.value = shipping;
+    if (total != null) totalAmount.value = total;
+  }
+
   void addToCart(CartItem item) {
     print(item.name);
     int index = cartItems.indexWhere((cartItem) => cartItem.id == item.id);
@@ -49,6 +71,31 @@ class CartController extends GetxController {
     return cartItems.fold(0.0, (sum, item) => sum + (item.price * item.quantity.value));
   }
 
+double get mealPrepPrice {
+  return mealPrep.value ? 2000.00 : 0.00;
+}
+
+double get calculatedServiceCharge {
+  return totalIngredientPrice.value * 0.07;
+}
+
+RxDouble get totalIngredientPrice {
+  final total = cartItems.fold<double>(
+    0.0,
+    (sum, item) => sum +
+        item.ingredients.fold<double>(
+          0.0,
+          (ingredientSum, ingredient) =>
+              ingredientSum +
+              (ingredient.price! * ingredient.quantity!.value),
+        ),
+  );
+  return total.obs;
+}
+
+double get total {
+  return totalIngredientPrice.value + mealPrepPrice + calculatedServiceCharge + shippingCost.value; 
+}
 
   void incrementIngredientQuantity(int itemId, int ingredientId) {
   // Find the cart item

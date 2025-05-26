@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:jara_market/widgets/custom_button.dart';
+import 'package:get/get.dart';
 import 'package:jara_market/widgets/custom_text_field.dart';
 
 class HelpAndSupport extends StatelessWidget {
@@ -11,7 +11,11 @@ class HelpAndSupport extends StatelessWidget {
     return Scaffold(
         appBar: AppBar(
           backgroundColor: Colors.white,
-          leading: Icon(Icons.chevron_left_rounded),
+          leading: GestureDetector(
+            onTap:(){
+              Get.back();
+            },
+            child: Icon(Icons.chevron_left_rounded)),
           title: Text('Help and Support'),
           centerTitle: false,
         ),
