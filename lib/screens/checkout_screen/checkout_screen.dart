@@ -3,23 +3,18 @@ import 'package:flutter_sound/flutter_sound.dart';
 import 'package:get/get.dart';
 import 'package:jara_market/screens/cart_screen/controller/cart_controller.dart';
 import 'package:jara_market/screens/checkout_screen/controller/checkout_controller.dart';
-import 'package:jara_market/widgets/cart_widgets/cart_ingredient.dart';
 import 'package:jara_market/widgets/cart_widgets/cart_summary_card.dart';
+import 'package:jara_market/widgets/cart_widgets/checkout_button.dart';
+import 'package:jara_market/widgets/cart_widgets/checkout_button_paystack.dart';
+import 'package:jara_market/widgets/custom_button.dart';
 import 'package:permission_handler/permission_handler.dart';
-// import 'package:http/http.dart' as http;
-// import 'dart:convert';
-// import 'dart:io';
 import 'package:path_provider/path_provider.dart';
 import 'package:jara_market/services/api_service.dart';
-// import 'package:jara_market/widgets/custom_bottom_nav.dart';
-// import 'package:shared_preferences/shared_preferences.dart';
-import '../../widgets/cart_widgets/cart_item_card.dart';
 import '../../widgets/payment_method_card.dart';
 import '../../widgets/address_card.dart';
 import '../../widgets/summary_breakdown_card.dart';
 import '../../widgets/message_box.dart';
 import '../wallet_screen/wallet_screen.dart';
-// import '../../models/cart_item.dart';
 import 'package:jara_market/screens/cart_screen/models/models.dart';
 
 CheckoutController controller = Get.put(CheckoutController()) ;
@@ -290,22 +285,14 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                       return CartItemCard2(
                         id: item.id,
                         ingredients: ingredients,
-                        name: item.name ?? 'Unknown',
-                        unit: item.description ?? 'No description',
-                        basePrice: item.price ?? 0.0,
+                        name: item.name,
+                        unit: item.description,
+                        basePrice: item.price,
                         quantity: item.quantity,
-                      //  onQuantityChanged: (qty) {
-                          // Handle quantity change if needed
-                          //removeQuantity: cartController.removeFromCart(item.id as int),
-                          removeQuantity: () => cartController.removeFromCart(item.id as int),
-                          addQuantity: () => cartController.updateItemQuantity(item.id as int, (item.quantity.value ?? 1) + 1),
-                       // },
-                        onDeleteConfirmed: () {},
                         textController: TextEditingController(
-                          text: (item.quantity ?? 1).toString(),
+                          text: (item.quantity).toString(),
                         ),
                         isSelected: false,
-                        onCheckboxChanged: (value) {},
                       );
                     },
                   ),
@@ -327,20 +314,16 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                   ),
                   const SizedBox(height: 24),
                   SummaryBreakdown(
+                    mealPrep: cartController.mealPrepPrice,
                     itemsTotal: widget.totalAmount,
-                    serviceChargePercentage: 0,
-                    deliveryFee: deliveryFee,
+                    serviceChargePercentage: cartController.calculatedServiceCharge,
+                    deliveryFee: cartController.shippingCost.value,
                     total: widget.totalAmount,
                   ),
                   const SizedBox(height: 24),
-                  const Text(
-                    'Payment Methods',
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                  const SizedBox(height: 16),
+                  CheckoutButtonPaystack(title: 'Check Out',),
+                  
+                  const SizedBox(height: 24),
                   SingleChildScrollView(
                     scrollDirection: Axis.horizontal,
                     child: Row(

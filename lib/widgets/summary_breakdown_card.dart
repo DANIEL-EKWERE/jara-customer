@@ -4,6 +4,7 @@ class SummaryBreakdown extends StatelessWidget {
   final double itemsTotal;
   final double serviceChargePercentage;
   final double deliveryFee;
+  final double mealPrep;
   final double total;
 
   const SummaryBreakdown({
@@ -11,6 +12,7 @@ class SummaryBreakdown extends StatelessWidget {
     required this.itemsTotal,
     required this.serviceChargePercentage,
     required this.deliveryFee,
+    required this.mealPrep,
     required this.total,
   }) : super(key: key);
 
@@ -21,42 +23,49 @@ class SummaryBreakdown extends StatelessWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            const Text('Items'),
-            Text('N${itemsTotal.toStringAsFixed(0)}'),
+            const Text('Items',style: TextStyle(fontSize: 12,fontWeight: FontWeight.w600,fontFamily: 'Poppins'),),
+            Text('\u20A6${itemsTotal.toStringAsFixed(0)}'),
           ],
         ),
         const SizedBox(height: 8),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            const Text('Service Charge'),
-            Text('${serviceChargePercentage.toStringAsFixed(0)}%'),
+            const Text('Service Charge',style: TextStyle(fontSize: 12,fontWeight: FontWeight.w600,fontFamily: 'Poppins'),),
+            Text('\u20A6${serviceChargePercentage.toStringAsFixed(0)}(7%)'),
           ],
         ),
         const SizedBox(height: 8),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            const Text('Delivery Fee'),
-            Text('N${deliveryFee.toStringAsFixed(0)}'),
+            const Text('Meal Preparation',style: TextStyle(fontSize: 12,fontWeight: FontWeight.w600,fontFamily: 'Poppins'),),
+            Text('\u20A6${mealPrep.toStringAsFixed(0)}'),
+          ],
+        ),
+        const SizedBox(height: 8),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            const Text('Delivery Fee',style: TextStyle(fontSize: 12,fontWeight: FontWeight.w600,fontFamily: 'Poppins'),),
+            Text('\u20A6${deliveryFee.toStringAsFixed(0)}'),
           ],
         ),
         const Padding(
-          padding: EdgeInsets.symmetric(vertical: 12),
-          child: Divider(),
+          padding: EdgeInsets.symmetric(vertical: 2),
+          // child: Divider(),
         ),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             const Text(
-              'Total',
-              style: TextStyle(fontWeight: FontWeight.bold),
+              'Total',style: TextStyle(fontSize: 14,fontWeight: FontWeight.w600,fontFamily: 'Poppins'),
             ),
             Column(
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
                 Text(
-                  'N${total.toStringAsFixed(0)}',
+                  '\u20A6${total.toStringAsFixed(0)}',
                   style: const TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 18,

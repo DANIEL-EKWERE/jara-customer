@@ -21,17 +21,20 @@ class MessageBox extends StatelessWidget {
         const Text(
           'Message',
           style: TextStyle(
-            fontSize: 16,
+            fontSize: 14,
             color: Colors.grey,
+            fontFamily: 'Roboto',
+            fontWeight: FontWeight.w400,
           ),
         ),
         const SizedBox(height: 4),
         Text(
           'Lorem ipsum dolor sit amet consectetur. Fringilla',
           style: TextStyle(
-            fontSize: 16,
-            color: Colors.black,
-            fontWeight: FontWeight.w500,
+            fontSize: 12,
+            fontFamily: 'Roboto',
+            color: Color(0xff2D2D2D),
+            fontWeight: FontWeight.w600,
           ),
         ),
         const SizedBox(height: 12),

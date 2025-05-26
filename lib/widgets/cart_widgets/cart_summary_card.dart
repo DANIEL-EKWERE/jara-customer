@@ -16,14 +16,9 @@ class CartItemCard2 extends StatefulWidget {
   final double basePrice;
   final double? originalPrice;
   final RxInt quantity;
-  // final Function(int) addQuantity;
-  // final Function(int) removeQuantity;
-  final Function() addQuantity;
-  final Function() removeQuantity;
-  final VoidCallback onDeleteConfirmed;
   final TextEditingController textController;
   final bool isSelected;
-  final Function(bool?) onCheckboxChanged;
+  
   final RxList<Ingredients> ingredients;
 // int? id;
 //   String? name;
@@ -42,12 +37,8 @@ class CartItemCard2 extends StatefulWidget {
     required this.basePrice,
     this.originalPrice,
     required this.quantity,
-    required this.addQuantity,
-    required this.removeQuantity,
-    required this.onDeleteConfirmed,
     required this.textController,
     required this.isSelected,
-    required this.onCheckboxChanged,
     required this.ingredients,
   }) : super(key: key);
 
@@ -60,38 +51,6 @@ class _CartItemCardState extends State<CartItemCard2> {
       ? double.tryParse(widget.textController.text) ?? 0
       : widget.basePrice * widget.quantity.value;
 
-  void _showDeleteConfirmationDialog(BuildContext context, int itemId, int ingredientId) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text('Delete Item'),
-          content: const Text(
-              'Are you sure you want to delete this item from your cart?'),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop(); // Close the dialog
-              },
-              child: const Text('Cancel'),
-            ),
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop(); // Close the dialog
-               // widget.onDeleteConfirmed(); // Call the delete callback
-               controller.removeIngredient(itemId, ingredientId);
-                // controller.removeCartItem(itemId);
-                // controller.removeIngredientFromCart(itemId, ingredientId);
-              },
-              child: const Text('Delete', style: TextStyle(color: Colors.red)),
-            ),
-          ],
-        );
-      },
-    );
-  }
-
-  bool isSelected = false;
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -159,19 +118,19 @@ class _CartItemCardState extends State<CartItemCard2> {
                                           ),
                                         ),
                                         //if (widget.originalPrice != null) ...[
-                                        if (isSelected) ...[
-                                          const SizedBox(width: 8),
-                                          Text(
-                                            //  'N${widget.originalPrice!.toStringAsFixed(0)}',
-                                            '\u20A6${totalPrice.toStringAsFixed(0)}',
-                                            style: TextStyle(
-                                              color: Colors.grey[500],
-                                              decoration:
-                                                  TextDecoration.lineThrough,
-                                              fontSize: 14,
-                                            ),
-                                          ),
-                                        ],
+                                        // if (isSelected) ...[
+                                        //   const SizedBox(width: 8),
+                                        //   Text(
+                                        //     //  'N${widget.originalPrice!.toStringAsFixed(0)}',
+                                        //     '\u20A6${totalPrice.toStringAsFixed(0)}',
+                                        //     style: TextStyle(
+                                        //       color: Colors.grey[500],
+                                        //       decoration:
+                                        //           TextDecoration.lineThrough,
+                                        //       fontSize: 14,
+                                        //     ),
+                                        //   ),
+                                        // ],
                                       ],
                                     ),
                               const SizedBox(height: 4),

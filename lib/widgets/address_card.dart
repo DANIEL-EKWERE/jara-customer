@@ -31,6 +31,8 @@ class AddressCard extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 8),
+          Divider(color: Color(0xffE6E6E6),height: 0.5,),
+          const SizedBox(height: 8),
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -57,11 +59,12 @@ class AddressCard extends StatelessWidget {
                 ),
               ),
               TextButton(
+                style: ButtonStyle(shape: WidgetStateProperty.all(RoundedRectangleBorder(borderRadius: BorderRadius.circular(8),side: BorderSide(width: 1,color: Color(0xffFF9F0A))))),
                 onPressed: onChangePressed,
                 child: const Text(
                   'Change',
                   style: TextStyle(
-                    color: Colors.orange,
+                    color: Color(0xffFF9F0A),
                     fontWeight: FontWeight.w500,
                   ),
                 ),
