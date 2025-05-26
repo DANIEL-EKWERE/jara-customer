@@ -171,12 +171,16 @@ Future<String?> fn_getCurrentBearerToken() async {
   // Fetch food categories
   Future<http.Response> fetchFoodCategory() async {
     final url = Uri.parse('$baseUrl/fetch-ProductCategory');
+    
     _logRequest('GET', url);
+    final prefs = await SharedPreferences.getInstance();
+    final token = prefs.getString('token');
     return _retryRequest(() async {
       final response = await http.get(
         url,
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
+          'Authorization': 'Bearer $token',
         },
       ).timeout(
         const Duration(seconds: 10),

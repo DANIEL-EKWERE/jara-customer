@@ -130,7 +130,16 @@ class _FaqScreenState extends State<FaqScreen> {
       body: SafeArea(
         child: Column(
           children: [
-            const CustomBackHeader(title: 'Frequently Asked Questions'),
+            const CustomBackHeader(title: 'FAQs'),
+            const SizedBox(height: 14),
+            Padding(
+              padding: const EdgeInsets.only(left: 16),
+              child: Align(
+                alignment: Alignment.topLeft,
+                child: Text('Haven\'t seen you the answer you\'re looking for?', 
+                  style: TextStyle(fontSize: 12, fontWeight: FontWeight.w500, color: Colors.grey[700])),
+              ),
+            ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16.0),
               child: custom_search.SearchBar(  // Use the alias to reference your custom SearchBar

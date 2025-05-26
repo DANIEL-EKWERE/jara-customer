@@ -2,6 +2,8 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:jara_market/config/routes.dart';
+import 'package:jara_market/screens/help_and_support/help_and_support.dart';
 import 'package:jara_market/screens/profile_screen/controller/profile_controller.dart';
 import 'package:jara_market/services/api_service.dart';
 // import 'package:jara_market/widgets/custom_bottom_nav.dart';
@@ -246,29 +248,39 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           TextButton(onPressed: (){}, child: Text('on',style: TextStyle(color: Colors.amber, fontWeight: FontWeight.w600, fontSize: 18),))
                           ],),
                           const SizedBox(height: 16),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                            Row(
-                              crossAxisAlignment: CrossAxisAlignment.start,
+                          GestureDetector(
+                            onTap: (){
+                              Get.toNamed(AppRoutes.walletScreen);
+                            },
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                              SvgPicture.asset('assets/images/wallet.svg',semanticsLabel: 'Dart Logo',height: 20,width: 20,),SizedBox(width: 5,),
-                              Text('wallet',style: TextStyle(fontSize: 13,fontFamily: 'Mont', fontWeight: FontWeight.w600)),
+                              Row(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                SvgPicture.asset('assets/images/wallet.svg',semanticsLabel: 'Dart Logo',height: 20,width: 20,),SizedBox(width: 5,),
+                                Text('wallet',style: TextStyle(fontSize: 13,fontFamily: 'Mont', fontWeight: FontWeight.w600)),
+                              ],),
+                                                     
                             ],),
-                         
-                          ],),
+                          ),
                           const SizedBox(height: 16),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                            Row(
-                              crossAxisAlignment: CrossAxisAlignment.start,
+                          GestureDetector(
+                            onTap: (){
+                              Get.toNamed(AppRoutes.referralScreen);
+                            },
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                              SvgPicture.asset('assets/images/referral.svg',semanticsLabel: 'Dart Logo',height: 20,width: 20,),SizedBox(width: 5,),
-                              Text('Referral',style: TextStyle(fontSize: 13,fontFamily: 'Mont', fontWeight: FontWeight.w600)),
+                              Row(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                SvgPicture.asset('assets/images/referral.svg',semanticsLabel: 'Dart Logo',height: 20,width: 20,),SizedBox(width: 5,),
+                                Text('Referral',style: TextStyle(fontSize: 13,fontFamily: 'Mont', fontWeight: FontWeight.w600)),
+                              ],),
+                             //
                             ],),
-                           //
-                          ],)
+                          )
                         ],),
                       ),
                     ),
@@ -290,31 +302,42 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         child: Column(
                           
                           children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                            Row(
-                              crossAxisAlignment: CrossAxisAlignment.start,
+                          GestureDetector(
+                            onTap: (){
+                              Get.toNamed(AppRoutes.faqScreen);
+                            },
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                              SvgPicture.asset('assets/images/security.svg',semanticsLabel: 'Dart Logo',height: 20,width: 20,),SizedBox(width: 5,),
-                              Text('Security',style: TextStyle(fontSize: 13,fontFamily: 'Mont', fontWeight: FontWeight.w600),),
+                              Row(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                SvgPicture.asset('assets/images/security.svg',semanticsLabel: 'Dart Logo',height: 20,width: 20,),SizedBox(width: 5,),
+                               // Text('Security',style: TextStyle(fontSize: 13,fontFamily: 'Mont', fontWeight: FontWeight.w600),),
+                               Text('FAQs',style: TextStyle(fontSize: 13,fontFamily: 'Mont', fontWeight: FontWeight.w600),),
+                              ],),
+                             
+                            // SvgPicture.asset('assets/images/Vector(5).svg',semanticsLabel: 'Dart Logo',height: 20,width: 20,),
+                                                   //   TextButton(onPressed: (){}, child: Text('on',style: TextStyle(color: Colors.amber, fontWeight: FontWeight.w600, fontSize: 18),))
                             ],),
-                           
-                          // SvgPicture.asset('assets/images/Vector(5).svg',semanticsLabel: 'Dart Logo',height: 20,width: 20,),
-                       //   TextButton(onPressed: (){}, child: Text('on',style: TextStyle(color: Colors.amber, fontWeight: FontWeight.w600, fontSize: 18),))
-                          ],),
+                          ),
                           const SizedBox(height: 16),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                            Row(
-                              crossAxisAlignment: CrossAxisAlignment.start,
+                          GestureDetector(
+                            onTap: (){
+                              Get.to(HelpAndSupport());
+                            },
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                              SvgPicture.asset('assets/images/help_and_support.svg',semanticsLabel: 'Dart Logo',height: 20,width: 20,),SizedBox(width: 5,),
-                              Text('Help and Support',style: TextStyle(fontSize: 13,fontFamily: 'Mont', fontWeight: FontWeight.w600)),
+                              Row(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                SvgPicture.asset('assets/images/help_and_support.svg',semanticsLabel: 'Dart Logo',height: 20,width: 20,),SizedBox(width: 5,),
+                                Text('Help and Support',style: TextStyle(fontSize: 13,fontFamily: 'Mont', fontWeight: FontWeight.w600)),
+                              ],),
+                                                     
                             ],),
-                         
-                          ],),
+                          ),
                           const SizedBox(height: 16),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -328,17 +351,22 @@ class _ProfileScreenState extends State<ProfileScreen> {
                            //
                           ],),
                           const SizedBox(height: 16),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                            Row(
-                              crossAxisAlignment: CrossAxisAlignment.start,
+                          GestureDetector(
+                            onTap: (){
+                              Get.toNamed(AppRoutes.privacyPolicyScreen);
+                            },
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                              SvgPicture.asset('assets/images/privacy_policy.svg',semanticsLabel: 'Dart Logo',height: 20,width: 20,),SizedBox(width: 5,),
-                              Text('Privacy Policy',style: TextStyle(fontSize: 13,fontFamily: 'Mont', fontWeight: FontWeight.w600)),
+                              Row(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                SvgPicture.asset('assets/images/privacy_policy.svg',semanticsLabel: 'Dart Logo',height: 20,width: 20,),SizedBox(width: 5,),
+                                Text('Privacy Policy',style: TextStyle(fontSize: 13,fontFamily: 'Mont', fontWeight: FontWeight.w600)),
+                              ],),
+                             //
                             ],),
-                           //
-                          ],)
+                          )
                         ],),
                       ),
                     ),
