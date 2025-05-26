@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:jara_market/screens/cart_screen/controller/cart_controller.dart';
 import 'package:jara_market/screens/checkout_screen/controller/checkout_controller.dart';
 import 'package:jara_market/widgets/cart_widgets/cart_ingredient.dart';
+import 'package:jara_market/widgets/cart_widgets/cart_summary_card.dart';
 import 'package:permission_handler/permission_handler.dart';
 // import 'package:http/http.dart' as http;
 // import 'dart:convert';
@@ -252,13 +253,23 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Cart Summary'),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.more_vert),
-            onPressed: () {},
-          ),
-        ],
+        shadowColor: Colors.transparent,
+        elevation: 0,
+        backgroundColor: Colors.white,
+        leading: GestureDetector(
+          onTap: (){
+            Get.back();
+          },
+          child: Icon(Icons.chevron_left,size: 26,)),
+        centerTitle: true,
+        title: const Text('Cart Summary',
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.w700,
+                            fontFamily: 'Poppins',
+                          ),
+                          textAlign: TextAlign.center,
+                          ),
       ),
       body: SafeArea(
         child: Column(
@@ -269,14 +280,14 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                 children: [
                   ListView.separated(
                     shrinkWrap: true,
-                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                   // padding: const EdgeInsets.symmetric(horizontal: 16),
                     itemCount: widget.cartItems.length,
                     separatorBuilder: (context, index) =>
                         const Divider(height: 1),
                     itemBuilder: (context, index) {
                       final item = cartController.cartItems[index];
                       final ingredients = item.ingredients;
-                      return CartItemCard1(
+                      return CartItemCard2(
                         id: item.id,
                         ingredients: ingredients,
                         name: item.name ?? 'Unknown',
