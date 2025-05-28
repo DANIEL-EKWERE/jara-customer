@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:badges/badges.dart' as badges;
+import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:jara_market/screens/cart_screen/controller/cart_controller.dart';
 
@@ -39,14 +40,14 @@ class CustomBottomNav extends StatelessWidget {
         selectedItemColor: const Color(0xFF212429),
         unselectedItemColor: Colors.grey,
         items: [
-          const BottomNavigationBarItem(
-            icon: Icon(Icons.home_outlined),
-            activeIcon: Icon(Icons.home),
+           BottomNavigationBarItem(
+            icon: SvgPicture.asset('assets/images/img_nav_home_unselected.svg'),   //Icon(Icons.home_outlined),
+            activeIcon: SvgPicture.asset('assets/images/img_nav_home_selected.svg'),   //Icon(Icons.home),
             label: 'Home',
           ),
           const BottomNavigationBarItem(
             icon: Icon(Icons.favorite_border),
-            activeIcon: Icon(Icons.favorite),
+            activeIcon: Icon(Icons.favorite_border),
             label: 'Favourites',
           ),
           BottomNavigationBarItem(
@@ -75,14 +76,14 @@ class CustomBottomNav extends StatelessWidget {
                   Get.find<CartController>().cartItems.length.toString(),
                   style: const TextStyle(color: Colors.white, fontSize: 12),
                 ),
-                child: const Icon(Icons.shopping_cart),
+                child: const Icon(Icons.shopping_cart_outlined),
               );
             }),
             label: 'Cart',
           ),
-          const BottomNavigationBarItem(
+          BottomNavigationBarItem(
             icon: Icon(Icons.person_outline),
-            activeIcon: Icon(Icons.person),
+            activeIcon: Icon(Icons.person_2_outlined),
             label: 'Profile',
           ),
         ],

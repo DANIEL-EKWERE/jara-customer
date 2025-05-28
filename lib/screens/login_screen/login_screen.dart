@@ -30,7 +30,7 @@ class _LoginScreenState extends State<LoginScreen> {
   
 
 
-  ApiService _apiService = ApiService(Duration(seconds: 60 * 5));
+
   final _formKey = GlobalKey<FormState>();
 
   @override
@@ -130,12 +130,12 @@ class _LoginScreenState extends State<LoginScreen> {
   //   }
   // }
 
-  @override
-  void dispose() {
-    controller.emailController.dispose();
-    controller.passwordController.dispose();
-    super.dispose();
-  }
+  // @override
+  // void dispose() {
+  //   controller.emailController.dispose();
+  //   controller.passwordController.dispose();
+  //   super.dispose();
+  // }
 
   @override
   Widget build(BuildContext context) {

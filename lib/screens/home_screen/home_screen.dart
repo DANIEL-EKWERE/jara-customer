@@ -14,6 +14,7 @@ import 'package:jara_market/screens/cart_screen/controller/cart_controller.dart'
 //import 'package:jara_market/screens/categories_screen/categories_screen.dart';
 import 'package:jara_market/screens/egusi_soup_detail_screen/egusi_soup_detail_screen.dart';
 import 'package:jara_market/screens/home_screen/controller/home_controller.dart';
+import 'package:jara_market/screens/main_screen/main_screen.dart';
 import 'package:pull_to_refresh_flutter3/pull_to_refresh_flutter3.dart';
 // import 'package:jara_market/services/api_service.dart';
 // import 'package:jara_market/widgets/custom_button.dart';
@@ -54,9 +55,9 @@ class _HomeScreenState extends State<HomeScreen> {
 
   // Controller for the carousel
   late CarouselSliderController carouselController;
-  Timer? _autoSlideTimer;
-  int _currentPage = 0;
-  final int _totalItems = 5; // Update this with your actual number of items
+  // Timer? _autoSlideTimer;
+  // int _currentPage = 0;
+  // final int _totalItems = 5; // Update this with your actual number of items
 
   String? name;
 
@@ -148,6 +149,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   ))
                 : Column(
                     children: [
+                    //  ElevatedButton(onPressed: (){dataBase.logOut();}, child: Text('clear local db')),
                       // Header
                       Padding(
                         padding: const EdgeInsets.all(16),
@@ -759,9 +761,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                                     gridDelegate:
                                                         const SliverGridDelegateWithFixedCrossAxisCount(
                                                       crossAxisCount: 4,
-                                                      crossAxisSpacing: 10.0,
-                                                      mainAxisSpacing: 15.0,
-                                                      childAspectRatio: 1.5,
+                                                      crossAxisSpacing: 4.0,
+                                                      mainAxisSpacing: 7.0,
+                                                      childAspectRatio: 1.2,
                                                     ),
                                                     itemBuilder:
                                                         (context, index) {
@@ -870,12 +872,23 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                               Align(
                                                                                 alignment: Alignment.topRight,
                                                                                 child: IconButton(
-                                                                                    onPressed: () {
-                                                                                      setState(() {
-                                                                                        isSet = !isSet;
+                                                                                    onPressed: () async {
+                                                                                      if(category[index].isFavorite){
+                                                                                        // Remove from favorites
+                                                                                        controller.removeFavorite(category[index].id!);
+                                                                                        print('Removing from favorites');
+                                                                                        }
+                                                                                      var result = await controller.addFavorite(category[index].id!);
+                                                                                      setState(()  {
+                                                                                        //isSet = !isSet;
+                                                                                        category[index].isFavorite = !category[index].isFavorite;
+                                                                                       
+                                                                                       if(!result){
+                                                                                        category[index].isFavorite = !category[index].isFavorite;
+                                                                                       }
                                                                                       });
                                                                                     },
-                                                                                    icon: isSet ? Icon(Icons.favorite_rounded) : Icon(Icons.favorite_border_rounded)),
+                                                                                    icon: category[index].isFavorite ? Icon(Icons.favorite_rounded) : Icon(Icons.favorite_border_rounded)),
                                                                               )
                                                                             ],
                                                                           ),
@@ -950,7 +963,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                               height:
                                                                                   40,
                                                                               width:
-                                                                                  60,
+                                                                                  110,
                                                                               child: ElevatedButton(
                                                                                   style: ElevatedButton.styleFrom(
                                                                                     elevation: 0,
@@ -989,10 +1002,16 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                                     // print(category[index].price!);
                                                                                     // Add your add to cart logic here
                                                                                   },
-                                                                                  child: Icon(
-                                                                                    Icons.shopping_cart_outlined,
-                                                                                    color: Colors.blueGrey,
-                                                                                    size: 16,
+                                                                                  child: Row(
+                                                                                    spacing: 4,
+                                                                                    children: [
+                                                                                      Icon(
+                                                                                        Icons.shopping_cart_outlined,
+                                                                                        color: Colors.blueGrey,
+                                                                                        size: 16,
+                                                                                      ),
+                                                                                      Text('Add To Cart',style: TextStyle(color: Colors.blueGrey,fontSize: 12),)
+                                                                                    ],
                                                                                   ))),
                                                                           Expanded(
                                                                             child: SizedBox(
@@ -1062,7 +1081,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                         null
                                                                     ? CircleAvatar(
                                                                         radius:
-                                                                            16,
+                                                                            20,
                                                                         child:
                                                                             ClipOval(
                                                                           child: Image
@@ -1102,7 +1121,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                       .name
                                                                       .toString(),
                                                               style: TextStyle(
-                                                                  fontSize: 10,
+                                                                  fontSize: 12,
                                                                   fontWeight:
                                                                       FontWeight
                                                                           .w400,

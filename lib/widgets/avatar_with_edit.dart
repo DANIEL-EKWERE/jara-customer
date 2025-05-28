@@ -20,10 +20,14 @@ class AvatarWithEdit extends StatelessWidget {
     return Stack(
       children: [
         CircleAvatar(
+          backgroundColor: Color(0xffD9D9D9),
           radius: avatarRadius,
           backgroundImage: imageUrl != null && imageUrl!.isNotEmpty
               ? NetworkImage(imageUrl!)
-              : const AssetImage('assets/images/default_avatar.png') as ImageProvider,
+              : null,
+          child: (imageUrl == null || imageUrl!.isEmpty)
+              ? SvgPicture.asset('assets/images/avatar.svg')
+              : null,
         ),
         Positioned(
           right: 0,

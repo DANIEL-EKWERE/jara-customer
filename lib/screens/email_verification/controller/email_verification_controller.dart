@@ -47,11 +47,11 @@ Future<void> resendOtp(Map<String, String> resendData) async {
 
       // You might need to implement a resend OTP endpoint in your API service
       // For now, we'll reuse the registration endpoint
-      final response = await _apiService.registerCustomer(resendData);
+      final response = await _apiService.resendOtp(resendData);
 
       if (response.statusCode == 200) {
         ScaffoldMessenger.of(Get.context!).showSnackBar(
-          const SnackBar(content: Text('A new code has been sent to your email')),
+          const SnackBar(content: Text('A new code has been sent to your email'),backgroundColor: Colors.amber,),
         );
         _startCountdown();
       } else {
@@ -90,13 +90,19 @@ Future<void> resendOtp(Map<String, String> resendData) async {
         //   Get.context!,
         //   MaterialPageRoute(builder: (context) => const LoginScreen()),
         // );
+        var  responseBody = jsonDecode(response.body);
+        var message = responseBody['message'] ?? 'something went wrong';
+        ScaffoldMessenger.of(Get.context!).showSnackBar(
+          SnackBar(content: Text('Success: \n${message}'),backgroundColor: Colors.green,),
+        );
         Get.offAllNamed('/login_screen');
+        
       } else {
         var  responseBody = jsonDecode(response.body);
         var message = responseBody['message'] ?? 'something went wrong';
-        
+
         ScaffoldMessenger.of(Get.context!).showSnackBar(
-          SnackBar(content: Text('OTP verification failed: ${message}')),
+          SnackBar(content: Text('OTP verification failed: ${message}'),backgroundColor: Colors.red,),
         );
       }
     } catch (e) {

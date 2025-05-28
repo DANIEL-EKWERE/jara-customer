@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:jara_market/config/local_storage.dart';
 import 'package:jara_market/screens/cart_screen/controller/cart_controller.dart';
 import 'package:jara_market/screens/home_screen/controller/home_controller.dart';
 import 'package:jara_market/screens/main_screen/controller/main_controller.dart';
@@ -10,7 +11,7 @@ import '../cart_screen/cart_screen.dart';
 import '../profile_screen/profile_screen.dart';
 
 MainController controller = Get.put(MainController());
-
+DataBase dataBase = Get.find<DataBase>();
 class MainScreen extends StatefulWidget {
   const MainScreen({Key? key}) : super(key: key);
 

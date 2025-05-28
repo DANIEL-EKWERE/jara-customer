@@ -5,12 +5,8 @@ import 'package:get/get.dart';
 import 'package:jara_market/config/routes.dart';
 import 'package:jara_market/screens/help_and_support/help_and_support.dart';
 import 'package:jara_market/screens/profile_screen/controller/profile_controller.dart';
-import 'package:jara_market/services/api_service.dart';
-// import 'package:jara_market/widgets/custom_bottom_nav.dart';
 import '../../widgets/avatar_with_edit.dart';
-import '../../widgets/contact_info_card.dart';
-import '../../widgets/settings_card.dart';
-import '../../widgets/additional_options_card.dart';
+
 
 ProfileController controller = Get.put(ProfileController());
 
@@ -22,88 +18,24 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
-  ApiService _apiService = ApiService(Duration(seconds: 60 * 5));
-  bool _isLoading = true;
+  
   Map<String, dynamic> _userProfile = {};
-  late String _userEmail; // This should be retrieved from user session/storage
+  
 
   @override
   void initState() {
     super.initState();
-    _fetchUserProfile();
+    controller.fetchUserProfile();
   }
 
-  Future<void> _fetchUserProfile() async {
-    try {
-      // Replace fetchUserProfile with getUser
-      final response = await _apiService.getUser();
-
-      if (response.statusCode == 200 || response.statusCode == 201) {
-        setState(() {
-          _userProfile = jsonDecode(response.body);
-          _userEmail = _userProfile['email'];
-          _isLoading = false;
-        });
-      } else {
-        setState(() {
-          _isLoading = false;
-        });
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Failed to load profile: ${response.body}')),
-        );
-      }
-    } catch (e, stackTrace) {
-      print('Error: $e');
-      print('Stack Trace: $stackTrace');
-      setState(() {
-        _isLoading = false;
-      });
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Error: $e')),
-      );
-    }
-  }
-
-  Future<void> _updateUserProfile(Map<String, dynamic> updatedData) async {
-    try {
-      setState(() {
-        _isLoading = true;
-      });
-
-      final response =
-          await _apiService.editUserProfile(_userEmail, updatedData);
-
-      setState(() {
-        _isLoading = false;
-      });
-
-      if (response.statusCode == 200 || response.statusCode == 201) {
-        // Refresh profile data
-        _fetchUserProfile();
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Profile updated successfully')),
-        );
-      } else {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Failed to update profile: ${response.body}')),
-        );
-      }
-    } catch (e) {
-      setState(() {
-        _isLoading = false;
-      });
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Error: $e')),
-      );
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-        child: _isLoading
-            ? const Center(child: CircularProgressIndicator())
+        child: Obx((){
+          return controller.isLoading.value
+            ? const Center(child: CircularProgressIndicator(color: Colors.amber,))
             : SingleChildScrollView(
                 child: Column(
                   children: [
@@ -119,7 +51,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     ),
                     const SizedBox(height: 16),
                     Text(
-                      'Daniel Ekwere',
+                      controller.data.name! ?? 'N/A',
                       style: const TextStyle(
                         fontSize: 24,
                         fontWeight: FontWeight.bold,
@@ -184,7 +116,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                               Text('Phone Number',style: TextStyle(fontSize: 13,fontFamily: 'Mont', fontWeight: FontWeight.normal),),
-                              Text('+2347043194111',style: TextStyle(fontSize: 13,fontFamily: 'Mont', fontWeight: FontWeight.w600)),
+                              Text(controller.data.phoneNumber! ?? 'N/A',style: TextStyle(fontSize: 13,fontFamily: 'Mont', fontWeight: FontWeight.w600)),
                             ],),
                            
                            SvgPicture.asset('assets/images/Vector(5).svg',semanticsLabel: 'Dart Logo',height: 20,width: 20,),
@@ -197,7 +129,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                               Text('Email Address',style: TextStyle(fontSize: 13,fontFamily: 'Mont', fontWeight: FontWeight.normal),),
-                              Text('ekweredaniel8@gmail.com',style: TextStyle(fontSize: 13,fontFamily: 'Mont', fontWeight: FontWeight.w600)),
+                              Text(controller.data.email! ?? 'N/A',style: TextStyle(fontSize: 13,fontFamily: 'Mont', fontWeight: FontWeight.w600)),
                             ],),
                            SvgPicture.asset('assets/images/Group 35689.svg',semanticsLabel: 'Dart Logo',height: 20,width: 20,),
                            //Icon(Icons.email,color: Colors.amber,size: 20,),
@@ -373,9 +305,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     const SizedBox(height: 24),
                   ],
                 ),
-              ),
-      ),
-    );
+              );
+      
+        })
+    ));
   }
 
   void _showEditProfileImageDialog() {
@@ -445,7 +378,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           TextButton(
             onPressed: () {
               Navigator.pop(context);
-              _updateUserProfile({
+              controller.updateUserProfile({
                 'phone': phoneController.text,
               });
             },

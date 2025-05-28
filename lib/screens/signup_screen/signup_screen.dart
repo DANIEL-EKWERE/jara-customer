@@ -38,6 +38,7 @@ class _SignupScreenState extends State<SignupScreen> {
   String? _errorLastName;
   String? _errorEmail;
   String? _errorPassword;
+  String? _errorPhoneNumber;
 
 void _validateEmail(String value) {
     setState(() {
@@ -50,6 +51,19 @@ void _validateEmail(String value) {
       }
     });
   }
+
+  void _validatePhoneNumber(String value) {
+    setState(() {
+      if (value.isEmpty) {
+        _errorEmail = 'Phone number is required';
+      } else if (!RegExp(r'^\+?[0-9]{10,15}$').hasMatch(value)) {
+        _errorEmail = 'Enter a valid phone number';
+      } else {
+        _errorEmail = null;
+      }
+    });
+  }
+
   void _validatePassword(String value) {
     setState(() {
       if (value.isEmpty) {
@@ -234,6 +248,16 @@ void _validateEmail(String value) {
                 controller: controller.emailController,
                 hint: "Email",
                 keyboardType: TextInputType.emailAddress,
+              ),
+              const SizedBox(height: 16),
+              CustomTextField(
+                onChanged: (p0) {
+                  _validatePhoneNumber(p0);
+                },
+                errorText: _errorPhoneNumber,
+                controller: controller.phoneNumberController,
+                hint: "Phone Number",
+                keyboardType: TextInputType.phone,
               ),
               const SizedBox(height: 16),
               CustomTextField(

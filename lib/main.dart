@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:jara_market/config/local_storage.dart';
 import 'package:jara_market/config/routes.dart';
+import 'package:jara_market/screens/main_screen/main_screen.dart';
 // import 'screens/splash/splash_screen.dart';
 
 void main() async {
@@ -15,6 +16,7 @@ void main() async {
     ),
   );
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
+  DataBase dataBase = Get.put(DataBase());
   var token = await dataBase.getToken();
   String initialRoute = token.isNotEmpty ? '/main_screen' : '/splash_screen';
   runApp(MyApp(initialRoute: initialRoute));

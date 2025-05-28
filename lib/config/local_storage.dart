@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-DataBase dataBase = Get.put(DataBase());
+//DataBase dataBase = Get.put(DataBase());
 
 class DataBase extends GetxController {
   final Future<SharedPreferences> _pref = SharedPreferences.getInstance();
@@ -332,9 +332,23 @@ class DataBase extends GetxController {
     return true;
   }
 
+    saveRole(String role) async {
+    SharedPreferences sharedPreferences = await _pref;
+    await sharedPreferences.setString('role', role);
+
+    return true;
+  }
+
   saveEmail(String email) async {
     SharedPreferences sharedPreferences = await _pref;
     await sharedPreferences.setString('email', email);
+
+    return true;
+  }
+
+    saveFullName(String full_name) async {
+    SharedPreferences sharedPreferences = await _pref;
+    await sharedPreferences.setString('full_name', full_name);
 
     return true;
   }
@@ -349,6 +363,27 @@ class DataBase extends GetxController {
   saveLastName(String last_name) async {
     SharedPreferences sharedPreferences = await _pref;
     await sharedPreferences.setString('last_name', last_name);
+
+    return true;
+  }
+
+    saveReferalCode(String refCode) async {
+    SharedPreferences sharedPreferences = await _pref;
+    await sharedPreferences.setString('refCode', refCode);
+
+    return true;
+  }
+
+    saveReferalCount(String refCount) async {
+    SharedPreferences sharedPreferences = await _pref;
+    await sharedPreferences.setString('refCount', refCount);
+
+    return true;
+  }
+
+    saveRefererId(String referId) async {
+    SharedPreferences sharedPreferences = await _pref;
+    await sharedPreferences.setString('referId', referId);
 
     return true;
   }
@@ -420,6 +455,63 @@ class DataBase extends GetxController {
     if (sharedPreferences.containsKey('bio')) {
       String bio = sharedPreferences.getString('bio')!;
       return bio;
+    } else {
+      return ''; // Return an empty string if no cover photo is saved
+    }
+  }
+
+  // Get Cover Photo
+  Future<String> getReferId() async {
+    SharedPreferences sharedPreferences = await _pref;
+    if (sharedPreferences.containsKey('referId')) {
+      String referId = sharedPreferences.getString('referId')!;
+      return referId;
+    } else {
+      return ''; // Return an empty string if no cover photo is saved
+    }
+  }
+
+
+  // Get Cover Photo
+  Future<String> getRefCode() async {
+    SharedPreferences sharedPreferences = await _pref;
+    if (sharedPreferences.containsKey('refCode')) {
+      String refCode = sharedPreferences.getString('refCode')!;
+      return refCode;
+    } else {
+      return ''; // Return an empty string if no cover photo is saved
+    }
+  }
+
+  // Get Cover Photo
+  Future<String> getRefCount() async {
+    SharedPreferences sharedPreferences = await _pref;
+    if (sharedPreferences.containsKey('refCount')) {
+      String refCount = sharedPreferences.getString('refCount')!;
+      return refCount;
+    } else {
+      return ''; // Return an empty string if no cover photo is saved
+    }
+  }
+
+
+  // Get Cover Photo
+  Future<String> getRole() async {
+    SharedPreferences sharedPreferences = await _pref;
+    if (sharedPreferences.containsKey('role')) {
+      String role = sharedPreferences.getString('role')!;
+      return role;
+    } else {
+      return ''; // Return an empty string if no cover photo is saved
+    }
+  }
+
+  // Get Cover Photo
+  Future<String> getFullName() async {
+    SharedPreferences sharedPreferences = await _pref;
+    if (sharedPreferences.containsKey('full_name')) {
+      String fullName = sharedPreferences.getString('full_name')!;
+      return fullName;
     } else {
       return ''; // Return an empty string if no cover photo is saved
     }

@@ -197,6 +197,7 @@ class Products {
   String? imageUrl;
   List<Ingredients>? ingredients;
   String? createdAt;
+  bool isFavorite = false;
 
   Products(
       {this.id,
@@ -209,7 +210,9 @@ class Products {
       this.rating,
       this.imageUrl,
       this.ingredients,
-      this.createdAt});
+      this.createdAt,
+      this.isFavorite = false
+      });
 
   Products.fromJson(Map<String, dynamic> json) {
     id = json['id'];

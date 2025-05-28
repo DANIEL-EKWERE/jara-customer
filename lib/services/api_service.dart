@@ -4,6 +4,7 @@ import 'dart:math';
 import 'package:get/get_connect/connect.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/foundation.dart'; // Import foundation for kDebugMode
+import 'package:jara_market/screens/main_screen/main_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 const API_TIMEOUT_INT_SECONDS = 60 * 5;
@@ -15,7 +16,7 @@ class ApiService extends GetConnect {
 
   ApiService(this.timeout) : super(timeout: timeout);
 
-   var baseUrl = 'https://admin.jaramarket.com.ng/api';
+   var baseUrl = 'https://admin.jaramarket.com.ng/api/jaram';
   static const int maxRetries = 3;
   static const Duration retryDelay = Duration(seconds: 2);
 
@@ -104,7 +105,24 @@ Future<String?> fn_getCurrentBearerToken() async {
 
   Future<http.Response> registerCustomer(
     Map<String, dynamic> customerData) async {
-  final url = Uri.parse('$baseUrl/registerUser');
+  final url = Uri.parse('$baseUrl/register');
+  _logRequest('POST', url, body: customerData);
+  final response = await http.post(
+    url,
+    headers: <String, String>{
+      'Content-Type': 'application/json; charset=UTF-8',
+      'Accept': 'application/json',
+    },
+    body: jsonEncode(customerData),
+  );
+  _logResponse(response);
+  return response;
+}
+
+
+Future<http.Response> resendOtp(
+    Map<String, dynamic> customerData) async {
+  final url = Uri.parse('$baseUrl/resend-otp');
   _logRequest('POST', url, body: customerData);
   final response = await http.post(
     url,
@@ -122,7 +140,7 @@ Future<String?> fn_getCurrentBearerToken() async {
   // Validate user signup OTP
   Future<http.Response> validateUserSignupOtp(
       Map<String, dynamic> otpData) async {
-    final url = Uri.parse('$baseUrl/validateUserSignupOtp');
+    final url = Uri.parse('$baseUrl/validate-otp');
     _logRequest('POST', url, body: otpData);
     final response = await http.post(
       url,
@@ -170,16 +188,18 @@ Future<String?> fn_getCurrentBearerToken() async {
 
   // Fetch food categories
   Future<http.Response> fetchFoodCategory() async {
-    final url = Uri.parse('$baseUrl/fetch-ProductCategory');
+    //final url = Uri.parse('$baseUrl/fetch-ProductCategory');
+    final url = Uri.parse('$baseUrl/fetch/categories-limit-products');
     
     _logRequest('GET', url);
-    final prefs = await SharedPreferences.getInstance();
-    final token = prefs.getString('token');
+    // final prefs = await SharedPreferences.getInstance();
+    // final token = prefs.getString('token');
+    var token = await dataBase.getToken();
     return _retryRequest(() async {
       final response = await http.get(
         url,
         headers: <String, String>{
-          'Content-Type': 'application/json; charset=UTF-8',
+          'Content-Type': 'application/json;',
           'Authorization': 'Bearer $token',
         },
       ).timeout(
@@ -195,7 +215,7 @@ Future<String?> fn_getCurrentBearerToken() async {
 
   // Fetch food products
   Future<http.Response> fetchFood() async {
-    final url = Uri.parse('$baseUrl/fetch-product');
+    final url = Uri.parse('$baseUrl/fetch/categories-limit-products');
     _logRequest('GET', url);
     return _retryRequest(() async {
       final response = await http.get(
@@ -282,10 +302,11 @@ Future<String?> fn_getCurrentBearerToken() async {
 
   // Get current user
   Future<http.Response> getUser() async {
-    final url = Uri.parse('$baseUrl/user');
+    final email = await dataBase.getEmail(); 
+    final url = Uri.parse('$baseUrl/fetch-user/${email}');
     _logRequest('GET', url);
-    final prefs = await SharedPreferences.getInstance();
-    final token = prefs.getString('token');
+    //final prefs = await SharedPreferences.getInstance();
+    final token = await dataBase.getToken();  //prefs.getString('token');
     final response = await http.get(
       url,
       headers: <String, String>{
@@ -763,5 +784,7 @@ Future<String?> fn_getCurrentBearerToken() async {
     _logResponse(response);
     return response;
   }
+
+  addFavorite() {}
 }
 ApiService apiService = ApiService(API_TIMEOUT_DURATION);

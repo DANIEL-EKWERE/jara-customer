@@ -1,5 +1,7 @@
 import 'dart:convert';
 import 'dart:developer' as myLog;
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jara_market/screens/home_screen/models/food_model.dart';
 import 'package:jara_market/screens/home_screen/models/models.dart';
@@ -46,16 +48,18 @@ RxList<Ingredient> ingredient = <Ingredient>[].obs;
 
 
  Future<void> fetchFoodCategories() async {
+  if(Get.isSnackbarOpen) return;
       isLoading.value = true;
     try {
       final response = await apiService.fetchFoodCategory();
       if (response.statusCode == 200 || response.statusCode == 201) {
         try {
-          final decodedData = jsonDecode(response.body);
-          
+        final decodedData = jsonDecode(response.body);
+       myLog.log("Response body: ${decodedData}", name: 'HomeController');
+   
         categories = categoriesFromJson(response.body);
         category = categories.data!;
-          myLog.log('Decoded Data: $decodedData', name: 'HomeController');
+        //  myLog.log('Decoded Data: $decodedData', name: 'HomeController');
         
           // setState(() {
           //   _foodCategories = decodedData;
@@ -155,6 +159,49 @@ RxList<Ingredient> ingredient = <Ingredient>[].obs;
         isLoading1.value = false;
       
       showErrorSnackBar('Error loading foods: $e');
+    }
+  }
+
+  Future<bool> addFavorite(int id) async {
+    //if (Get.isSnackbarOpen) return;
+
+    try {
+      final response = await apiService.addToFavorites(id);
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        ScaffoldMessenger.of(Get.context!).showSnackBar(
+          SnackBar(content: Text('Added to favorites'), backgroundColor: Colors.green),
+        );
+      } else {
+        showErrorSnackBar('Failed to add to favorites: ${response.body}');
+      }
+      return true;
+    } catch (e, stackTrace) {
+      print('Error adding to favorites: $e');
+      print('Stack Trace: $stackTrace');
+      showErrorSnackBar('Error adding to favorites: $e');
+      return false;
+    }
+  }
+
+
+  Future<bool> removeFavorite(int id) async {
+    //if (Get.isSnackbarOpen) return;
+
+    try {
+      final response = await apiService.removeFromFavorites(id);
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        ScaffoldMessenger.of(Get.context!).showSnackBar(
+          SnackBar(content: Text('Removed from favorites'), backgroundColor: Colors.red),
+        );
+      } else {
+        showErrorSnackBar('Failed to remove from favorites: ${response.body}');
+      }
+      return true;
+    } catch (e, stackTrace) {
+      print('Error removing from favorites: $e');
+      print('Stack Trace: $stackTrace');
+      showErrorSnackBar('Error removing from favorites: $e');
+      return false;
     }
   }
 
