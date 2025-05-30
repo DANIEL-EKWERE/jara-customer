@@ -13,7 +13,7 @@ class CartItemCard1 extends StatefulWidget {
   final int id;
   final String name;
   final String unit;
-  final double basePrice;
+  final RxDouble basePrice;
   final double? originalPrice;
   final RxInt quantity;
   // final Function(int) addQuantity;
@@ -56,6 +56,9 @@ class CartItemCard1 extends StatefulWidget {
 }
 
 class _CartItemCardState extends State<CartItemCard1> {
+  TextEditingController textController = TextEditingController();
+  int count = 0;
+  double? result;
   double get totalPrice => widget.isSelected
       ? double.tryParse(widget.textController.text) ?? 0
       : widget.basePrice * widget.quantity.value;
@@ -78,10 +81,35 @@ class _CartItemCardState extends State<CartItemCard1> {
             TextButton(
               onPressed: () {
                 Navigator.of(context).pop(); // Close the dialog
-               // widget.onDeleteConfirmed(); // Call the delete callback
                controller.removeIngredient(itemId, ingredientId);
-                // controller.removeCartItem(itemId);
-                // controller.removeIngredientFromCart(itemId, ingredientId);
+              },
+              child: const Text('Delete', style: TextStyle(color: Colors.red)),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void _showDeleteConfirmationDialog1(BuildContext context, int itemId) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Delete Item'),
+          content: const Text(
+              'Are you sure you want to delete this item from your cart?'),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(); // Close the dialog
+              },
+              child: const Text('Cancel'),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(); // Close the dialog
+               controller.removeFromCart(itemId);
               },
               child: const Text('Delete', style: TextStyle(color: Colors.red)),
             ),
@@ -96,18 +124,45 @@ class _CartItemCardState extends State<CartItemCard1> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Container(
+        if (widget.ingredients.isNotEmpty)
+          Container(
             width: double.infinity,
-            height: 50,
+            height: 73,
             decoration: BoxDecoration(
               color: Colors.grey.shade200,
               borderRadius: BorderRadius.circular(5),
             ),
-            child: Center(
-                child: Text(
-              widget.name,
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-            ))),
+            child: Column(
+              children: [
+                const SizedBox(height: 10),
+                Center(
+                    child: Text(
+                  widget.name,
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                )),
+                Row(children: [
+                  const SizedBox(width: 10),
+                  Obx((){
+                    return Text(
+                    '\u20A6${widget.basePrice.toStringAsFixed(0)}',
+                    style: TextStyle(
+                      color: Colors.grey[500],
+                      fontSize: 14,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  );
+                  }),
+                  const Spacer(),
+                  IconButton(
+                              icon: SvgPicture.asset(
+                                  'assets/images/delete.svg'),
+                              onPressed: () =>
+                                  _showDeleteConfirmationDialog1(context, widget.id),
+                            ),
+                  const SizedBox(width: 10),
+                ],)
+              ],
+            )),
         Obx((){
           return ListView.builder(
             shrinkWrap: true,
@@ -134,8 +189,6 @@ class _CartItemCardState extends State<CartItemCard1> {
                             children: [
                               widget.ingredients[index].isSelected.value
                                   ? Text(
-                                      //  'N${widget.originalPrice!.toStringAsFixed(0)}',
-                                      //'\u20A6${totalPrice.toStringAsFixed(0)}',
                                       '\u20A6${widget.ingredients[index].price! * widget.ingredients[index].quantity!.value}',
                                       style: TextStyle(
                                         color: Colors.grey[500],
@@ -215,7 +268,14 @@ class _CartItemCardState extends State<CartItemCard1> {
                                       onChanged: (bool? value) {
                                         widget.onCheckboxChanged(value);
                                         setState(() {
+                                          count++;
                                          // isSelected = value ?? false;
+                                         if(value! && count == 0){
+                                         result = widget.ingredients[index].price;
+                                         }else if(!value && count > 0){
+                                          widget.ingredients[index].price = result;
+                                         }
+
                                           controller.toggleItemSelection(widget.id, widget.ingredients[index].id);
                                         });
                                       }),
@@ -255,6 +315,11 @@ class _CartItemCardState extends State<CartItemCard1> {
                                       width: 119,
                                       height: 36,
                                       child: CustomTextField(
+                                        keyboardType: TextInputType.number,
+                                        controller: textController,
+                                        onChanged: (p0){
+                                          controller.updateCustomPrice(widget.id, widget.ingredients[index].id, p0);
+                                        },
                                         hint: '25000',
                                         prefixIcon: Text('\u20A6'),
                                       ))

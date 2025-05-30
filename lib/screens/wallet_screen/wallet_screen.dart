@@ -1,5 +1,6 @@
 // lib/screens/wallet_screen.dart
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'dart:convert';
 import 'package:jara_market/screens/add_money_screen/add_money_screen.dart';
@@ -152,7 +153,7 @@ class _WalletScreenState extends State<WalletScreen> {
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             children: [
                               _buildActionButton(
-                                icon: Icons.add,
+                                icon: 'assets/images/add.svg',
                                 label: 'Add Money',
                                 onTap: () async {
                                   final result = await Navigator.push(
@@ -173,7 +174,8 @@ class _WalletScreenState extends State<WalletScreen> {
                                 },
                               ),
                               _buildActionButton(
-                                icon: Icons.arrow_downward,
+                                icon: 
+                                  'assets/images/withdraw.svg',
                                 label: 'Withdraw',
                                 onTap: () {
                                   // TODO: Implement withdraw action
@@ -188,8 +190,8 @@ class _WalletScreenState extends State<WalletScreen> {
                           const Text(
                             'Wallet History',
                             style: TextStyle(
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold,
+                              fontSize: 14,
+                              fontWeight: FontWeight.w700,
                             ),
                           ),
                           const SizedBox(height: 16),
@@ -229,7 +231,7 @@ class _WalletScreenState extends State<WalletScreen> {
   }
 
   Widget _buildActionButton({
-    required IconData icon,
+    required String icon,
     required String label,
     required VoidCallback onTap,
   }) {
@@ -238,22 +240,27 @@ class _WalletScreenState extends State<WalletScreen> {
       child: Column(
         children: [
           Container(
-            padding: const EdgeInsets.all(16),
+            height: 40,
+            width: 40,
+            padding: const EdgeInsets.all(14),
             decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(8),
               color: Colors.grey[100],
-              shape: BoxShape.circle,
+              shape: BoxShape.rectangle,
             ),
-            child: Icon(
-              icon,
-              color: Theme.of(context).primaryColor,
-            ),
+            child: SvgPicture.asset(icon,
+            fit: BoxFit.cover,
+            // height: 14,
+            // width: 24,
+            )
           ),
           const SizedBox(height: 8),
           Text(
             label,
             style: const TextStyle(
-              fontSize: 14,
-              fontWeight: FontWeight.w500,
+              fontSize: 10,
+              fontFamily: "Roboto",
+              fontWeight: FontWeight.w600,
             ),
           ),
         ],
@@ -263,9 +270,11 @@ class _WalletScreenState extends State<WalletScreen> {
 
   Widget _buildEmptyState() {
     return Container(
+      height: 362,
       width: double.infinity,
       padding: const EdgeInsets.all(32),
       decoration: BoxDecoration(
+        border: Border.all(width: 1,color: Color(0xff1919190D)),
         color: Colors.grey[100],
         borderRadius: BorderRadius.circular(16),
       ),
@@ -273,21 +282,22 @@ class _WalletScreenState extends State<WalletScreen> {
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Icon(
-            Icons.block,
-            size: 48,
-            color: Colors.grey[400],
-          ),
+          // Icon(
+          //   Icons.block,
+          //   size: 48,
+          //   color: Colors.grey[400],
+          // ),
+          SvgPicture.asset('assets/images/block.svg'),
           const SizedBox(height: 16),
-          Text(
-            'No transactions found',
-            style: TextStyle(
-              fontSize: 16,
-              color: Colors.grey[600],
-              fontWeight: FontWeight.w500,
-            ),
-          ),
-          const SizedBox(height: 256), // Increase the height here
+          // Text(
+          //   'No transactions found',
+          //   style: TextStyle(
+          //     fontSize: 16,
+          //     color: Colors.grey[600],
+          //     fontWeight: FontWeight.w500,
+          //   ),
+          // ),
+        //  const SizedBox(height: 256), // Increase the height here
         ],
       ),
     );

@@ -1,5 +1,6 @@
 // lib/widgets/balance_card.dart
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 
 class BalanceCard extends StatelessWidget {
   final String balance;
@@ -18,14 +19,16 @@ class BalanceCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(24),
+      height: 140,
+      padding: const EdgeInsets.only(left: 20,top:15,bottom: 17,right: 20),
       decoration: BoxDecoration(
         color: Theme.of(context).primaryColor,
         borderRadius: BorderRadius.circular(16),
-        image: const DecorationImage(
-          image: AssetImage('assets/images/pattern.png'),
+        
+        image: DecorationImage(
+          image: const AssetImage('assets/images/background.png'),
           fit: BoxFit.cover,
-          opacity: 0.1,
+        //  opacity: 0.1,
         ),
       ),
       child: Column(
@@ -38,33 +41,38 @@ class BalanceCard extends StatelessWidget {
                 'Available Balance',
                 style: TextStyle(
                   color: Colors.white,
-                  fontSize: 16,
+                  fontFamily: 'Roboto',
+                  fontWeight: FontWeight.w500,
+                  fontSize: 10,
                 ),
               ),
               IconButton(
                 icon: Icon(
                   isBalanceVisible ? Icons.visibility : Icons.visibility_off,
                   color: Colors.white,
+                  size: 14,
                 ),
                 onPressed: onToggleVisibility,
               ),
             ],
           ),
-          const SizedBox(height: 8),
+          //const SizedBox(height: 8),
           Text(
             isBalanceVisible ? '₦$balance' : '****',
             style: const TextStyle(
               color: Colors.white,
               fontSize: 32,
-              fontWeight: FontWeight.bold,
+              fontFamily: 'Roboto',
+              fontWeight: FontWeight.w600,
             ),
           ),
-          const SizedBox(height: 8),
+          //const SizedBox(height: 4),
           Text(
             subtitle,
             style: const TextStyle(
               color: Colors.white70,
-              fontSize: 14,
+              fontSize: 10,
+              fontWeight: FontWeight.w400
             ),
           ),
         ],

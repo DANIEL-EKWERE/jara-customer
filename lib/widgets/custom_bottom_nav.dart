@@ -46,8 +46,8 @@ class CustomBottomNav extends StatelessWidget {
             label: 'Home',
           ),
           const BottomNavigationBarItem(
-            icon: Icon(Icons.favorite_border),
-            activeIcon: Icon(Icons.favorite_border),
+            icon: Icon(Icons.favorite_border,weight: 0.1,),
+            activeIcon: Icon(Icons.favorite_border,weight: 0.1,),
             label: 'Favourites',
           ),
           BottomNavigationBarItem(
@@ -62,7 +62,7 @@ class CustomBottomNav extends StatelessWidget {
                   Get.find<CartController>().cartItems.length.toString(),
                   style: const TextStyle(color: Colors.white, fontSize: 12),
                 ),
-                child: const Icon(Icons.shopping_cart_outlined),
+                child: const Icon(Icons.shopping_cart_outlined,weight: 0.01,),
               );
             }),
             activeIcon: Obx(() {
@@ -76,7 +76,7 @@ class CustomBottomNav extends StatelessWidget {
                   Get.find<CartController>().cartItems.length.toString(),
                   style: const TextStyle(color: Colors.white, fontSize: 12),
                 ),
-                child: const Icon(Icons.shopping_cart_outlined),
+                child: const Icon(Icons.shopping_cart_outlined,weight: 0.01,),
               );
             }),
             label: 'Cart',

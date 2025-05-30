@@ -25,32 +25,47 @@ class PaymentMethodCards extends StatelessWidget {
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
           border: Border.all(
-            color: isSelected ? Theme.of(context).primaryColor : Colors.grey[300]!,
+            color:
+                isSelected ? Theme.of(context).primaryColor : Colors.grey[300]!,
             width: 2,
           ),
           borderRadius: BorderRadius.circular(12),
         ),
         child: Row(
           children: [
-            icon,
-            const SizedBox(width: 16),
             Expanded(
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    title,
-                    style: const TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                    ),
+                  Row(
+                    children: [
+                      icon,
+                      SizedBox(width: 10,),
+                      Text(
+                        title,
+                        style: const TextStyle(
+                          fontSize: 12,
+                          fontWeight: FontWeight.w700,
+                          fontFamily: 'Roboto'
+                        ),
+                      ),
+                      const SizedBox(width: 16),
+                    ],
                   ),
-                  Text(
-                    description,
-                    style: TextStyle(
-                      color: Colors.grey[600],
-                      fontSize: 14,
-                    ),
+                  SizedBox(height: 5,),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Text(
+                          description,
+                          style: TextStyle(
+                            color: Colors.grey[600],
+                            fontFamily: 'Roboto',
+                            fontWeight: FontWeight.w300,
+                            fontSize: 11,
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 ],
               ),

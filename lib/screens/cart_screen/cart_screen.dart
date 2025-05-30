@@ -33,95 +33,95 @@ class _CartScreenState extends State<CartScreen> {
   @override
   void initState() {
     super.initState();
-    _fetchCart();
+   // _fetchCart();
   }
 
-  Future<void> _fetchCart() async {
-    try {
-      setState(() {
-        _isLoading = true;
-        _errorMessage = null;
-      });
+  // Future<void> _fetchCart() async {
+  //   try {
+  //     setState(() {
+  //       _isLoading = true;
+  //       _errorMessage = null;
+  //     });
 
-      final cart = await _cartService.getActiveCart();
-      _currentCartId = cart['id'];
+  //     final cart = await _cartService.getActiveCart();
+  //     _currentCartId = cart['id'];
 
-      setState(() {
-        _isLoading = false;
-        _cartItems = ((cart['items'] ?? []) as List).map((item) {
-          final product = item['product'] ?? {};
+  //     setState(() {
+  //       _isLoading = false;
+  //       _cartItems = ((cart['items'] ?? []) as List).map((item) {
+  //         final product = item['product'] ?? {};
 
-          // Parse price values safely
-          double parsePrice(dynamic value) {
-            if (value == null) return 0.0;
-            if (value is num) return value.toDouble();
-            if (value is String) {
-              try {
-                return double.parse(value);
-              } catch (e) {
-                return 0.0;
-              }
-            }
-            return 0.0;
-          }
+  //         // Parse price values safely
+  //         double parsePrice(dynamic value) {
+  //           if (value == null) return 0.0;
+  //           if (value is num) return value.toDouble();
+  //           if (value is String) {
+  //             try {
+  //               return double.parse(value);
+  //             } catch (e) {
+  //               return 0.0;
+  //             }
+  //           }
+  //           return 0.0;
+  //         }
 
-          return CartItem(
-            ingredients: [],
-            id: item.id,
-            name: product['name']?.toString() ?? 'Unknown Product',
-            description: product['description']?.toString() ?? '',
-            price: parsePrice(item['price']),
-            originalPrice: parsePrice(product['price']),
-            quantity: item['quantity'] ?? 1,
-          );
-        }).toList();
-      });
-    } catch (e) {
-      setState(() {
-        _isLoading = false;
-        _errorMessage = 'Error fetching cart: $e';
-      });
-      debugPrint(_errorMessage);
-    }
-  }
+  //         return CartItem(
+  //           ingredients: [],
+  //           id: item.id,
+  //           name: product['name']?.toString() ?? 'Unknown Product',
+  //           description: product['description']?.toString() ?? '',
+  //           price: parsePrice(item['price']),
+  //           originalPrice: parsePrice(product['price']),
+  //           quantity: item['quantity'] ?? 1,
+  //         );
+  //       }).toList();
+  //     });
+  //   } catch (e) {
+  //     setState(() {
+  //       _isLoading = false;
+  //       _errorMessage = 'Error fetching cart: $e';
+  //     });
+  //     debugPrint(_errorMessage);
+  //   }
+  // }
 
-  Future<void> _updateQuantity(String itemId, int newQuantity) async {
-    if (_currentCartId == null) return;
+  // Future<void> _updateQuantity(String itemId, int newQuantity) async {
+  //   if (_currentCartId == null) return;
 
-    try {
-      await _cartService.updateCartItem(
-        _currentCartId!,
-        int.parse(itemId),
-        newQuantity,
-      );
-      await _fetchCart(); // Refresh the cart
-    } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Failed to update quantity')),
-      );
-    }
-  }
+  //   try {
+  //     await _cartService.updateCartItem(
+  //       _currentCartId!,
+  //       int.parse(itemId),
+  //       newQuantity,
+  //     );
+  //     await _fetchCart(); // Refresh the cart
+  //   } catch (e) {
+  //     ScaffoldMessenger.of(context).showSnackBar(
+  //       const SnackBar(content: Text('Failed to update quantity')),
+  //     );
+  //   }
+  // }
 
-  Future<void> _removeItem(String itemId) async {
-    if (_currentCartId == null) return;
+  // Future<void> _removeItem(String itemId) async {
+  //   if (_currentCartId == null) return;
 
-    try {
-      await _cartService.removeCartItem(
-        _currentCartId!,
-        int.parse(itemId),
-      );
-      await _fetchCart(); // Refresh the cart
-    } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Failed to remove item')),
-      );
-    }
-  }
+  //   try {
+  //     await _cartService.removeCartItem(
+  //       _currentCartId!,
+  //       int.parse(itemId),
+  //     );
+  //     await _fetchCart(); // Refresh the cart
+  //   } catch (e) {
+  //     ScaffoldMessenger.of(context).showSnackBar(
+  //       const SnackBar(content: Text('Failed to remove item')),
+  //     );
+  //   }
+  // }
 
-  double get _totalAmount {
-    return _cartItems.fold(
-        0, (sum, item) => sum + (item.price * item.quantity.value));
-  }
+  // double get _totalAmount {
+  //   return _cartItems.fold(
+  //       0, (sum, item) => sum + (item.price * item.quantity.value));
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -129,19 +129,15 @@ class _CartScreenState extends State<CartScreen> {
     bool isCheckoutEnabled = !isCartEmpty && controller.total > 0;
 
     return SafeArea(
-      child: _isLoading
-          ? const Center(child: CircularProgressIndicator())
-          : _errorMessage != null && controller.cartItems.isEmpty
-              ? Center(child: Text(_errorMessage!))
-              : Scaffold(
-                  body: Column(
-                    children: [
-                      const Padding(
-                        padding: EdgeInsets.symmetric(vertical: 16),
-                        child: Text(
-                          'Cart',
-                          style: TextStyle(
-                            fontSize: 18,
+      child: Scaffold(
+              body: Column(
+                children: [
+                  const Padding(
+                    padding: EdgeInsets.symmetric(vertical: 16),
+                    child: Text(
+                      'Cart',
+                      style: TextStyle(
+                        fontSize: 18,
                             fontWeight: FontWeight.w700,
                             fontFamily: 'Poppins',
                           ),
@@ -251,10 +247,8 @@ class _CartScreenState extends State<CartScreen> {
                                         ingredients: ingredients,
                                         name: item.name,
                                         unit: item.description,
-                                        basePrice: item.price,
+                                        basePrice: item.price.obs,
                                         quantity: item.quantity,
-                                        // onQuantityChanged: (newQuantity) =>
-                                        //     _updateQuantity(item.id.toString(), newQuantity),
                                         addQuantity: () {
                                           controller.updateItemQuantity(
                                               item.id, item.quantity.value + 1);
@@ -281,22 +275,9 @@ class _CartScreenState extends State<CartScreen> {
                           children: [
                             CartSummary(
                               itemsCost: controller.totalIngredientPrice,
-                              // .cartItems.fold(
-                              //   // 0.0,
-                              //   // (sum, item) =>
-                              //   //     sum +
-                              //   //     (item.price * item.quantity.value) +
-                              //   //     item.ingredients.fold(
-                              //   0.0,
-                              //   (ingredientSum, ingredient) =>
-                              //       ingredientSum +
-                              //       ((ingredient.price) *
-                              //           (ingredient.quantity.value)),
-                                // ),
-                            //  ),
                               mealCost: controller.mealPrepPrice,
                               serviceCharge: controller.calculatedServiceCharge,
-                              shippingCost: controller.shippingCost.value,
+                              shippingCost: controller.shippingCost1.value,
                               totalAmount: controller.total.obs,
                             ),
                             const SizedBox(height: 16),

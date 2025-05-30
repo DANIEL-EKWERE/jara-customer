@@ -43,6 +43,7 @@ flutter:
   assets:
     - assets/
     - assets/images/
+    - assets/images/background.png
     - assets/images/grilled-turkey.png
     - assets/images/mama-gold-rice.png
     - assets/images/grilled-chicken.png

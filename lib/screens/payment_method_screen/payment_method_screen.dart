@@ -105,8 +105,9 @@ class _PaymentMethodScreenState extends State<PaymentMethodScreen> {
                     const Text(
                       'Select the method for your payment',
                       style: TextStyle(
-                        fontSize: 24,
-                        fontWeight: FontWeight.w500,
+                        fontSize: 15,
+                        fontWeight: FontWeight.w300,
+                        fontFamily: 'Roboto'
                       ),
                     ),
                     const SizedBox(height: 24),
@@ -175,7 +176,7 @@ class _PaymentMethodScreenState extends State<PaymentMethodScreen> {
                           : Text(
                               'Pay ₦${widget.amount.toStringAsFixed(2)}',
                               style: const TextStyle(
-                                fontSize: 18,
+                                fontSize: 16,
                                 fontWeight: FontWeight.bold,
                                 color: Colors.white,
                               ),

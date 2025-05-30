@@ -14,7 +14,7 @@ class CartController extends GetxController {
   var shippingCost = 2000.0.obs;
   var totalAmount = 0.0.obs;
 
-  RxBool mealPrep = true.obs;
+  RxBool mealPrep = false.obs;
 
   void updateCosts({
     double? items,
@@ -75,6 +75,10 @@ double get mealPrepPrice {
   return mealPrep.value ? 2000.00 : 0.00;
 }
 
+RxDouble get shippingCost1{
+  return itemsCost > 0.0 ? 2000.0.obs : 0.0.obs;
+}
+
 double get calculatedServiceCharge {
   return totalIngredientPrice.value * 0.07;
 }
@@ -94,7 +98,7 @@ RxDouble get totalIngredientPrice {
 }
 
 double get total {
-  return totalIngredientPrice.value + mealPrepPrice + calculatedServiceCharge + shippingCost.value; 
+  return totalIngredientPrice.value + mealPrepPrice + calculatedServiceCharge + shippingCost1.value; 
 }
 
   void incrementIngredientQuantity(int itemId, int ingredientId) {
@@ -178,4 +182,18 @@ double get total {
       print('Item with id $itemId not found.');
     }
   }
+
+  void updateCustomPrice(int id, int id2, String p0) {
+     int index = cartItems.indexWhere((item) => item.id == id);
+    if (index != -1) {
+      final ingredientIndex = cartItems[index].ingredients.indexWhere((ing) => ing.id == id2);
+      if (ingredientIndex != -1) {
+        cartItems[index].ingredients[ingredientIndex].price = double.tryParse(p0) ?? 0.0;
+        print('Updated custom price for ingredient: ${cartItems[index].ingredients[ingredientIndex].name}, New Price: ${cartItems[index].ingredients[ingredientIndex].price}');
+      } else {
+        print('Ingredient with id $id2 not found in item $id.');
+      }
+
+  }
+}
 }

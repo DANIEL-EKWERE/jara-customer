@@ -114,9 +114,9 @@ class _AddMoneyScreenState extends State<AddMoneyScreen> {
                         const Text(
                           '₦',
                           style: TextStyle(
-                            fontSize: 40,
+                            fontSize: 20,
                             fontWeight: FontWeight.w300,
-                            color: Colors.grey,
+                            color: Color(0xffBABABA),
                           ),
                         ),
                         Expanded(
@@ -124,12 +124,14 @@ class _AddMoneyScreenState extends State<AddMoneyScreen> {
                             controller: _amountController,
                             focusNode: _amountFocusNode,
                             keyboardType: TextInputType.number,
+                            
                             style: const TextStyle(
                               fontSize: 40,
                               fontWeight: FontWeight.w300,
                               color: Colors.grey,
                             ),
                             decoration: const InputDecoration(
+                              hintStyle: TextStyle(color: Color(0xffBABABA),),
                               border: InputBorder.none,
                               contentPadding: EdgeInsets.zero,
                             ),

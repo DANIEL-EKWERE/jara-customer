@@ -17,8 +17,9 @@ import '../../widgets/message_box.dart';
 import '../wallet_screen/wallet_screen.dart';
 import 'package:jara_market/screens/cart_screen/models/models.dart';
 
-CheckoutController controller = Get.put(CheckoutController()) ;
+CheckoutController controller = Get.put(CheckoutController());
 var cartController = Get.find<CartController>();
+
 class CheckoutScreen extends StatefulWidget {
   final double totalAmount;
   final List<CartItem> cartItems;
@@ -252,19 +253,23 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
         elevation: 0,
         backgroundColor: Colors.white,
         leading: GestureDetector(
-          onTap: (){
-            Get.back();
-          },
-          child: Icon(Icons.chevron_left,size: 26,)),
+            onTap: () {
+              Get.back();
+            },
+            child: Icon(
+              Icons.chevron_left,
+              size: 26,
+            )),
         centerTitle: true,
-        title: const Text('Cart Summary',
-                          style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.w700,
-                            fontFamily: 'Poppins',
-                          ),
-                          textAlign: TextAlign.center,
-                          ),
+        title: const Text(
+          'Cart Summary',
+          style: TextStyle(
+            fontSize: 18,
+            fontWeight: FontWeight.w700,
+            fontFamily: 'Poppins',
+          ),
+          textAlign: TextAlign.center,
+        ),
       ),
       body: SafeArea(
         child: Column(
@@ -275,7 +280,8 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                 children: [
                   ListView.separated(
                     shrinkWrap: true,
-                   // padding: const EdgeInsets.symmetric(horizontal: 16),
+                    physics: NeverScrollableScrollPhysics(),
+                    // padding: const EdgeInsets.symmetric(horizontal: 16),
                     itemCount: widget.cartItems.length,
                     separatorBuilder: (context, index) =>
                         const Divider(height: 1),
@@ -316,13 +322,15 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                   SummaryBreakdown(
                     mealPrep: cartController.mealPrepPrice,
                     itemsTotal: widget.totalAmount,
-                    serviceChargePercentage: cartController.calculatedServiceCharge,
+                    serviceChargePercentage:
+                        cartController.calculatedServiceCharge,
                     deliveryFee: cartController.shippingCost.value,
                     total: widget.totalAmount,
                   ),
                   const SizedBox(height: 24),
-                  CheckoutButtonPaystack(title: 'Check Out',),
-                  
+                  CheckoutButtonPaystack(
+                    title: 'Check Out',
+                  ),
                   const SizedBox(height: 24),
                   SingleChildScrollView(
                     scrollDirection: Axis.horizontal,

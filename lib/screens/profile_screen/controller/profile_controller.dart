@@ -8,15 +8,17 @@ class ProfileController extends GetxController {
   ApiService _apiService = ApiService(Duration(seconds: 60 * 5));
 
   RxBool isLoading = false.obs;
-  ProfileModel profileModel = ProfileModel(status: true, message: '', data: ProfileData());
+  ProfileModel profileModel = ProfileModel(status: false, message: '', data: ProfileData());
   ProfileData data = ProfileData();
+
+  RxString? errorMessage = ''.obs;
 
   Future<void> fetchUserProfile() async {
     isLoading.value = true;
     try {
       // Replace fetchUserProfile with getUser
       final response = await _apiService.getUser();
-
+print(response.statusCode);
       if (response.statusCode == 200 || response.statusCode == 201) {
         isLoading.value = false;
         profileModel = profileModelFromJson(response.body);
@@ -29,16 +31,18 @@ class ProfileController extends GetxController {
         );
       }
     } catch (e, stackTrace) {
+      
       print('Error: $e');
       print('Stack Trace: $stackTrace');
 
       isLoading.value = false;
-
+errorMessage!.value = e.toString();
       ScaffoldMessenger.of(Get.context!).showSnackBar(
         SnackBar(content: Text('Error: $e')),
       );
     }finally{
 isLoading.value = false;
+
     }
   }
 
