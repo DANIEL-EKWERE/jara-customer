@@ -165,7 +165,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                 Text('Address',style: TextStyle(fontSize: 13,fontFamily: 'Mont', fontWeight: FontWeight.normal),),
-                                Text('Obot Idim. ibesikpo',style: TextStyle(fontSize: 13,fontFamily: 'Mont', fontWeight: FontWeight.w600)),
+                                if(controller.data.contactAddress != null && controller.data.contactAddress!.isNotEmpty)
+                                  Text(controller.data.contactAddress![0].contactAddress! ?? 'N/A',style: TextStyle(fontSize: 13,fontFamily: 'Mont', fontWeight: FontWeight.w600))
+                                else
+                                  GestureDetector(
+                                    onTap: (){
+                                      Get.toNamed(AppRoutes.checkoutAddressChange,
+                                          arguments: {
+                                            'isFromProfile': true,
+                                          });
+                                    },
+                                    child: Text('Click here to set your address',style: TextStyle(fontSize: 13,fontFamily: 'Mont', fontWeight: FontWeight.w600))),
                               ],),
                               SvgPicture.asset('assets/images/location.svg',semanticsLabel: 'Dart Logo',height: 20,width: 20,),
                             // Icon(Icons.location_on,color: Colors.amber,size: 20,),

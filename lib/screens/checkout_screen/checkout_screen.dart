@@ -1,8 +1,12 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_sound/flutter_sound.dart';
 import 'package:get/get.dart';
+import 'package:jara_market/config/routes.dart';
 import 'package:jara_market/screens/cart_screen/controller/cart_controller.dart';
+import 'package:jara_market/screens/checkout_address_change/checkout_address_change.dart';
 import 'package:jara_market/screens/checkout_screen/controller/checkout_controller.dart';
+import 'package:jara_market/screens/main_screen/main_screen.dart';
 import 'package:jara_market/widgets/cart_widgets/cart_summary_card.dart';
 import 'package:jara_market/widgets/cart_widgets/checkout_button.dart';
 import 'package:jara_market/widgets/cart_widgets/checkout_button_paystack.dart';
@@ -23,11 +27,13 @@ var cartController = Get.find<CartController>();
 class CheckoutScreen extends StatefulWidget {
   final double totalAmount;
   final List<CartItem> cartItems;
+  final List<dynamic> orderAddress;
 
   const CheckoutScreen({
     Key? key,
     required this.totalAmount,
     required this.cartItems,
+    required this.orderAddress,
   }) : super(key: key);
 
   @override
@@ -36,6 +42,17 @@ class CheckoutScreen extends StatefulWidget {
 
 class _CheckoutScreenState extends State<CheckoutScreen> {
   String _selectedPaymentMethod = '';
+
+  String fullName = 'Jacob Peter';
+  Map<String, dynamic> result = {};
+
+  getName() async {
+    var name = await dataBase.getFullName();
+    setState(() {
+      fullName = name;
+    });
+  }
+
   final TextEditingController _messageController = TextEditingController();
   final FlutterSoundRecorder _recorder = FlutterSoundRecorder();
   ApiService _apiService = ApiService(Duration(seconds: 60 * 5));
@@ -49,6 +66,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
   void initState() {
     super.initState();
     _initializeRecorder();
+    getName();
   }
 
   Future<void> _initializeRecorder() async {
@@ -381,14 +399,58 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                     ),
                   ),
                   const SizedBox(height: 24),
+                  result.isNotEmpty ? 
+                  Obx((){
+                    return AddressCard(
+                    name: fullName,
+                    action: 'Change',
+                    address: '${controller.selectedAddress},${controller.selectedState},${controller.selectedCountry} ',
+                    onChangePressed: () async {
+                      print('change address pressed');
+                      //Get.toNamed(AppRoutes.checkoutAddressChange);
+                      // Navigator.of(context).push(
+                      //   CupertinoPageRoute(
+                      //     builder: (context) => CheckoutAddressChangeScreen(),
+                      //   ),
+                      // );
+                     result = await Get.toNamed(AppRoutes.checkoutAddressChange, arguments: {
+                        'isFromProfile': false,
+                      });
+                      if (result.isNotEmpty) {
+                        setState(() {
+                          controller.selectedAddress.value = result['contact_address'];
+                          controller.selectedCountry.value = result['country'];
+                          controller.selectedState.value = result['state'];
+                          controller.selectedLga.value = result['lga'];
+                          controller.number.value = result['phone_number'];
+                        });
+                      }
+                    },
+                  );
+                  }) : 
                   AddressCard(
-                    name: 'Jacob Peter',
-                    address: '2972 Westheimer Rd. Santa Ana, Illinois 85486',
-                    onChangePressed: () {},
+                    name: fullName,
+                    action: widget.orderAddress.isNotEmpty ? 'Change' : 'Add',
+                    address: widget.orderAddress.isNotEmpty
+                        ? '${widget.orderAddress[0]['contact_address']},${widget.orderAddress[0]['lga']},${widget.orderAddress[0]['state']},${widget.orderAddress[0]['country']}.'
+                        : 'Set Address to recieve your order.',
+                    onChangePressed: () async {
+                      print('change address pressed');
+                      //Get.toNamed(AppRoutes.checkoutAddressChange);
+                      // Navigator.of(context).push(
+                      //   CupertinoPageRoute(
+                      //     builder: (context) => CheckoutAddressChangeScreen(),
+                      //   ),
+                      // );
+                      result = await Get.toNamed(AppRoutes.checkoutAddressChange, arguments: {
+                        'isFromProfile': false,
+                      });
+                    },
                   ),
                 ],
               ),
             ),
+            //ElevatedButton(onPressed: (){print(result);}, child: Text('Print Result'))
           ],
         ),
       ),

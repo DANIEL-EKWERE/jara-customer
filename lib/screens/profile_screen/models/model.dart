@@ -49,6 +49,7 @@ class ProfileData {
   String? lastLogin;
   Wallet? wallet;
   List<dynamic>? favorites;  // Changed from List<Null> to List<dynamic>
+  List<ContactAddress>? contactAddress;
   
 
   ProfileData({
@@ -69,7 +70,7 @@ class ProfileData {
     this.lastLogin,
     this.wallet,
     this.favorites,
-    
+    this.contactAddress,
   });
 
   ProfileData.fromJson(Map<String, dynamic> json) {
@@ -90,7 +91,11 @@ class ProfileData {
     lastLogin = json['last_login'];
     wallet = json['wallet'] != null ? Wallet.fromJson(json['wallet']) : null;
     favorites = json['favorites'];
-    
+    contactAddress = json['contact_address'] != null
+        ? (json['contact_address'] as List)
+            .map((i) => ContactAddress.fromJson(i))
+            .toList()
+        : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -132,6 +137,52 @@ class Wallet {
       'id': id,
       'balance': balance,
     };
+  }
+}
+
+class ContactAddress {
+  int? id;
+  String? country;
+  String? state;
+  String? lga;
+  String? contactAddress;
+  String? phoneNumber;
+  String? isDefault;
+  String? createdAt;
+  
+
+  ContactAddress(
+      {this.id,
+      this.country,
+      this.state,
+      this.lga,
+      this.contactAddress,
+      this.phoneNumber,
+      this.isDefault,
+      this.createdAt});
+
+  ContactAddress.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
+    country = json['country'];
+    state = json['state'];
+    lga = json['lga'];
+    contactAddress = json['contact_address'];
+    phoneNumber = json['phone_number'];
+    isDefault = json['is_default'];
+    createdAt = json['created_at'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['id'] = this.id;
+    data['country'] = this.country;
+    data['state'] = this.state;
+    data['lga'] = this.lga;
+    data['contact_address'] = this.contactAddress;
+    data['phone_number'] = this.phoneNumber;
+    data['is_default'] = this.isDefault;
+    data['created_at'] = this.createdAt;
+    return data;
   }
 }
 

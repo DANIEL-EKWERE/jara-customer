@@ -9,6 +9,8 @@ import 'package:jara_market/screens/categories_screen/bindings/categories_bindin
 import 'package:jara_market/screens/categories_screen/categories_screen.dart';
 import 'package:jara_market/screens/category_screen/bindings/category_bindings.dart';
 import 'package:jara_market/screens/category_screen/category_screen.dart';
+import 'package:jara_market/screens/checkout_address_change/bindings/checkout_address_change_binding.dart';
+import 'package:jara_market/screens/checkout_address_change/checkout_address_change.dart';
 import 'package:jara_market/screens/contact_screen/bindings/contact_bindings.dart';
 import 'package:jara_market/screens/contact_screen/contact_screen.dart';
 import 'package:jara_market/screens/egusi_soup_detail_screen/egusi_soup_detail_screen.dart';
@@ -104,8 +106,13 @@ class AppRoutes {
   static const walletScreen = '/user_orders_screen';
   static const privacyPolicyScreen = '/privacy_policy_screen';
   static const termsOfServiceScreen = '/terms_of_service_screen';
+  static const checkoutAddressChange = '/checkout-address-change';
 
   static List<GetPage> pages = [
+    GetPage(name: checkoutAddressChange,
+    page: () =>  CheckoutAddressChangeScreen(),
+    bindings: [CheckoutAddressChangeBinding()]),
+    
     GetPage(
         name: addMoneyScreen,
         page: () => const AddMoneyScreen(),

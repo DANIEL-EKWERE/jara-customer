@@ -137,6 +137,105 @@ Future<http.Response> resendOtp(
 }
 
 
+Future<http.Response> fetchCountry() async {
+  var token = await dataBase.getToken();
+  final url = Uri.parse('$baseUrl/country');
+  _logRequest('GET', url);
+  final response = await http.get(
+    url,
+    headers: <String, String>{
+      'Content-Type': 'application/json; charset=UTF-8',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer $token',
+    },
+  );
+  _logResponse(response);
+  return response;
+}
+
+Future<http.Response> fetchState() async {
+  var token = await dataBase.getToken();
+  final url = Uri.parse('$baseUrl/states');
+  _logRequest('GET', url);
+  final response = await http.get(
+    url,
+    headers: <String, String>{
+      'Content-Type': 'application/json; charset=UTF-8',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer $token',
+    },
+  );
+  _logResponse(response);
+  return response;
+}
+
+
+Future<http.Response> fetchLgas(String name) async {
+  var token = await dataBase.getToken();
+  final url = Uri.parse('$baseUrl/lgas?state=$name');
+  _logRequest('GET', url);
+  final response = await http.get(
+    url,
+    headers: <String, String>{
+      'Content-Type': 'application/json; charset=UTF-8',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer $token',
+    },
+  );
+  _logResponse(response);
+  return response;
+}
+
+Future<http.Response> updateCheckoutAddress(Map<String, dynamic> addressData) async {
+  var token = await dataBase.getToken();
+  final url = Uri.parse('$baseUrl/addresses/1');
+  _logRequest('PUT', url, body: addressData);
+  final response = await http.put(
+    url,
+    body: jsonEncode(addressData),
+    headers: <String, String>{
+      'Content-Type': 'application/json; charset=UTF-8',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer $token',
+    },
+  );
+  _logResponse(response);
+  return response;
+}
+
+Future<http.Response> addCheckoutAddress(Map<String, dynamic> addressData) async {
+  var token = await dataBase.getToken();
+  final url = Uri.parse('$baseUrl/addresses');
+  _logRequest('POST', url, body: addressData);
+  final response = await http.post(
+    url,
+    body: jsonEncode(addressData),
+    headers: <String, String>{
+      'Content-Type': 'application/json; charset=UTF-8',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer $token',
+    },
+  );
+  _logResponse(response);
+  return response;
+}
+
+Future<http.Response> getCheckoutAddress() async {
+  var token = await dataBase.getToken();
+  final url = Uri.parse('$baseUrl/addresses');
+  _logRequest('GET', url);
+  final response = await http.get(
+    url,
+    headers: <String, String>{
+      'Content-Type': 'application/json; charset=UTF-8',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer $token',
+    },
+  );
+  _logResponse(response);
+  return response;
+}
+
   // Validate user signup OTP
   Future<http.Response> validateUserSignupOtp(
       Map<String, dynamic> otpData) async {

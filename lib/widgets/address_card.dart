@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 class AddressCard extends StatelessWidget {
   final String name;
   final String address;
+  final String action;
   final VoidCallback onChangePressed;
 
   const AddressCard({
@@ -10,6 +11,7 @@ class AddressCard extends StatelessWidget {
     required this.name,
     required this.address,
     required this.onChangePressed,
+    required this.action,
   }) : super(key: key);
 
   @override
@@ -61,8 +63,8 @@ class AddressCard extends StatelessWidget {
               TextButton(
                 style: ButtonStyle(shape: WidgetStateProperty.all(RoundedRectangleBorder(borderRadius: BorderRadius.circular(8),side: BorderSide(width: 1,color: Color(0xffFF9F0A))))),
                 onPressed: onChangePressed,
-                child: const Text(
-                  'Change',
+                child:  Text(
+                  action,
                   style: TextStyle(
                     color: Color(0xffFF9F0A),
                     fontWeight: FontWeight.w500,

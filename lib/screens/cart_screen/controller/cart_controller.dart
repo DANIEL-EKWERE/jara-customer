@@ -1,8 +1,13 @@
+import 'dart:convert';
+import 'dart:developer' as myLog;
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:jara_market/config/routes.dart';
 import 'package:jara_market/screens/cart_screen/models/models.dart';
+import 'package:jara_market/services/api_service.dart';
 
 
-
+ApiService _apiService = ApiService(Duration(seconds: 60 * 5));
 class CartController extends GetxController {
   
 
@@ -13,7 +18,7 @@ class CartController extends GetxController {
   var serviceChargeValue = 0.0.obs;
   var shippingCost = 2000.0.obs;
   var totalAmount = 0.0.obs;
-
+  RxBool isLoading = false.obs;
   RxBool mealPrep = false.obs;
 
   void updateCosts({
@@ -195,5 +200,37 @@ double get total {
       }
 
   }
+  
 }
+
+  Future<dynamic> getCheckoutAddress() async {
+    // Implement the logic to retrieve the checkout address
+    isLoading.value = true;
+  try{
+    final response = await _apiService.getCheckoutAddress();
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      var data = jsonDecode(response.body);
+      myLog.log('Checkout address data: $data');
+      // var data1 = data;
+      // Parse the response and update the address
+        // For example:
+        // checkoutAddress.value = CheckoutAddress.fromJson(value.data);
+       // Get.toNamed(AppRoutes.checkoutScreen, arguments: data);
+       
+        isLoading.value = false;
+        return data;
+      } else {
+        isLoading.value = false;
+        Get.snackbar('Error', 'Failed to load checkout address: ${response.body}',
+            backgroundColor: Colors.red, colorText: Colors.white);
+            return [];
+      }
+  }catch(error) {
+      isLoading.value = false;
+      Get.snackbar('Error', 'An error occurred: $error',
+          backgroundColor: Colors.red, colorText: Colors.white);
+          myLog.log('Error fetching checkout address: $error');
+    };
+    return [];
+  }
 }

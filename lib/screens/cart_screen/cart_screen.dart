@@ -281,11 +281,18 @@ class _CartScreenState extends State<CartScreen> {
                               totalAmount: controller.total.obs,
                             ),
                             const SizedBox(height: 16),
-                            CheckoutButton(
+                            Obx((){
+                              return CheckoutButton(
                               isEnabled: isCheckoutEnabled,
                               totalAmount: controller.total,
                               cartItems: controller.cartItems,
-                            ),
+                              loading: controller.isLoading.value,
+                              // onPressed: () {
+                              //   // Handle checkout button press
+                              //   controller.getCheckoutAddress();
+                              // },
+                            );
+                            }),
                             const SizedBox(height: 16),
                             const PaymentMethods(),
                           ],
