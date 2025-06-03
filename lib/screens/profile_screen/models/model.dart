@@ -41,6 +41,7 @@ class ProfileData {
   bool? emailVerified;
   String? role;
   String? referralCode;
+  String? profilePicture;
   dynamic referrerId;        // Changed from Null? to dynamic
   dynamic referralCount;     // Changed from Null? to dynamic
   bool? hasPin;
@@ -71,6 +72,7 @@ class ProfileData {
     this.wallet,
     this.favorites,
     this.contactAddress,
+    this.profilePicture,
   });
 
   ProfileData.fromJson(Map<String, dynamic> json) {
@@ -89,6 +91,7 @@ class ProfileData {
     isActive = json['is_active'];
     createdAt = json['created_at'];
     lastLogin = json['last_login'];
+    profilePicture = json['profile_picture'];
     wallet = json['wallet'] != null ? Wallet.fromJson(json['wallet']) : null;
     favorites = json['favorites'];
     contactAddress = json['contact_address'] != null
@@ -115,6 +118,7 @@ class ProfileData {
       'is_active': isActive,
       'created_at': createdAt,
       'last_login': lastLogin,
+      'profile_picture': profilePicture,
       if (wallet != null) 'wallet': wallet!.toJson(),
       if (favorites != null) 'favorites': favorites,
     };

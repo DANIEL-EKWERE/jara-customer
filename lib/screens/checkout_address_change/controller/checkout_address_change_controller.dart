@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:jara_market/screens/checkout_address_change/models/country_model.dart';
 import 'package:jara_market/screens/checkout_address_change/models/lga_model.dart';
 import 'package:jara_market/screens/checkout_address_change/models/state_model.dart';
+import 'package:jara_market/screens/profile_screen/controller/profile_controller.dart';
 import 'package:jara_market/services/api_service.dart';
 
 class CheckoutAddressChangeController extends GetxController {
@@ -20,7 +21,7 @@ ApiService _apiService = ApiService(Duration(seconds: 60 * 5));
   RxBool isDefault = false.obs;
   TextEditingController contactAddressController = TextEditingController();
   TextEditingController contactNumberController = TextEditingController();
-
+  var profileController = Get.find<ProfileController>();
   List<String> countries = [];
   CountryModel countryModel = CountryModel();
   CountryData selectedCountryData = CountryData();
@@ -182,19 +183,21 @@ fetchLgas(String name) async {
     
     myLog.log('Storing address data: $addressData');
   //  Call a method to save this data
-    _apiService.addCheckoutAddress(addressData).then((response) {
+    _apiService.addCheckoutAddress(addressData).then((response) async {
       if (response.statusCode == 200 || response.statusCode == 201) {
         myLog.log('Address stored successfully: ${response.body}');
         Get.snackbar('Success', 'Address stored successfully.',
             backgroundColor: Colors.green, colorText: Colors.white);
         Get.back();
-        if(Navigator.canPop(Get.context!)){
+        if(Navigator.canPop(Get.context!)) {
           print('Can pop the current route');
-         
           Navigator.pop(Get.context!);
         } else {
           print('Cannot pop the current route');
         }
+        Future.delayed(Duration(milliseconds: 100), () {
+        profileController.fetchUserProfile();
+      });
       } else {
         Get.snackbar('Error', 'Failed to store address: ${response.body}',
             backgroundColor: Colors.red, colorText: Colors.white);

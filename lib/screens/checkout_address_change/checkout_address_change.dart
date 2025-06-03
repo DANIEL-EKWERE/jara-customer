@@ -7,11 +7,14 @@ import 'package:jara_market/screens/checkout_address_change/models/country_model
 import 'package:jara_market/screens/checkout_address_change/models/lga_model.dart'
     as lgaData;
 import 'package:jara_market/screens/checkout_address_change/models/state_model.dart';
+import 'package:jara_market/screens/profile_screen/controller/profile_controller.dart';
 import 'package:jara_market/widgets/custom_button.dart';
 import 'package:jara_market/widgets/custom_text_field.dart';
 
 CheckoutAddressChangeController controller =
     Get.put(CheckoutAddressChangeController());
+    var profileController =
+    Get.find<ProfileController>();
 
 class CheckoutAddressChangeScreen extends StatefulWidget {
   @override

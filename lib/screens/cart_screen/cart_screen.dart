@@ -277,7 +277,7 @@ class _CartScreenState extends State<CartScreen> {
                               itemsCost: controller.totalIngredientPrice,
                               mealCost: controller.mealPrepPrice,
                               serviceCharge: controller.calculatedServiceCharge,
-                              shippingCost: controller.shippingCost1.value,
+                              shippingCost: controller.shippingCost.value,
                               totalAmount: controller.total.obs,
                             ),
                             const SizedBox(height: 16),

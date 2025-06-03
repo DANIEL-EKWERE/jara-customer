@@ -1,6 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
+
+
+extension ImageTypeExtension on String {
+  ImageType get imageType {
+    if (this.startsWith('http') || this.startsWith('https')) {
+      return ImageType.network;
+    } else if (this.endsWith('.svg')) {
+      return ImageType.svg;
+    } else if (this.startsWith('file:///')) {
+      return ImageType.file;
+    } else if (this.startsWith('/data/user/')) {
+      return ImageType.file;
+    } else {
+      return ImageType.png;
+    }
+  }
+}
+
+enum ImageType { svg, png, network, file, unknown }
+
 class AvatarWithEdit extends StatelessWidget {
   final double avatarRadius;
   final double editIconSize;
@@ -14,6 +34,8 @@ class AvatarWithEdit extends StatelessWidget {
     this.imageUrl,
     this.onEditPressed,
   }) : super(key: key);
+
+
 
   @override
   Widget build(BuildContext context) {

@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 // import 'package:jara_market/screens/home_screen/models/models.dart';
 
@@ -22,6 +23,7 @@ class CartItem {
   final double? originalPrice;
   final RxList<Ingredients> ingredients;
   RxInt quantity;
+  
   
 
   CartItem({
@@ -49,6 +51,7 @@ class Ingredients {
   String? createdAt;
   RxInt? quantity;
   RxBool isSelected;
+  TextEditingController controller = TextEditingController();
 
   Ingredients(
       {required this.id,

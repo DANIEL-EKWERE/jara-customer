@@ -44,4 +44,11 @@ RxString number = ''.obs;
   void toggleDefault() {
     isDefault.value = !isDefault.value;
   }
+
+  Future<void> initializeCheckout() async {
+    // Perform any necessary initialization for the checkout process
+    // This could include fetching user data, addresses, etc.
+    // For example:
+    // await fetchUserAddresses();
+  }
 }

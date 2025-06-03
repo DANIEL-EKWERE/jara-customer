@@ -1,3 +1,4 @@
+import 'dart:developer' as myLog;
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jara_market/screens/cart_screen/controller/cart_controller.dart';
@@ -34,11 +35,12 @@ class CheckoutButton extends StatelessWidget {
             () async {
               //  Navigate to the CheckoutScreen
            var checkoutAddress = await controller.getCheckoutAddress();
-
+myLog.log('Checkout Address: ${checkoutAddress['data'][0]['contact_address']}');
            // Check if it's a non-empty list
-if (checkoutAddress is List && checkoutAddress.isNotEmpty) {
-  var data = checkoutAddress[0];
+if (checkoutAddress.isNotEmpty) {
+  var data = checkoutAddress['data'][0];
   // Use `data` here
+  myLog.log('Checkout Address first index data: $data');
   Navigator.push(
                   context,
                   MaterialPageRoute(
@@ -57,7 +59,7 @@ if (checkoutAddress is List && checkoutAddress.isNotEmpty) {
                     builder: (context) => CheckoutScreen(
                       totalAmount: totalAmount,
                       cartItems: cartItems,
-                      orderAddress: [],
+                      orderAddress: {},
                     ),
                   ),
                 );

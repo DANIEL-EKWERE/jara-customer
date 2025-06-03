@@ -27,7 +27,7 @@ var cartController = Get.find<CartController>();
 class CheckoutScreen extends StatefulWidget {
   final double totalAmount;
   final List<CartItem> cartItems;
-  final List<dynamic> orderAddress;
+  final Map<String, dynamic> orderAddress;
 
   const CheckoutScreen({
     Key? key,
@@ -432,7 +432,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                     name: fullName,
                     action: widget.orderAddress.isNotEmpty ? 'Change' : 'Add',
                     address: widget.orderAddress.isNotEmpty
-                        ? '${widget.orderAddress[0]['contact_address']},${widget.orderAddress[0]['lga']},${widget.orderAddress[0]['state']},${widget.orderAddress[0]['country']}.'
+                        ? '${widget.orderAddress['contact_address']},${widget.orderAddress['lga']},${widget.orderAddress['state']},${widget.orderAddress['country']}.'
                         : 'Set Address to recieve your order.',
                     onChangePressed: () async {
                       print('change address pressed');
