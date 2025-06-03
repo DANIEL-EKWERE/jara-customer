@@ -903,7 +903,7 @@ Future<http.Response> getCheckoutAddress() async {
     return response;
   }
 
-  getCheckoutData() async {
+  getCheckoutData(Map<String, dynamic> checkoutData) async {
     final prefs = await SharedPreferences.getInstance();
     final token = prefs.getString('token') ?? '';
 
@@ -911,6 +911,7 @@ Future<http.Response> getCheckoutAddress() async {
     _logRequest('POST', url);
     final response = await http.post(
       url,
+      body: jsonEncode(checkoutData),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
         'Authorization': 'Bearer $token',

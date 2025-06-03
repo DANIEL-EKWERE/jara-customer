@@ -66,8 +66,9 @@ class CheckoutController extends GetxController {
         },
         "payment_gateway": "paystack"
       };
-      var response = await _apiService.getCheckoutData();
+      var response = await _apiService.getCheckoutData(checkoutData);
       if (response.statusCode == 200 || response.statusCode == 201) {
+        isLoading.value = false;
         // Handle successful response
         checkoutModel = checkoutModelFromJson(response.body);
         print('Checkout initialized successfully: ${checkoutModel.data?.url}');
@@ -78,6 +79,7 @@ class CheckoutController extends GetxController {
       }
     } catch (e) {
       print('Error initializing checkout: $e');
+      isLoading.value = false;
     } finally {
       isLoading.value = false;
     }

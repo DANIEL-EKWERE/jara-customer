@@ -347,7 +347,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                   ),
                   const SizedBox(height: 24),
                   CheckoutButtonPaystack(
-                    title: 'Check Out',
+                    title: controller.isLoading.value ? 'Initalizing Payment...' :'Check Out',
                     amount: widget.totalAmount,
                   ),
                   const SizedBox(height: 24),
