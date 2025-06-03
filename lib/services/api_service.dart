@@ -902,5 +902,22 @@ Future<http.Response> getCheckoutAddress() async {
     _logResponse(response);
     return response;
   }
+
+  getCheckoutData() async {
+    final prefs = await SharedPreferences.getInstance();
+    final token = prefs.getString('token') ?? '';
+
+    final url = Uri.parse('$baseUrl/payments/initialize-transaction');
+    _logRequest('POST', url);
+    final response = await http.post(
+      url,
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization': 'Bearer $token',
+      },
+    );
+    _logResponse(response);
+    return response;
+  }
 }
 ApiService apiService = ApiService(API_TIMEOUT_DURATION);

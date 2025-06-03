@@ -348,6 +348,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                   const SizedBox(height: 24),
                   CheckoutButtonPaystack(
                     title: 'Check Out',
+                    amount: widget.totalAmount,
                   ),
                   const SizedBox(height: 24),
                   SingleChildScrollView(

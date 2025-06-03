@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:jara_market/screens/checkout_screen/controller/checkout_controller.dart';
 // import '../../models/cart_item.dart';
 
+CheckoutController checkoutController = Get.find<CheckoutController>();
 class CheckoutButtonPaystack extends StatelessWidget {
  final String title;
+ final double amount;
 
   const CheckoutButtonPaystack(
-      {super.key,required this.title
+      {super.key,required this.title, required this.amount
       });
 
   @override
@@ -24,10 +28,9 @@ class CheckoutButtonPaystack extends StatelessWidget {
           //     ),
           //   ),
           // );
-          
+          checkoutController.initializeCheckout(amount);
           print('paystack calling here');
-              }
-          ,
+        },
         style: ElevatedButton.styleFrom(
           backgroundColor: const Color(0xFFFF9800),
           foregroundColor: Colors.black,
