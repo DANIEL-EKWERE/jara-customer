@@ -346,10 +346,12 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                     total: widget.totalAmount,
                   ),
                   const SizedBox(height: 24),
-                  CheckoutButtonPaystack(
+                  Obx((){
+                    return CheckoutButtonPaystack(
                     title: controller.isLoading.value ? 'Initalizing Payment...' :'Check Out',
                     amount: widget.totalAmount,
-                  ),
+                  );
+                  }),
                   const SizedBox(height: 24),
                   SingleChildScrollView(
                     scrollDirection: Axis.horizontal,

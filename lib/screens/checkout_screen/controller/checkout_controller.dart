@@ -56,6 +56,7 @@ class CheckoutController extends GetxController {
 
   Future<void> initializeCheckout(double amount) async {
     isLoading.value = true;
+    print('Initializing checkout with amount: $amount');
     try {
       var checkoutData = {
         "amount": amount,
@@ -72,10 +73,14 @@ class CheckoutController extends GetxController {
         // Handle successful response
         checkoutModel = checkoutModelFromJson(response.body);
         print('Checkout initialized successfully: ${checkoutModel.data?.url}');
+        Navigator.push(
+        Get.context!,
         CupertinoPageRoute(
-          builder: (context) =>
-              AtomicWebViewScreen(url: checkoutModel.data?.url ?? ''),
-        );
+          builder: (context) => AtomicWebViewScreen(
+            url: checkoutModel.data?.url ?? '',
+          ),
+        ),
+      );
       }
     } catch (e) {
       print('Error initializing checkout: $e');
