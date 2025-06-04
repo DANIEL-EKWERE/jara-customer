@@ -35,7 +35,7 @@ class CheckoutButton extends StatelessWidget {
             () async {
               //  Navigate to the CheckoutScreen
            var checkoutAddress = await controller.getCheckoutAddress();
-myLog.log('Checkout Address: ${checkoutAddress['data'][0]['contact_address']}');
+//myLog.log('Checkout Address: ${checkoutAddress['data'][0]['contact_address']}');
            // Check if it's a non-empty list
 if (checkoutAddress.isNotEmpty) {
   var data = checkoutAddress['data'][0];

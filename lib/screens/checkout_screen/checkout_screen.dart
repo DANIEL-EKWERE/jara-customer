@@ -417,7 +417,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                       //   ),
                       // );
                      result = await Get.toNamed(AppRoutes.checkoutAddressChange, arguments: {
-                        'isFromProfile': false,
+                        'isFromProfile': widget.orderAddress.isEmpty ? true : false,
                       });
                       if (result.isNotEmpty) {
                         setState(() {
@@ -446,7 +446,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                       //   ),
                       // );
                       result = await Get.toNamed(AppRoutes.checkoutAddressChange, arguments: {
-                        'isFromProfile': false,
+                        'isFromProfile': widget.orderAddress.isEmpty ? true : false,
                       });
                     },
                   ),

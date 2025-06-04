@@ -21,7 +21,7 @@ ApiService _apiService = ApiService(Duration(seconds: 60 * 5));
   RxBool isDefault = false.obs;
   TextEditingController contactAddressController = TextEditingController();
   TextEditingController contactNumberController = TextEditingController();
-  var profileController = Get.find<ProfileController>();
+  ProfileController profileController = Get.put(ProfileController());
   List<String> countries = [];
   CountryModel countryModel = CountryModel();
   CountryData selectedCountryData = CountryData();
@@ -118,7 +118,7 @@ fetchLgas(String name) async {
         'lga_id': selectedLGAId,
         'contact_address': contactAddressController.text,
         'phone_number': contactNumberController.text,
-        'is_default': isDefault.value.toString(),
+        'is_default': isDefault.value,
       };
      
       myLog.log('Updating address data: $addressData');
@@ -188,9 +188,17 @@ fetchLgas(String name) async {
         myLog.log('Address stored successfully: ${response.body}');
         Get.snackbar('Success', 'Address stored successfully.',
             backgroundColor: Colors.green, colorText: Colors.white);
-        Get.back();
+       // Get.back();
         if(Navigator.canPop(Get.context!)) {
           print('Can pop the current route');
+          Navigator.pop(Get.context!, {
+      'country': selectedCountry1,
+        'state': selectedState1,
+        'lga': selectedLGA1,
+        'contact_address': contactAddressController.text,
+        'phone_number': contactNumberController.text,
+        'is_default': isDefault.value.toString(),
+      },);
           Navigator.pop(Get.context!);
         } else {
           print('Cannot pop the current route');

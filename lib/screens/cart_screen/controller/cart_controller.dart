@@ -222,15 +222,21 @@ double get total {
   try{
     final response = await _apiService.getCheckoutAddress();
     if (response.statusCode == 200 || response.statusCode == 201) {
+      isLoading.value = false;
       var data = jsonDecode(response.body);
+      var datax = data['data'];
       myLog.log('Checkout address data: $data');
+      myLog.log('Checkout address data: ${data['data']}');
+      if (datax.isEmpty)
+        return {};
+      else
       // var data1 = data;
       // Parse the response and update the address
         // For example:
         // checkoutAddress.value = CheckoutAddress.fromJson(value.data);
        // Get.toNamed(AppRoutes.checkoutScreen, arguments: data);
        
-        isLoading.value = false;
+        
         return data;
       } else {
         isLoading.value = false;
