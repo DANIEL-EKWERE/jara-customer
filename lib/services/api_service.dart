@@ -426,12 +426,14 @@ Future<http.Response> getCheckoutAddress() async {
   Future<http.Response> createOrder(Map<String, dynamic> orderData) async {
         final prefs = await SharedPreferences.getInstance();
     final token = prefs.getString('token') ?? '';
-    final url = Uri.parse('$baseUrl/create-order');
+    final url = Uri.parse('$baseUrl/orders');
     _logRequest('POST', url, body: orderData);
     final response = await http.post(
       url,
+     // body: jsonEncode(orderData),
       headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
         'Authorization': 'Bearer $token',
       },
       body: jsonEncode(orderData),

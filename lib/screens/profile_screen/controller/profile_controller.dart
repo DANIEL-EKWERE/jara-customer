@@ -120,6 +120,7 @@ class ProfileController extends GetxController {
           '${apiService.baseUrl}/update-profile'; // Replace with your API endpoint
       isLoading.value = false;
       Map<String, String> headers = {
+        'Accept':'application/json',
         'Authorization': 'Bearer $token',
         //'Content-Type': 'multipart/form-data', // Important for multipart
       };

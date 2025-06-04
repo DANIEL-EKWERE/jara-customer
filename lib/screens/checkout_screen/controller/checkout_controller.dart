@@ -1,3 +1,4 @@
+
 import 'dart:developer' as myLog;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -101,9 +102,45 @@ class CheckoutController extends GetxController {
     isLoading.value = true;
 
     try {
-      final payload = buildOrderPayload(
+      final payload = 
+//       {
+//     "order_date": "2025-06-02",
+//     "shipping_fee": "0",
+//     "delivery_type": "pickup", //or walkin
+//     "address_id": 1,
+//     "service_charge": 1000,
+//     "products": [
+//         {
+//                 "product_id": 7,
+//                 "quantity": 3,
+//                 "price": 4000
+//         },
+//         {
+//                 "product_id": 8,
+//                 "quantity": 3,
+//                 "price": 4000
+//         }
+//     ],
+//     "ingredients": [
+//         {
+//             "ingredient_id": 1,
+//             "quantity": 2,
+//             "unit": "kg",
+//             "price": 3000
+//         },
+//         {
+//             "ingredient_id": 4,
+//             "quantity": 2,
+//             "unit": "kg",
+//             "price": 3000
+//         }
+//     ],
+//     "vat": 100,
+//     "total": 5000
+// };
+      buildOrderPayload(
         cartItems: cartController.cartItems,
-        orderDate: DateTime.now().toIso8601String(),
+        orderDate: DateFormat('yyyy-MM-dd').format(DateTime.now()),
         addressId: 1,
         deliveryType: 'pickup',
         shippingFee: 2000,
@@ -125,8 +162,9 @@ class CheckoutController extends GetxController {
               (route) => false,
             );
       } else {
-        Get.snackbar('Success', orderSuccessModel.message.toString(),
+        Get.snackbar('Oops, Something Went Wrong', response.body,
             colorText: Colors.white, backgroundColor: Colors.red);
+            Navigator.push(Get.context!, CupertinoDialogRoute(builder: (context)=> const SuccessScreen(), context: Get.context!));
       }
     } catch (e) {
       Get.snackbar('Error', e.toString(),
