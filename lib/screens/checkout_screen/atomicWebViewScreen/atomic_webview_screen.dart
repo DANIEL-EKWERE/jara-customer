@@ -41,13 +41,14 @@ final String callback_url = "http://127.0.0.1:8000";
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Colors.white,
           leading: IconButton(
               onPressed: () {
                 Navigator.of(context).canPop()
                     ? Navigator.pop(context)
                     : Navigator.of(context).pushNamed(AppRoutes.mainScreen);
               },
-              icon: Icon(Icons.arrow_back)),
+              icon: Icon(Icons.chevron_left_rounded)),
           title: Text("Pay with Paystack",style:TextStyle(fontFamily: 'Poppins',fontWeight:FontWeight.w600,fontSize:14))),
 
       // body: WebView(
