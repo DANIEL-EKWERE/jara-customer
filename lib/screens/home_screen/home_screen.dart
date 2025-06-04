@@ -741,7 +741,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                   .length /
                                                               4)
                                                           .ceil() *
-                                                      60.0,
+                                                      70.0,
                                                   child: GridView.builder(
                                                     physics:
                                                         NeverScrollableScrollPhysics(), // Disable grid scrolling

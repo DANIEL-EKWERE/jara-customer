@@ -14,16 +14,16 @@ class LoginController extends GetxController {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   RxBool isButtonEnabled = false.obs;
 
-  bool _isLoading = false;
-  bool get isLoading => _isLoading;
+  RxBool isLoading = false.obs;
+  // bool get isLoading => _isLoading;
 
   LoginModel loginModel = LoginModel(status: true, message: '', data: LoginData());
 LoginData data = LoginData();
 
-  set isLoading(bool value) {
-    _isLoading = value;
-    update();
-  }
+  // set isLoading(bool value) {
+  //   _isLoading = value;
+  //   update();
+  // }
 
   ApiService _apiService = ApiService(Duration(seconds: 60 * 5));
 
@@ -32,7 +32,7 @@ LoginData data = LoginData();
     //   return;
     // }
 
-    isLoading = true;
+    isLoading.value = true;
 
     try {
       final response = await _apiService.login({
@@ -40,7 +40,7 @@ LoginData data = LoginData();
         'password': passwordController.text,
       });
 
-      isLoading = false;
+      isLoading.value = false;
 
       if (response.statusCode == 200 || response.statusCode == 201) {
         loginModel = loginModelFromJson(response.body);
@@ -77,7 +77,7 @@ LoginData data = LoginData();
         );
       }
     } catch (e) {
-      isLoading = false;
+      isLoading.value = false;
 
       ScaffoldMessenger.of(Get.context!).showSnackBar(
         SnackBar(

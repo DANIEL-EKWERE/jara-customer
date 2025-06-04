@@ -202,7 +202,7 @@ class _EmailVerificationScreenState extends State<EmailVerificationScreen> {
                     onPressed:
                         controller.isVerifying && !controller.isLoading.value
                             ? () async {
-                                await controller.verifyOtp({
+                                await controller.verifyEmail({
                                   'email': Get.arguments['email'],
                                   'otp': controller.otpController.text,
                                 });

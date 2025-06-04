@@ -348,7 +348,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                   const SizedBox(height: 24),
                   Obx((){
                     return CheckoutButtonPaystack(
-                    title: controller.isLoading.value ? 'Initalizing Payment...' :'Check Out',
+                    title: controller.isLoading.value ? 'Initializing Payment...' :'Check Out',
                     amount: widget.totalAmount,
                   );
                   }),

@@ -120,6 +120,7 @@ Future<String?> fn_getCurrentBearerToken() async {
 }
 
 
+
 Future<http.Response> resendOtp(
     Map<String, dynamic> customerData) async {
   final url = Uri.parse('$baseUrl/resend-otp');
@@ -136,6 +137,38 @@ Future<http.Response> resendOtp(
   return response;
 }
 
+Future<http.Response> forgotPassword(
+    Map<String, dynamic> customerData) async {
+  final url = Uri.parse('$baseUrl/forgot-password');
+  _logRequest('POST', url, body: customerData);
+  final response = await http.post(
+    url,
+    headers: <String, String>{
+      'Content-Type': 'application/json; charset=UTF-8',
+      'Accept': 'application/json',
+    },
+    body: jsonEncode(customerData),
+  );
+  _logResponse(response);
+  return response;
+}
+
+
+Future<http.Response> resetPassword(
+    Map<String, dynamic> customerData) async {
+  final url = Uri.parse('$baseUrl/reset-password');
+  _logRequest('POST', url, body: customerData);
+  final response = await http.post(
+    url,
+    headers: <String, String>{
+      'Content-Type': 'application/json; charset=UTF-8',
+      'Accept': 'application/json',
+    },
+    body: jsonEncode(customerData),
+  );
+  _logResponse(response);
+  return response;
+}
 
 Future<http.Response> fetchCountry() async {
   var token = await dataBase.getToken();
@@ -253,6 +286,24 @@ Future<http.Response> getCheckoutAddress() async {
     return response;
   }
 
+
+  // Validate user signup Email
+  Future<http.Response> validateUserSignupEmail(
+      Map<String, dynamic> otpData) async {
+    final url = Uri.parse('$baseUrl/validate-email');
+    _logRequest('POST', url, body: otpData);
+    final response = await http.post(
+      url,
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Accept': 'application/json',
+      },
+      body: jsonEncode(otpData),
+    );
+    _logResponse(response);
+    return response;
+  }
+
   // Login user
   Future<http.Response> login(Map<String, dynamic> loginData) async {
     final url = Uri.parse('$baseUrl/login');
@@ -271,7 +322,7 @@ Future<http.Response> getCheckoutAddress() async {
   // Validate user login OTP
   Future<http.Response> validateUserLoginOtp(
       Map<String, dynamic> otpData) async {
-    final url = Uri.parse('$baseUrl/validateUserLoginOtp');
+    final url = Uri.parse('$baseUrl/validate-otp');
     _logRequest('POST', url, body: otpData);
     final response = await http.post(
       url,
@@ -288,7 +339,8 @@ Future<http.Response> getCheckoutAddress() async {
   // Fetch food categories
   Future<http.Response> fetchFoodCategory() async {
     //final url = Uri.parse('$baseUrl/fetch-ProductCategory');
-    final url = Uri.parse('$baseUrl/fetch/categories-limit-products');
+    //final url = Uri.parse('$baseUrl/fetch/categories-limit-products');
+    final url = Uri.parse('$baseUrl/fetch/categories-all-products');
     
     _logRequest('GET', url);
     // final prefs = await SharedPreferences.getInstance();

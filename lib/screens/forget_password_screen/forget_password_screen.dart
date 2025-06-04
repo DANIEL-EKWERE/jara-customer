@@ -16,62 +16,22 @@ class ForgetPasswordScreen extends StatefulWidget {
 }
 
 class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
-  final TextEditingController _emailController = TextEditingController();
-  ApiService _apiService = ApiService(Duration(seconds: 60 * 5)); // Add ApiService
+  //final TextEditingController _emailController = TextEditingController();
   bool _isEmailValid = false;
-  bool _isLoading = false; // Add loading state
+  // bool _isLoading = false; // Add loading state
 
   @override
   void initState() {
     super.initState();
-    _emailController.text = '';
+    controller.emailController.text = '';
     _validateEmail();
   }
 
   void _validateEmail() {
     setState(() {
-      _isEmailValid = RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(_emailController.text);
+      _isEmailValid = RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$')
+          .hasMatch(controller.emailController.text);
     });
-  }
-
-  Future<void> _requestPasswordReset() async {
-    setState(() {
-      _isLoading = true;
-    });
-
-    try {
-      final resetData = {
-        'email': _emailController.text,
-        'reset_password': true, // Flag to indicate password reset request
-      };
-
-      // Use login endpoint to trigger password reset flow
-      final response = await _apiService.login(resetData);
-
-      setState(() {
-        _isLoading = false;
-      });
-
-      if (response.statusCode == 200) {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => OTPVerificationScreen(email: _emailController.text),
-          ),
-        );
-      } else {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Password reset request failed: ${response.body}')),
-        );
-      }
-    } catch (e) {
-      setState(() {
-        _isLoading = false;
-      });
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Error: $e')),
-      );
-    }
   }
 
   @override
@@ -94,7 +54,7 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
             const SizedBox(height: 24),
             CustomTextField(
               label: 'Email',
-              controller: _emailController,
+              controller: controller.emailController,
               keyboardType: TextInputType.emailAddress,
               hintText: 'Enter your email',
               onChanged: (value) {
@@ -102,24 +62,30 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
               },
             ),
             const Spacer(),
-            SizedBox(
-              width: double.infinity,
-              child: ElevatedButton(
-                onPressed: _isEmailValid && !_isLoading ? _requestPasswordReset : null,
-                style: ElevatedButton.styleFrom(
-                  foregroundColor: Colors.white,
-                  backgroundColor: _isEmailValid ? Colors.orange : Colors.grey,
-                  padding: const EdgeInsets.symmetric(vertical: 16),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8),
+            Obx(() {
+              return SizedBox(
+                width: double.infinity,
+                child: ElevatedButton(
+                  onPressed: _isEmailValid && !controller.isLoading.value
+                      ? controller.requestPasswordReset
+                      : null,
+                  style: ElevatedButton.styleFrom(
+                    foregroundColor: Colors.white,
+                    backgroundColor:
+                        _isEmailValid ? Colors.orange : Colors.grey,
+                    padding: const EdgeInsets.symmetric(vertical: 16),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                  ),
+                  child: Text(
+                    controller.isLoading.value ? 'Processing...' : 'Verify',
+                    style: const TextStyle(
+                        fontSize: 18, fontWeight: FontWeight.bold),
                   ),
                 ),
-                child: Text(
-                  _isLoading ? 'Processing...' : 'Verify',
-                  style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                ),
-              ),
-            ),
+              );
+            }),
           ],
         ),
       ),

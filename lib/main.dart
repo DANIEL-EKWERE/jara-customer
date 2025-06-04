@@ -10,7 +10,7 @@ import 'package:jara_market/screens/main_screen/main_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-    await InAppWebViewController.setWebContentsDebuggingEnabled(true); // Optional
+   // await InAppWebViewController.setWebContentsDebuggingEnabled(true); // Optional
   SystemChrome.setSystemUIOverlayStyle(
     const SystemUiOverlayStyle(
       statusBarColor: Colors.transparent,

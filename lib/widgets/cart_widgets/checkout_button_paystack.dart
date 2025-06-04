@@ -46,6 +46,7 @@ class CheckoutButtonPaystack extends StatelessWidget {
             fontSize: 14,
             fontFamily: 'Poppins',
             fontWeight: FontWeight.w400,
+            color: Colors.white,
           ),
         ),
       ),

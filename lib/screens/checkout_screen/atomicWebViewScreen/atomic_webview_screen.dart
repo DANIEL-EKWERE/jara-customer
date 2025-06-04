@@ -2,6 +2,7 @@ import 'package:atomic_webview/atomic_webview.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:flutter/material.dart';
 import 'package:jara_market/config/routes.dart';
+import 'package:jara_market/screens/success_screen/success_screen.dart';
 
 class AtomicWebViewScreen extends StatefulWidget {
   AtomicWebViewScreen({super.key, this.url = ''});
@@ -14,6 +15,8 @@ class AtomicWebViewScreen extends StatefulWidget {
 
 class _AtomicWebViewScreenState extends State<AtomicWebViewScreen> {
   WebViewController webViewController = WebViewController();
+  InAppWebViewController? webViewController1;
+final String callback_url = "http://127.0.0.1:8000";
 
   @override
   void initState() {
@@ -45,7 +48,7 @@ class _AtomicWebViewScreenState extends State<AtomicWebViewScreen> {
                     : Navigator.of(context).pushNamed(AppRoutes.mainScreen);
               },
               icon: Icon(Icons.arrow_back)),
-          title: Text("Pay with Paystack")),
+          title: Text("Pay with Paystack",style:TextStyle(fontFamily: 'Poppins',fontWeight:FontWeight.w600,fontSize:14))),
 
       // body: WebView(
       //   controller: webViewController,
@@ -54,6 +57,20 @@ class _AtomicWebViewScreenState extends State<AtomicWebViewScreen> {
       body: InAppWebView(
         key: webViewKey,
         initialUrlRequest: URLRequest(url: WebUri(widget.url ?? '')),
+        onWebViewCreated: (controller){
+          webViewController1 = controller;
+        },
+        onLoadStop: (controller, url) {
+          print("Loaded URL: $url");
+          if (url.toString().startsWith(callback_url)) {
+            // Detected redirect to callback URL
+            Navigator.pop(context); // Close the WebView
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (_) => const SuccessScreen()),
+            );
+          }
+        },
       ),
     );
 

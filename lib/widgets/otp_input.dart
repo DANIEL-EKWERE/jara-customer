@@ -90,7 +90,7 @@ class _OtpInputState extends State<OtpInput> {
                 borderRadius: BorderRadius.circular(8),
                 borderSide: BorderSide(
                   color: _controllers[index].text.isNotEmpty
-                      ? Colors.green
+                      ? Colors.amber
                       : Colors.grey,
                   width: 2,
                 ),

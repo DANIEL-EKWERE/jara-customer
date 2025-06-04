@@ -204,8 +204,8 @@ class _LoginScreenState extends State<LoginScreen> {
               const SizedBox(height: 20),
               Obx(() {
                 return LoginButton(
-                text: controller.isLoading ? "Processing..." : "Log In",
-                onPressed: (controller.isButtonEnabled.value && !controller.isLoading) ? controller.login : null,
+                text: controller.isLoading.value ? "Processing..." : "Log In",
+                onPressed: (controller.isButtonEnabled.value && !controller.isLoading.value) ? controller.login : null,
                 color: controller.isButtonEnabled.value ? Colors.orange : Colors.grey,
               );
               },),

@@ -1,9 +1,12 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:jara_market/config/routes.dart';
+import 'package:jara_market/screens/forget_password_screen/forget_password_screen.dart';
 import 'package:jara_market/screens/help_and_support/help_and_support.dart';
 import 'package:jara_market/screens/profile_screen/controller/profile_controller.dart';
+import 'package:jara_market/screens/success_screen/success_screen.dart';
 import 'package:jara_market/widgets/custom_button.dart';
 import 'package:pull_to_refresh_flutter3/pull_to_refresh_flutter3.dart';
 import '../../widgets/avatar_with_edit.dart';
@@ -628,7 +631,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                     const SizedBox(height: 16),
                                     GestureDetector(
                                       onTap: () {
-                                        Get.to(HelpAndSupport());
+                                        Get.to(ForgetPasswordScreen());
                                       },
                                       child: Row(
                                         mainAxisAlignment:
@@ -657,35 +660,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                           ),
                                         ],
                                       ),
-                                    ),
-                                    const SizedBox(height: 16),
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Row(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            SvgPicture.asset(
-                                              'assets/images/security.svg',
-                                              semanticsLabel: 'Dart Logo',
-                                              height: 20,
-                                              width: 20,
-                                            ),
-                                            SizedBox(
-                                              width: 5,
-                                            ),
-                                            Text('Change Password',
-                                                style: TextStyle(
-                                                    fontSize: 13,
-                                                    fontFamily: 'Mont',
-                                                    fontWeight:
-                                                        FontWeight.w600)),
-                                          ],
-                                        ),
-                                        //
-                                      ],
                                     ),
                                     const SizedBox(height: 16),
                                     GestureDetector(

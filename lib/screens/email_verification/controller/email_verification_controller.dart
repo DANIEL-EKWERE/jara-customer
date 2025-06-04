@@ -113,4 +113,50 @@ Future<void> resendOtp(Map<String, String> resendData) async {
     }
   }
 
+
+  Future<void> verifyEmail(Map<String, String> otpData) async {
+  myLog.log('Verifying OTP: ${otpData['otp']}');
+      isLoading.value = true;
+  
+
+    try {
+      // final otpData = {
+      //   'email': widget.email,
+      //   'otp': _otpController.text,
+      // };
+
+      final response = await _apiService.validateUserSignupEmail(otpData);
+
+      
+        isLoading.value = false;
+      
+
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        // Navigator.pushReplacement(
+        //   Get.context!,
+        //   MaterialPageRoute(builder: (context) => const LoginScreen()),
+        // );
+        var  responseBody = jsonDecode(response.body);
+        var message = responseBody['message'] ?? 'something went wrong';
+        ScaffoldMessenger.of(Get.context!).showSnackBar(
+          SnackBar(content: Text('Success: \n${message}'),backgroundColor: Colors.green,),
+        );
+        Get.offAllNamed('/login_screen');
+        
+      } else {
+        var  responseBody = jsonDecode(response.body);
+        var message = responseBody['message'] ?? 'something went wrong';
+
+        ScaffoldMessenger.of(Get.context!).showSnackBar(
+          SnackBar(content: Text('OTP verification failed: ${message}'),backgroundColor: Colors.red,),
+        );
+      }
+    } catch (e) {
+  isLoading.value = false;
+      ScaffoldMessenger.of(Get.context!).showSnackBar(
+        SnackBar(content: Text('Error: $e')),
+      );
+    }
+  }
+
 }
