@@ -29,7 +29,8 @@ class _WalletScreenState extends State<WalletScreen> {
   @override
   void initState() {
     super.initState();
-    _fetchWalletData();
+    // _fetchWalletData();
+    controller.fetchWallet();
   }
 
   Future<void> _fetchWalletData() async {
@@ -127,8 +128,9 @@ class _WalletScreenState extends State<WalletScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-        child: _isLoading
-            ? const Center(child: CircularProgressIndicator())
+        child: Obx((){
+          return controller.isLoading.value
+            ? const Center(child: CircularProgressIndicator(color: Colors.amber,))
             : Column(
                 children: [
                   const CustomBackHeader(title: 'Wallet'),
@@ -138,8 +140,12 @@ class _WalletScreenState extends State<WalletScreen> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          BalanceCard(
-                            balance: _balance,
+
+                         Obx((){
+                          return  BalanceCard(
+                            balance: controller.isLoading.value
+                                ? 'Loading...'
+                                : (controller.walletModel.data?.balance?.toString() ?? '0.00'),
                             subtitle: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit',
                             isBalanceVisible: _isBalanceVisible,
                             onToggleVisibility: () {
@@ -147,7 +153,8 @@ class _WalletScreenState extends State<WalletScreen> {
                                 _isBalanceVisible = !_isBalanceVisible;
                               });
                             },
-                          ),
+                          );
+                         }),
                           const SizedBox(height: 24),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -225,7 +232,8 @@ class _WalletScreenState extends State<WalletScreen> {
                     ),
                   ),
                 ],
-              ),
+              );
+        })
       ),
     );
   }

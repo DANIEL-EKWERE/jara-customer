@@ -8,7 +8,7 @@ import 'package:jara_market/screens/profile_screen/controller/profile_controller
 import 'package:jara_market/services/api_service.dart';
 
 class CheckoutAddressChangeController extends GetxController {
-ApiService _apiService = ApiService(Duration(seconds: 60 * 5));
+  ApiService _apiService = ApiService(Duration(seconds: 60 * 5));
   CountryData? selectedCountry;
   String? selectedCountry1;
   int? selectedCountryId;
@@ -39,44 +39,48 @@ ApiService _apiService = ApiService(Duration(seconds: 60 * 5));
   void onInit() {
     super.onInit();
     myLog.log('CheckoutAddressChangeController initialized');
-   fetchCountries();
+    fetchCountries();
     // fetchStates();
     // fetchLgas('Lagos');
   }
 
   isValid() {
-    return selectedCountryId != null && selectedStateId != null && selectedLGAId != null && contactAddressController.text.isNotEmpty && contactNumberController.text.isNotEmpty;
+    return selectedCountryId != null &&
+        selectedStateId != null &&
+        selectedLGAId != null &&
+        contactAddressController.text.isNotEmpty &&
+        contactNumberController.text.isNotEmpty;
   }
+
   RxBool isLoading = false.obs;
   RxBool isCountryLoading = false.obs;
   RxBool isStateLoading = false.obs;
   RxBool isLgaLoading = false.obs;
 
-
-
-fetchCountries() async {
+  fetchCountries() async {
     isCountryLoading.value = true;
-    
+
     final response = await _apiService.fetchCountry();
-    if (response.statusCode == 200 || response.statusCode == 201){
+    if (response.statusCode == 200 || response.statusCode == 201) {
       countryModel = countryModelFromJson(response.body);
       countries = countryModel.data!.map((e) => e.name!).toList();
       countryDataList = countryModel.data!;
       isCountryLoading.value = false;
-      myLog.log('Countries fetched successfully: ${countries.length} countries loaded.');
+      myLog.log(
+          'Countries fetched successfully: ${countries.length} countries loaded.');
       myLog.log('Countries: ${countries.join(', ')}');
     } else {
       isCountryLoading.value = false;
-      Get.snackbar('Error', 'Failed to load countries: ${response.body}',backgroundColor: Colors.red, colorText: Colors.white);
+      Get.snackbar('Error', 'Failed to load countries: ${response.body}',
+          backgroundColor: Colors.red, colorText: Colors.white);
     }
   }
 
-
-fetchStates() async {
+  fetchStates() async {
     isStateLoading.value = true;
 
     final response = await _apiService.fetchState();
-    if (response.statusCode == 200 || response.statusCode == 201){
+    if (response.statusCode == 200 || response.statusCode == 201) {
       stateModel = stateModelFromJson(response.body);
       states = stateModel.data!.map((e) => e.name!).toList();
       stateDataList = stateModel.data!;
@@ -85,17 +89,16 @@ fetchStates() async {
       myLog.log('States: ${states.join(', ')}');
     } else {
       isStateLoading.value = false;
-      Get.snackbar('Error', 'Failed to load states: ${response.body}',backgroundColor: Colors.red, colorText: Colors.white);
+      Get.snackbar('Error', 'Failed to load states: ${response.body}',
+          backgroundColor: Colors.red, colorText: Colors.white);
     }
   }
 
-
-
-fetchLgas(String name) async {
+  fetchLgas(String name) async {
     isLgaLoading.value = true;
 
     final response = await _apiService.fetchLgas(name);
-    if (response.statusCode == 200 || response.statusCode == 201){
+    if (response.statusCode == 200 || response.statusCode == 201) {
       lgaModel = lgaModelFromJson(response.body);
       lgas = lgaModel.data!.map((e) => e.name!).toList();
       lgaDataList = lgaModel.data!;
@@ -104,7 +107,8 @@ fetchLgas(String name) async {
       myLog.log('LGAs: ${lgas.join(', ')}');
     } else {
       isLgaLoading.value = false;
-      Get.snackbar('Error', 'Failed to load LGAs: ${response.body}',backgroundColor: Colors.red, colorText: Colors.white);
+      Get.snackbar('Error', 'Failed to load LGAs: ${response.body}',
+          backgroundColor: Colors.red, colorText: Colors.white);
       myLog.log('Failed to load LGAs: ${response.body}');
     }
   }
@@ -120,7 +124,7 @@ fetchLgas(String name) async {
         'phone_number': contactNumberController.text,
         'is_default': isDefault.value,
       };
-     
+
       myLog.log('Updating address data: $addressData');
       _apiService.updateCheckoutAddress(addressData).then((response) {
         isLoading.value = false;
@@ -128,33 +132,29 @@ fetchLgas(String name) async {
           myLog.log('Address updated successfully: ${response.body}');
           Get.snackbar('Success', 'Address updated successfully.',
               backgroundColor: Colors.green, colorText: Colors.white);
-    
-    if(Navigator.canPop(Get.context!)){
-        print(
-          'Can pop the current route');
-      //     Get.back(result: {
-      //   'country': selectedCountry1,
-      //   'state': selectedState1,
-      //   'lga': selectedLGA1,
-      //   'contact_address': contactAddressController.text,
-      //   'phone_number': contactNumberController.text,
-      //   'is_default': isDefault.value.toString(),
-      // });
-      Get.back(result: addressData);
-      Navigator.pop(Get.context!, {
-      'country': selectedCountry1,
-        'state': selectedState1,
-        'lga': selectedLGA1,
-        'contact_address': contactAddressController.text,
-        'phone_number': contactNumberController.text,
-        'is_default': isDefault.value.toString(),
-      }
-      );
-      }
-      else{
-        print('Cannot pop the current route');
-      }
 
+          if (Navigator.canPop(Get.context!)) {
+            print('Can pop the current route');
+            //     Get.back(result: {
+            //   'country': selectedCountry1,
+            //   'state': selectedState1,
+            //   'lga': selectedLGA1,
+            //   'contact_address': contactAddressController.text,
+            //   'phone_number': contactNumberController.text,
+            //   'is_default': isDefault.value.toString(),
+            // });
+            Get.back(result: addressData);
+            Navigator.pop(Get.context!, {
+              'country': selectedCountry1,
+              'state': selectedState1,
+              'lga': selectedLGA1,
+              'contact_address': contactAddressController.text,
+              'phone_number': contactNumberController.text,
+              'is_default': isDefault.value.toString(),
+            });
+          } else {
+            print('Cannot pop the current route');
+          }
         } else {
           Get.snackbar('Error', 'Failed to update address: ${response.body}',
               backgroundColor: Colors.red, colorText: Colors.white);
@@ -167,45 +167,47 @@ fetchLgas(String name) async {
     } else {
       Get.snackbar('Error', 'Please select a country, state, and LGA.',
           backgroundColor: Colors.red, colorText: Colors.white);
-   }
+    }
   }
 
-  storeAddress(){
+  storeAddress() {
     // Store the address data in shared preferences or any local storage
     final Map<String, dynamic> addressData = {
-        'country_id': selectedCountryId,
-        'state_id': selectedStateId,
-        'lga_id': selectedLGAId,
-        'contact_address': contactAddressController.text,
-        'phone_number': contactNumberController.text,
-        'is_default': isDefault.value,
+      'country_id': selectedCountryId,
+      'state_id': selectedStateId,
+      'lga_id': selectedLGAId,
+      'contact_address': contactAddressController.text,
+      'phone_number': contactNumberController.text,
+      'is_default': isDefault.value,
     };
-    
+
     myLog.log('Storing address data: $addressData');
-  //  Call a method to save this data
+    //  Call a method to save this data
     _apiService.addCheckoutAddress(addressData).then((response) async {
       if (response.statusCode == 200 || response.statusCode == 201) {
         myLog.log('Address stored successfully: ${response.body}');
         Get.snackbar('Success', 'Address stored successfully.',
             backgroundColor: Colors.green, colorText: Colors.white);
-       // Get.back();
-        if(Navigator.canPop(Get.context!)) {
+        // Get.back();
+        if (Navigator.canPop(Get.context!)) {
           print('Can pop the current route');
-          Navigator.pop(Get.context!, {
-      'country': selectedCountry1,
-        'state': selectedState1,
-        'lga': selectedLGA1,
-        'contact_address': contactAddressController.text,
-        'phone_number': contactNumberController.text,
-        'is_default': isDefault.value.toString(),
-      },);
-          Navigator.pop(Get.context!);
+          Navigator.pop(
+            Get.context!,
+            {
+              'country': selectedCountry1,
+              'state': selectedState1,
+              'lga': selectedLGA1,
+              'contact_address': contactAddressController.text,
+              'phone_number': contactNumberController.text,
+              'is_default': isDefault.value.toString(),
+            },
+          );
         } else {
           print('Cannot pop the current route');
         }
         Future.delayed(Duration(milliseconds: 100), () {
-        profileController.fetchUserProfile();
-      });
+          profileController.fetchUserProfile();
+        });
       } else {
         Get.snackbar('Error', 'Failed to store address: ${response.body}',
             backgroundColor: Colors.red, colorText: Colors.white);
@@ -215,5 +217,4 @@ fetchLgas(String name) async {
           backgroundColor: Colors.red, colorText: Colors.white);
     });
   }
-
 }

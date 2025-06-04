@@ -29,7 +29,8 @@ class CheckoutButtonPaystack extends StatelessWidget {
           //   ),
           // );
 
-          checkoutController.initializeCheckout(amount);
+        //  checkoutController.initializeCheckout(amount);
+        checkoutController.createOrder();
           print('paystack calling here');
         },
         style: ElevatedButton.styleFrom(

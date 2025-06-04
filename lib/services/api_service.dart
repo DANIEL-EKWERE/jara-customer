@@ -186,6 +186,22 @@ Future<http.Response> fetchCountry() async {
   return response;
 }
 
+Future<http.Response> fetchWallet() async {
+  var token = await dataBase.getToken();
+  final url = Uri.parse('$baseUrl/fetch-wallet');
+  _logRequest('GET', url);
+  final response = await http.get(
+    url,
+    headers: <String, String>{
+      'Content-Type': 'application/json; charset=UTF-8',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer $token',
+    },
+  );
+  _logResponse(response);
+  return response;
+}
+
 Future<http.Response> fetchState() async {
   var token = await dataBase.getToken();
   final url = Uri.parse('$baseUrl/states');
@@ -408,12 +424,15 @@ Future<http.Response> getCheckoutAddress() async {
 
   // Create order (used in checkout_screen.dart)
   Future<http.Response> createOrder(Map<String, dynamic> orderData) async {
+        final prefs = await SharedPreferences.getInstance();
+    final token = prefs.getString('token') ?? '';
     final url = Uri.parse('$baseUrl/create-order');
     _logRequest('POST', url, body: orderData);
     final response = await http.post(
       url,
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization': 'Bearer $token',
       },
       body: jsonEncode(orderData),
     );
@@ -453,8 +472,7 @@ Future<http.Response> getCheckoutAddress() async {
 
   // Get current user
   Future<http.Response> getUser() async {
-    final email = await dataBase.getEmail(); 
-    final url = Uri.parse('$baseUrl/fetch-user/${email}');
+    final url = Uri.parse('$baseUrl/fetch-user');
     _logRequest('GET', url);
     //final prefs = await SharedPreferences.getInstance();
     final token = await dataBase.getToken();  //prefs.getString('token');
@@ -972,5 +990,23 @@ Future<http.Response> getCheckoutAddress() async {
     _logResponse(response);
     return response;
   }
+
+  // createOrder(Map<String, dynamic> checkoutData) async {
+  //   final prefs = await SharedPreferences.getInstance();
+  //   final token = prefs.getString('token') ?? '';
+
+  //   final url = Uri.parse('$baseUrl/payments/initialize-transaction');
+  //   _logRequest('POST', url);
+  //   final response = await http.post(
+  //     url,
+  //     body: jsonEncode(checkoutData),
+  //     headers: <String, String>{
+  //       'Content-Type': 'application/json; charset=UTF-8',
+  //       'Authorization': 'Bearer $token',
+  //     },
+  //   );
+  //   _logResponse(response);
+  //   return response;
+  // }
 }
 ApiService apiService = ApiService(API_TIMEOUT_DURATION);

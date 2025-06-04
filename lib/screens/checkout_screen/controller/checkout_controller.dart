@@ -1,7 +1,13 @@
+import 'dart:developer' as myLog;
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:jara_market/screens/cart_screen/controller/cart_controller.dart';
 import 'package:jara_market/screens/checkout_screen/atomicWebViewScreen/atomic_webview_screen.dart';
+import 'package:jara_market/screens/checkout_screen/models/buildOrderPayload.dart';
 import 'package:jara_market/screens/checkout_screen/models/models.dart';
+import 'package:jara_market/screens/checkout_screen/models/ordersuccess.dart';
+import 'package:jara_market/screens/success_screen/success_screen.dart';
 import 'package:jara_market/services/api_service.dart';
 
 class CheckoutController extends GetxController {
@@ -15,6 +21,7 @@ class CheckoutController extends GetxController {
   RxString contactName = ''.obs;
   RxBool isDefault = false.obs;
   RxBool isLoading = false.obs;
+  OrderSuccessModel orderSuccessModel = OrderSuccessModel();
   CheckoutModel checkoutModel = CheckoutModel(
     status: false,
     message: '',
@@ -62,9 +69,7 @@ class CheckoutController extends GetxController {
         "amount": amount,
         "currency": "NGN",
         "callback_url": "http://127.0.0.1:8000",
-        "metadata": {
-          "notes": "This is a sample payment"
-        },
+        "metadata": {"notes": "This is a sample payment"},
         "payment_gateway": "paystack"
       };
       var response = await _apiService.getCheckoutData(checkoutData);
@@ -74,17 +79,58 @@ class CheckoutController extends GetxController {
         checkoutModel = checkoutModelFromJson(response.body);
         print('Checkout initialized successfully: ${checkoutModel.data?.url}');
         Navigator.push(
-        Get.context!,
-        CupertinoPageRoute(
-          builder: (context) => AtomicWebViewScreen(
-            url: checkoutModel.data?.url ?? '',
+          Get.context!,
+          CupertinoPageRoute(
+            builder: (context) => AtomicWebViewScreen(
+              url: checkoutModel.data?.url ?? '',
+            ),
           ),
-        ),
-      );
+        );
       }
     } catch (e) {
       print('Error initializing checkout: $e');
       isLoading.value = false;
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
+  CartController cartController = Get.find<CartController>();
+
+  Future<void> createOrder() async {
+    isLoading.value = true;
+
+    try {
+      final payload = buildOrderPayload(
+        cartItems: cartController.cartItems,
+        orderDate: DateTime.now().toIso8601String(),
+        addressId: 1,
+        deliveryType: 'pickup',
+        shippingFee: 2000,
+        serviceCharge: 1000,
+        vat: 0,
+      );
+
+// Send payload to backend
+      var response = await apiService.createOrder(payload); // Example API call
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        isLoading.value = false;
+        myLog.log(response.body, name:'Order body');
+        orderSuccessModel = orderSuccessModelFromJson(response.body);
+        Get.snackbar('Success', orderSuccessModel.message.toString(),
+            colorText: Colors.white, backgroundColor: Colors.green);
+            Navigator.pushAndRemoveUntil(
+              Get.context!,
+              MaterialPageRoute(builder: (context) => SuccessScreen()), // Replace with your target screen and URL
+              (route) => false,
+            );
+      } else {
+        Get.snackbar('Success', orderSuccessModel.message.toString(),
+            colorText: Colors.white, backgroundColor: Colors.red);
+      }
+    } catch (e) {
+      Get.snackbar('Error', e.toString(),
+          colorText: Colors.white, backgroundColor: Colors.red);
     } finally {
       isLoading.value = false;
     }

@@ -1,6 +1,7 @@
 import 'package:atomic_webview/atomic_webview.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:jara_market/config/routes.dart';
 import 'package:jara_market/screens/success_screen/success_screen.dart';
 
@@ -65,11 +66,12 @@ final String callback_url = "http://127.0.0.1:8000";
           print("Loaded URL: $url");
           if (url.toString().startsWith(callback_url)) {
             // Detected redirect to callback URL
+            Get.snackbar('Success','Wallet Funding Successful!!!',colorText: Colors.white,backgroundColor: Colors.green,icon: Icon(Icons.check,color: Colors.white,));
             Navigator.pop(context); // Close the WebView
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(builder: (_) => const SuccessScreen()),
-            );
+            // Navigator.pushReplacement(
+            //   context,
+            //   MaterialPageRoute(builder: (_) => const SuccessScreen()),
+            // );
           }
         },
       ),

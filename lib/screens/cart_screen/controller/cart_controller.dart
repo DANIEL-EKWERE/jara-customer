@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'dart:developer' as myLog;
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:jara_market/config/routes.dart';
 import 'package:jara_market/screens/cart_screen/models/models.dart';
 import 'package:jara_market/services/api_service.dart';
 

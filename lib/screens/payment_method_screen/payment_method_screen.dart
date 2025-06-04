@@ -1,6 +1,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:jara_market/screens/checkout_screen/controller/checkout_controller.dart';
 import 'package:jara_market/screens/payment_method_screen/controller/payment_method_controller.dart';
 import 'dart:convert';
 import 'package:jara_market/widgets/payment_method_cards.dart';
@@ -8,7 +9,7 @@ import '../../widgets/custom_back_header.dart';
 import '../../services/api_service.dart';
 
 PaymentMethodController controller = Get.put(PaymentMethodController());
-
+CheckoutController checkoutController = Get.put(CheckoutController());
 class PaymentMethodScreen extends StatefulWidget {
   final double amount;
   
@@ -24,69 +25,69 @@ class PaymentMethodScreen extends StatefulWidget {
 class _PaymentMethodScreenState extends State<PaymentMethodScreen> {
   ApiService _apiService = ApiService(Duration(seconds: 60 * 5));
   String _selectedMethod = 'mastercard';
-  bool _isProcessing = false;
+  
   String? _errorMessage;
+//checkoutController.initializeCheckout(amount);
+  // Future<void> _processPayment() async {
+  //   try {
+  //     setState(() {
+  //       _isProcessing = true;
+  //       _errorMessage = null;
+  //     });
 
-  Future<void> _processPayment() async {
-    try {
-      setState(() {
-        _isProcessing = true;
-        _errorMessage = null;
-      });
+  //     // Prepare payment data
+  //     final paymentData = {
+  //       'amount': widget.amount,
+  //       'payment_method': _selectedMethod,
+  //       'user_id': 'user123', // Replace with actual user ID from auth provider
+  //       'currency': 'NGN',
+  //       'description': 'Wallet funding',
+  //     };
 
-      // Prepare payment data
-      final paymentData = {
-        'amount': widget.amount,
-        'payment_method': _selectedMethod,
-        'user_id': 'user123', // Replace with actual user ID from auth provider
-        'currency': 'NGN',
-        'description': 'Wallet funding',
-      };
-
-      // Create payment
-      final response = await _apiService.createPayment(paymentData);
+  //     // Create payment
+  //     final response = await _apiService.createPayment(paymentData);
       
-      if (response.statusCode == 200) {
-        final responseData = jsonDecode(response.body);
+  //     if (response.statusCode == 200) {
+  //       final responseData = jsonDecode(response.body);
         
-        // Check if we need to redirect to a payment gateway
-        if (responseData['redirect_url'] != null) {
-          // In a real app, you would open a WebView or redirect to the payment gateway
-          print('Redirecting to payment gateway: ${responseData['redirect_url']}');
+  //       // Check if we need to redirect to a payment gateway
+  //       if (responseData['redirect_url'] != null) {
+  //         // In a real app, you would open a WebView or redirect to the payment gateway
+  //         print('Redirecting to payment gateway: ${responseData['redirect_url']}');
           
-          // Simulate payment gateway callback
-          await Future.delayed(const Duration(seconds: 2));
+  //         // Simulate payment gateway callback
+  //         await Future.delayed(const Duration(seconds: 2));
           
-          // Handle payment callback
-          final callbackResponse = await _apiService.handlePaymentCallback({
-            'transaction_id': responseData['transaction_id'],
-            'status': 'success',
-          });
+  //         // Handle payment callback
+  //         final callbackResponse = await _apiService.handlePaymentCallback({
+  //           'transaction_id': responseData['transaction_id'],
+  //           'status': 'success',
+  //         });
           
-          if (callbackResponse.statusCode == 200) {
-            // Payment successful
-            Navigator.pop(context, {'success': true});
-          } else {
-            throw Exception('Payment verification failed');
-          }
-        } else {
-          // Direct payment success
-          Navigator.pop(context, {'success': true});
-        }
-      } else {
-        throw Exception('Payment failed: ${response.statusCode}');
-      }
-    } catch (e) {
-      setState(() {
-        _errorMessage = 'Error: $e';
-      });
-      print(_errorMessage);
-    } finally {
-      setState(() {
-        _isProcessing = false;
-      });
-    }
-  }
+  //         if (callbackResponse.statusCode == 200) {
+  //           // Payment successful
+  //           Navigator.pop(context, {'success': true});
+  //         } else {
+  //           throw Exception('Payment verification failed');
+  //         }
+  //       } else {
+  //         // Direct payment success
+  //         Navigator.pop(context, {'success': true});
+  //       }
+  //     } else {
+  //       throw Exception('Payment failed: ${response.statusCode}');
+  //     }
+  //   } catch (e) {
+  //     setState(() {
+  //       _errorMessage = 'Error: $e';
+  //     });
+  //     print(_errorMessage);
+  //   } finally {
+  //     setState(() {
+  //       _isProcessing = false;
+  //     });
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -153,8 +154,9 @@ class _PaymentMethodScreenState extends State<PaymentMethodScreen> {
                         ),
                       ),
                     const SizedBox(height: 32),
-                    ElevatedButton(
-                      onPressed: _isProcessing ? null : _processPayment,
+                    Obx((){
+                      return ElevatedButton(
+                      onPressed: checkoutController.isLoading.value ? null : () => checkoutController.initializeCheckout(widget.amount),
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Theme.of(context).primaryColor,
                         minimumSize: const Size(double.infinity, 56),
@@ -164,7 +166,7 @@ class _PaymentMethodScreenState extends State<PaymentMethodScreen> {
                         disabledBackgroundColor: Theme.of(context).primaryColor.withOpacity(0.5),
                         disabledForegroundColor: Colors.white.withOpacity(0.7),
                       ),
-                      child: _isProcessing
+                      child: checkoutController.isLoading.value
                           ? const SizedBox(
                               width: 24,
                               height: 24,
@@ -181,7 +183,8 @@ class _PaymentMethodScreenState extends State<PaymentMethodScreen> {
                                 color: Colors.white,
                               ),
                             ),
-                    ),
+                    );
+                    })
                   ],
                 ),
               ),
