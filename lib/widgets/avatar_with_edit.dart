@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
@@ -39,15 +41,28 @@ class AvatarWithEdit extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
+    final imageUrl = this.imageUrl;
+
+  ImageProvider imageProvider;
+
+  if (imageUrl != null && imageUrl.startsWith('/')) {
+    // Local file image
+    imageProvider = FileImage(File(imageUrl));
+  } else if (imageUrl != null && imageUrl.startsWith('http')) {
+    // Network image
+    imageProvider = NetworkImage(imageUrl);
+  } else {
+    // Fallback (asset or placeholder)
+    imageProvider = AssetImage('assets/images/avatar_placeholder.png');
+  }
     return Stack(
       children: [
         CircleAvatar(
           backgroundColor: Color(0xffD9D9D9),
           radius: avatarRadius,
-          backgroundImage: imageUrl != null && imageUrl!.isNotEmpty
-              ? NetworkImage(imageUrl!)
-              : null,
-          child: (imageUrl == null || imageUrl!.isEmpty)
+          backgroundImage: imageProvider,
+          child: (imageUrl == null || imageUrl.isEmpty)
               ? SvgPicture.asset('assets/images/avatar.svg')
               : null,
         ),

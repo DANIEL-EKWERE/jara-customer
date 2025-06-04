@@ -1,4 +1,6 @@
+import 'dart:convert';
 
+import 'package:intl/intl.dart';
 import 'dart:developer' as myLog;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -162,7 +164,7 @@ class CheckoutController extends GetxController {
               (route) => false,
             );
       } else {
-        Get.snackbar('Oops, Something Went Wrong', response.body,
+        Get.snackbar('Oops, Something Went Wrong', jsonDecode(response.body)['message'],
             colorText: Colors.white, backgroundColor: Colors.red);
             Navigator.push(Get.context!, CupertinoDialogRoute(builder: (context)=> const SuccessScreen(), context: Get.context!));
       }

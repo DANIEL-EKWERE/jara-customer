@@ -36,8 +36,23 @@ class _ProfileScreenState extends State<ProfileScreen> {
     controller.fetchUserProfile();
   }
 
+  
+
   @override
   Widget build(BuildContext context) {
+  //    final imageUrl = this.imageUrl;
+  //   ImageProvider imageProvider;
+  //    if (imageUrl != null && imageUrl.startsWith('/')) {
+  //   // Local file image
+  //   imageProvider = FileImage(File(imageUrl));
+  // } else if (imageUrl != null && imageUrl.startsWith('http')) {
+  //   // Network image
+  //   imageProvider = NetworkImage(imageUrl);
+  // } else {
+  //   // Fallback (asset or placeholder)
+  //   imageProvider = AssetImage('assets/images/avatar_placeholder.png');
+  // }
+
     return SmartRefresher(
       onRefresh: _onRefresh,
       controller: _refreshController,
@@ -357,7 +372,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
                                         // SvgPicture.asset('assets/images/Vector(5).svg',semanticsLabel: 'Dart Logo',height: 20,width: 20,),
                                         TextButton(
-                                            onPressed: () {},
+                                            onPressed: () {
+                                              Get.snackbar('Notification', 'You\'ll start receiving notifications from jara market (Coming Soon)');
+                                            },
                                             child: Text(
                                               'on',
                                               style: TextStyle(
@@ -367,7 +384,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                             ))
                                       ],
                                     ),
-                                    const SizedBox(height: 16),
+                                    const SizedBox(height: 10),
                                     GestureDetector(
                                       onTap: () {
                                         Get.toNamed(AppRoutes.walletScreen);
@@ -628,7 +645,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                         ],
                                       ),
                                     ),
-                                    const SizedBox(height: 16),
+                                  //  const SizedBox(height: 16),
                                     GestureDetector(
                                       onTap: () {
                                         Get.to(ForgetPasswordScreen());
@@ -720,10 +737,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
           mainAxisSize: MainAxisSize.min,
           children: [
             CustomButton(text: 'Choose from Gallery', onPressed: () {
+              Navigator.pop(context);
               controller.obtainImageFromGallery();
             }),
             const SizedBox(height: 8),
             CustomButton(text: 'Take a Photo', onPressed: () {
+              Navigator.pop(context);
               controller.obtainImageFromCamera();
             }),
             
