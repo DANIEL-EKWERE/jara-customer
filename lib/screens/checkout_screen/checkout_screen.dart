@@ -1,3 +1,4 @@
+import 'dart:developer' as myLog;
 import 'package:flutter/material.dart';
 import 'package:flutter_sound/flutter_sound.dart';
 import 'package:get/get.dart';
@@ -28,7 +29,8 @@ class CheckoutScreen extends StatefulWidget {
     Key? key,
     required this.totalAmount,
     required this.cartItems,
-    required this.orderAddress, required this.balance,
+    required this.orderAddress,
+    required this.balance,
   }) : super(key: key);
 
   @override
@@ -50,11 +52,23 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
 
   final TextEditingController _messageController = TextEditingController();
   final FlutterSoundRecorder _recorder = FlutterSoundRecorder();
+  final FlutterSoundPlayer _player = FlutterSoundPlayer();
+
+  @override
+  void dispose() {
+    _recorder.closeRecorder();
+    _player.closePlayer();
+    super.dispose();
+  }
+
   bool _isRecording = false;
   bool _isPaused = false;
   String? _recordingPath;
   bool _isRecorderInitialized = false;
-
+  bool isPlayed = false;
+  bool isResumed = false;
+  bool isStoped = false;
+  String? recordingPath;
   @override
   void initState() {
     super.initState();
@@ -102,6 +116,9 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
       setState(() {
         _isRecording = true;
         _isPaused = false;
+        isResumed = false;
+        isStoped = false;
+        recordingPath = _recordingPath;
       });
 
       // Show recording indicator
@@ -129,6 +146,9 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
       await _recorder.pauseRecorder();
       setState(() {
         _isPaused = true;
+        isResumed = true;
+        isStoped = false;
+        isPlayed = false;
       });
 
       // Show paused indicator
@@ -182,6 +202,9 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
       setState(() {
         _isRecording = false;
         _isPaused = false;
+        isResumed = false;
+        isStoped = true;
+        isPlayed = true;
       });
 
       // Show success message with recording path
@@ -215,6 +238,9 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
 
     // Implement playback functionality
     // This would typically use FlutterSoundPlayer
+
+    await _player.openPlayer();
+    await _player.startPlayer(fromURI: path);
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(
         content: Text('Playing voice note...'),
@@ -292,14 +318,30 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                   MessageBox(
                     controller: _messageController,
                     hintText: 'Add a message...',
+                    isPaused: _isPaused,
+                    isPlayed: isPlayed,
+                    isResumed: isResumed,
+                    isStoped: isStoped,
+                    isRecording: _isRecording,
+                    filePath: recordingPath,
+                    onVoicePressedPlay: () {
+                      _playRecording(recordingPath);
+                    },
+                    onVoicePressedStop: () {
+                      _stopRecording();
+                    },
                     onVoicePressed: () {
                       if (_isRecording) {
+                        myLog.log('is Recording');
                         if (_isPaused) {
+                          myLog.log('is paused new resuming');
                           _resumeRecording();
                         } else {
+                          myLog.log('it was playing now resuming');
                           _pauseRecording();
                         }
                       } else {
+                        myLog.log('stoping rcorder');
                         _startRecording();
                       }
                     },
@@ -314,19 +356,22 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                     total: widget.totalAmount,
                   ),
                   const SizedBox(height: 24),
-                  Obx((){
-                    return (widget.balance < widget.totalAmount) ? AbsorbPointer(
-                      child: CheckoutButtonPaystack(
-                        color: Colors.grey[400],
-                      title: 'Insufficient Balance ${widget.balance}',
-                      amount: widget.totalAmount,
-                                        ),
-                    ) :
-                  CheckoutButtonPaystack(
-                    title: controller.isLoading.value ? 'Initializing Payment...' :'Check Out',
-                    amount: widget.totalAmount,
-                  );
-                  }),
+                  (widget.balance < widget.totalAmount)
+                      ? AbsorbPointer(
+                          child: CheckoutButtonPaystack(
+                            color: Colors.grey[400],
+                            title: 'Insufficient Balance ${widget.balance}',
+                            amount: widget.totalAmount,
+                          ),
+                        )
+                      : Obx(() {
+                          return CheckoutButtonPaystack(
+                            title: controller.isLoading.value
+                                ? 'Initializing Payment...'
+                                : 'Check Out',
+                            amount: widget.totalAmount,
+                          );
+                        }),
                   const SizedBox(height: 24),
                   SingleChildScrollView(
                     scrollDirection: Axis.horizontal,
@@ -377,54 +422,68 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                     ),
                   ),
                   const SizedBox(height: 24),
-                  result.isNotEmpty ? 
-                  Obx((){
-                    return AddressCard(
-                    name: fullName,
-                    action: 'Change',
-                    address: '${controller.selectedAddress},${controller.selectedState},${controller.selectedCountry} ',
-                    onChangePressed: () async {
-                      print('change address pressed');
-                      //Get.toNamed(AppRoutes.checkoutAddressChange);
-                      // Navigator.of(context).push(
-                      //   CupertinoPageRoute(
-                      //     builder: (context) => CheckoutAddressChangeScreen(),
-                      //   ),
-                      // );
-                     result = await Get.toNamed(AppRoutes.checkoutAddressChange, arguments: {
-                        'isFromProfile': widget.orderAddress.isEmpty ? true : false,
-                      });
-                      if (result.isNotEmpty) {
-                        setState(() {
-                          controller.selectedAddress.value = result['contact_address'];
-                          controller.selectedCountry.value = result['country'];
-                          controller.selectedState.value = result['state'];
-                          controller.selectedLga.value = result['lga'];
-                          controller.number.value = result['phone_number'];
-                        });
-                      }
-                    },
-                  );
-                  }) : 
-                  AddressCard(
-                    name: fullName,
-                    action: widget.orderAddress.isNotEmpty ? 'Change' : 'Add',
-                    address: widget.orderAddress.isNotEmpty
-                        ? '${widget.orderAddress['contact_address']},${widget.orderAddress['lga']},${widget.orderAddress['state']},${widget.orderAddress['country']}.'
-                        : 'Set Address to recieve your order.',
-                    onChangePressed: () async {
-                      print('change address pressed');
-                      //Get.toNamed(AppRoutes.checkoutAddressChange);
-                      // Navigator.of(context).push(
-                      //   CupertinoPageRoute(
-                      //     builder: (context) => CheckoutAddressChangeScreen(),
-                      //   ),
-                      // );
-                      result = await Get.toNamed(AppRoutes.checkoutAddressChange, arguments: {
-                        'isFromProfile': widget.orderAddress.isEmpty ? true : false,
-                      });
-                    },
-                  ),
+                  result.isNotEmpty
+                      ? Obx(() {
+                          return AddressCard(
+                            name: fullName,
+                            action: 'Change',
+                            address:
+                                '${controller.selectedAddress},${controller.selectedState},${controller.selectedCountry} ',
+                            onChangePressed: () async {
+                              print('change address pressed');
+                              //Get.toNamed(AppRoutes.checkoutAddressChange);
+                              // Navigator.of(context).push(
+                              //   CupertinoPageRoute(
+                              //     builder: (context) => CheckoutAddressChangeScreen(),
+                              //   ),
+                              // );
+                              result = await Get.toNamed(
+                                  AppRoutes.checkoutAddressChange,
+                                  arguments: {
+                                    'isFromProfile': widget.orderAddress.isEmpty
+                                        ? true
+                                        : false,
+                                  });
+                              if (result.isNotEmpty) {
+                                setState(() {
+                                  controller.selectedAddress.value =
+                                      result['contact_address'];
+                                  controller.selectedCountry.value =
+                                      result['country'];
+                                  controller.selectedState.value =
+                                      result['state'];
+                                  controller.selectedLga.value = result['lga'];
+                                  controller.number.value =
+                                      result['phone_number'];
+                                });
+                              }
+                            },
+                          );
+                        })
+                      : AddressCard(
+                          name: fullName,
+                          action:
+                              widget.orderAddress.isNotEmpty ? 'Change' : 'Add',
+                          address: widget.orderAddress.isNotEmpty
+                              ? '${widget.orderAddress['contact_address']},${widget.orderAddress['lga']},${widget.orderAddress['state']},${widget.orderAddress['country']}.'
+                              : 'Set Address to recieve your order.',
+                          onChangePressed: () async {
+                            print('change address pressed');
+                            //Get.toNamed(AppRoutes.checkoutAddressChange);
+                            // Navigator.of(context).push(
+                            //   CupertinoPageRoute(
+                            //     builder: (context) => CheckoutAddressChangeScreen(),
+                            //   ),
+                            // );
+                            result = await Get.toNamed(
+                                AppRoutes.checkoutAddressChange,
+                                arguments: {
+                                  'isFromProfile': widget.orderAddress.isEmpty
+                                      ? true
+                                      : false,
+                                });
+                          },
+                        ),
                 ],
               ),
             ),
