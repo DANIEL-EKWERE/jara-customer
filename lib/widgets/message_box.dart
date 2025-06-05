@@ -14,6 +14,7 @@ class MessageBox extends StatelessWidget {
   final bool isPlayed;
   final bool isRecording;
   final String? filePath;
+  final String? recordingDuration;
 
   const MessageBox({
     Key? key,
@@ -29,6 +30,7 @@ class MessageBox extends StatelessWidget {
     required this.isStoped,
     required this.isRecording,
     required this.filePath,
+    this.recordingDuration,
   }) : super(key: key);
 
   @override
@@ -108,6 +110,31 @@ class MessageBox extends StatelessWidget {
                         ),
                         onPressed: onVoicePressedDelete,
                       ),
+
+
+isRecording?
+ Row(children: [
+  AnimatedOpacity(
+  duration: const Duration(milliseconds: 500),
+  opacity: isRecording ? 1.0 : 0.0,
+  child: Container(
+    width: 8,
+    height: 8,
+    decoration: BoxDecoration(
+      shape: BoxShape.circle,
+      color: Colors.red,
+    ),
+  ),
+),
+        Text(
+          '00:13', // <- Replace with actual timer text from parent widget
+          style: const TextStyle(
+            color: Colors.red,
+            fontWeight: FontWeight.bold,
+          ),
+        )
+ ],) : SizedBox.shrink()
+
                     ],
                   )): SizedBox.shrink(),
               Positioned(
