@@ -124,7 +124,7 @@ class MessageBox extends StatelessWidget {
                           size: 20,
                         ),
                       ),
-                      onPressed: onVoicePressedStop,
+                      onPressed: onVoicePressed,
                     ) : IconButton(
                       icon: Container(
                         padding: const EdgeInsets.all(8),
@@ -138,7 +138,7 @@ class MessageBox extends StatelessWidget {
                           size: 20,
                         ),
                       ),
-                      onPressed: onVoicePressedStop,
+                      onPressed: onVoicePressed,
                     ),
                   ],
                 ),

@@ -102,6 +102,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
   }
 
   Future<void> _startRecording() async {
+    
     if (!_isRecorderInitialized) {
       await _initializeRecorder();
       if (!_isRecorderInitialized) return;
@@ -315,6 +316,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                     },
                   ),
                   const SizedBox(height: 24),
+                //  ElevatedButton(onPressed: (){print('starting');_startRecording();}, child: Text('start recode')),
                   MessageBox(
                     controller: _messageController,
                     hintText: 'Add a message...',
@@ -331,6 +333,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                       _stopRecording();
                     },
                     onVoicePressed: () {
+                      print('starting');
                       if (_isRecording) {
                         myLog.log('is Recording');
                         if (_isPaused) {
