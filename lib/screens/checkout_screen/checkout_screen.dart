@@ -326,6 +326,11 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                     isStoped: isStoped,
                     isRecording: _isRecording,
                     filePath: recordingPath,
+                    onVoicePressedDelete: (){
+                      setState(() {
+                        recordingPath = '';
+                      });
+                    },
                     onVoicePressedPlay: () {
                       _playRecording(recordingPath);
                     },

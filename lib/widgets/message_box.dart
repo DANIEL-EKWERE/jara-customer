@@ -7,6 +7,7 @@ class MessageBox extends StatelessWidget {
   final VoidCallback? onVoicePressed;
   final VoidCallback? onVoicePressedStop;
   final VoidCallback? onVoicePressedPlay;
+  final VoidCallback? onVoicePressedDelete;
   final bool isPaused;
   final bool isResumed;
   final bool isStoped;
@@ -21,6 +22,7 @@ class MessageBox extends StatelessWidget {
     this.onVoicePressed,
     this.onVoicePressedStop,
     this.onVoicePressedPlay,
+    this.onVoicePressedDelete,
     required this.isPaused,
     required this.isResumed,
     required this.isPlayed,
@@ -74,20 +76,39 @@ class MessageBox extends StatelessWidget {
            filePath != null ?   Positioned(
                   bottom: 8,
                   left: 8,
-                  child: IconButton(
-                    icon: Container(
-                      padding: const EdgeInsets.all(8),
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: Colors.grey.shade200,
+                  child: Row(
+                    children: [
+                      IconButton(
+                        icon: Container(
+                          padding: const EdgeInsets.all(8),
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: Colors.grey.shade200,
+                          ),
+                          child: const Icon(
+                            Icons.play_arrow,
+                            color: Colors.grey,
+                            size: 20,
+                          ),
+                        ),
+                        onPressed: onVoicePressedPlay,
                       ),
-                      child: const Icon(
-                        Icons.play_arrow,
-                        color: Colors.grey,
-                        size: 20,
+                      IconButton(
+                        icon: Container(
+                          padding: const EdgeInsets.all(8),
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: Colors.grey.shade200,
+                          ),
+                          child: const Icon(
+                            Icons.delete,
+                            color: Colors.grey,
+                            size: 20,
+                          ),
+                        ),
+                        onPressed: onVoicePressedDelete,
                       ),
-                    ),
-                    onPressed: onVoicePressedPlay,
+                    ],
                   )): SizedBox.shrink(),
               Positioned(
                 right: 8,
@@ -118,14 +139,14 @@ class MessageBox extends StatelessWidget {
                           shape: BoxShape.circle,
                           color: Colors.grey.shade200,
                         ),
-                        child: const Icon(
-                          Icons.pause,
+                        child:  Icon(
+                        isPaused ? Icons.play_circle : Icons.pause,
                           color: Colors.grey,
                           size: 20,
                         ),
                       ),
                       onPressed: onVoicePressed,
-                    ) : IconButton(
+                    )  : IconButton(
                       icon: Container(
                         padding: const EdgeInsets.all(8),
                         decoration: BoxDecoration(
