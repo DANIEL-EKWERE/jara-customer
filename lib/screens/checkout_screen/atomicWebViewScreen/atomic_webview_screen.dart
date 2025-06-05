@@ -3,7 +3,11 @@ import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jara_market/config/routes.dart';
+import 'package:jara_market/screens/cart_screen/controller/cart_controller.dart';
 import 'package:jara_market/screens/success_screen/success_screen.dart';
+import 'package:jara_market/screens/wallet_screen/controller/wallet_controller.dart';
+
+WalletController walletController = Get.put(WalletController());
 
 class AtomicWebViewScreen extends StatefulWidget {
   AtomicWebViewScreen({super.key, this.url = ''});
@@ -52,9 +56,6 @@ final String callback_url = "http://127.0.0.1:8000";
               icon: Icon(Icons.chevron_left_rounded)),
           title: Text("Pay with Paystack",style:TextStyle(fontFamily: 'Poppins',fontWeight:FontWeight.w600,fontSize:14))),
 
-      // body: WebView(
-      //   controller: webViewController,
-      // ),
 
       body: InAppWebView(
         key: webViewKey,
@@ -67,6 +68,10 @@ final String callback_url = "http://127.0.0.1:8000";
           if (url.toString().startsWith(callback_url)) {
             // Detected redirect to callback URL
             Get.snackbar('Success','Wallet Funding Successful!!!',colorText: Colors.white,backgroundColor: Colors.green,icon: Icon(Icons.check,color: Colors.white,));
+            walletController.fetchWallet();
+            walletController.fetchTransactions();
+            Navigator.pop(context); // Close the WebView
+            Navigator.pop(context); // Close the WebView
             Navigator.pop(context); // Close the WebView
             // Navigator.pushReplacement(
             //   context,

@@ -3,15 +3,17 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jara_market/screens/cart_screen/controller/cart_controller.dart';
 import 'package:jara_market/screens/cart_screen/models/models.dart';
+import 'package:jara_market/screens/wallet_screen/controller/wallet_controller.dart';
+import 'package:jara_market/screens/wallet_screen/models/models.dart';
 import '../../screens/checkout_screen/checkout_screen.dart';
 // import '../../models/cart_item.dart';
 
 var controller = Get.find<CartController>();
-
-class CheckoutButton extends StatelessWidget {
+WalletController walletController = Get.put(WalletController());
+class CheckoutButton extends StatefulWidget {
   final bool isEnabled;
   final double totalAmount;
-  
+
   final bool loading;
   final List<CartItem> cartItems;
 
@@ -20,8 +22,14 @@ class CheckoutButton extends StatelessWidget {
       required this.isEnabled,
       required this.totalAmount,
       required this.cartItems,
-      
       required this.loading});
+
+  @override
+  State<CheckoutButton> createState() => _CheckoutButtonState();
+}
+
+class _CheckoutButtonState extends State<CheckoutButton> {
+  WalletModel? walletModel;
 
   @override
   Widget build(BuildContext context) {
@@ -29,57 +37,49 @@ class CheckoutButton extends StatelessWidget {
       width: double.infinity,
       height: 56,
       child: ElevatedButton(
-        onPressed: isEnabled
-            ? 
-            
-            () async {
-              //  Navigate to the CheckoutScreen
-           var checkoutAddress = await controller.getCheckoutAddress();
-//myLog.log('Checkout Address: ${checkoutAddress['data'][0]['contact_address']}');
-           // Check if it's a non-empty list
-if (checkoutAddress.isNotEmpty) {
-  var data = checkoutAddress['data'][0];
-  // Use `data` here
-  myLog.log('Checkout Address first index data: $data');
-  Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => CheckoutScreen(
-                      totalAmount: totalAmount,
-                      cartItems: cartItems,
-                      orderAddress: data,
+        onPressed: widget.isEnabled
+            ? () async {
+                //  Navigate to the CheckoutScreen
+                var checkoutAddress = await controller.getCheckoutAddress();
+                var balance = await walletController.fetchBalance();
+                print(balance);
+                myLog.log('printing balance $balance');
+                if(balance == -1) return;                
+                if (checkoutAddress.isNotEmpty) {
+                  var data = checkoutAddress['data'][0];
+                  // Use `data` here
+                  myLog.log('Checkout Address first index data: $data');
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => CheckoutScreen(
+                        totalAmount: widget.totalAmount,
+                        cartItems: widget.cartItems,
+                        orderAddress: data,
+                        balance: balance,
+                      ),
                     ),
-                  ),
-                );
-} else {
-  // Handle empty state
-  Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => CheckoutScreen(
-                      totalAmount: totalAmount,
-                      cartItems: cartItems,
-                      orderAddress: {},
+                  );
+                } else {
+                                  var balance = await walletController.fetchBalance();
+                if(balance == -1) return;  
+                  // Handle empty state
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => CheckoutScreen(
+                        totalAmount: widget.totalAmount,
+                        cartItems: widget.cartItems,
+                        orderAddress: {},
+                        balance: balance,
+                      ),
                     ),
-                  ),
-                );
-}
-// var data = checkoutAddress.isNotEmpty ? checkoutAddress[0] : [];
-//                 Navigator.push(
-//                   context,
-//                   MaterialPageRoute(
-//                     builder: (context) => CheckoutScreen(
-//                       totalAmount: totalAmount,
-//                       cartItems: cartItems,
-//                       orderAddress: data,
-//                     ),
-//                   ),
-//                 );
-
-             }
+                  );
+                }
+              }
             : null,
         style: ElevatedButton.styleFrom(
-          backgroundColor: isEnabled ? const Color(0xFFFF9800) : Colors.grey,
+          backgroundColor: widget.isEnabled ? const Color(0xFFFF9800) : Colors.grey,
           foregroundColor: Colors.black,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(16),
@@ -87,7 +87,7 @@ if (checkoutAddress.isNotEmpty) {
           elevation: 0,
         ),
         child: Text(
-          loading ? "..." : 'Pay',
+          widget.loading ? "Processing..." : 'Pay',
           style: TextStyle(
             fontSize: 14,
             fontFamily: 'Poppins',

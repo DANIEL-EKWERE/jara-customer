@@ -1,27 +1,19 @@
 import 'dart:async';
 import 'dart:developer' as myLog;
-// lib/screens/home_screen.dart
-// import 'dart:convert';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
-
-import 'package:jara_market/config/local_storage.dart';
 import 'package:jara_market/screens/cart_screen/models/models.dart';
 import 'package:jara_market/screens/cart_screen/controller/cart_controller.dart';
-//import 'package:jara_market/screens/categories_screen/categories_screen.dart';
 import 'package:jara_market/screens/egusi_soup_detail_screen/egusi_soup_detail_screen.dart';
 import 'package:jara_market/screens/home_screen/controller/home_controller.dart';
 import 'package:jara_market/screens/main_screen/main_screen.dart';
 import 'package:pull_to_refresh_flutter3/pull_to_refresh_flutter3.dart';
-// import 'package:jara_market/services/api_service.dart';
-// import 'package:jara_market/widgets/custom_button.dart';
-// import 'package:jara_market/widgets/snacknar.dart';
-// import '../../widgets/category_item.dart';
 import '../soup_list_screen/soup_list_screen.dart';
-//import 'package:shared_preferences/shared_preferences.dart';
 
 HomeController controller = Get.put(HomeController());
 var cartController = Get.put(CartController());
@@ -43,14 +35,11 @@ class _HomeScreenState extends State<HomeScreen> {
   bool isSet = false;
   int _currentIndex = 0;
 
-
-    final RefreshController _refreshController =
+  final RefreshController _refreshController =
       RefreshController(initialRefresh: false);
 
-
-
   void _onRefresh() {
-   controller.fetchFoodCategories();
+    controller.fetchFoodCategories();
   }
 
   // Controller for the carousel
@@ -149,7 +138,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   ))
                 : Column(
                     children: [
-                    //  ElevatedButton(onPressed: (){dataBase.logOut();}, child: Text('clear local db')),
+                      //  ElevatedButton(onPressed: (){dataBase.logOut();}, child: Text('clear local db')),
                       // Header
                       Padding(
                         padding: const EdgeInsets.all(16),
@@ -166,7 +155,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           ],
                         ),
                       ),
-          
+
                       // Search Bar
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -195,7 +184,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                       ),
                       const SizedBox(height: 24),
-          
+
                       // Category sections inside ListView
                       Expanded(
                         child: SmartRefresher(
@@ -216,11 +205,12 @@ class _HomeScreenState extends State<HomeScreen> {
                                       color: Colors.grey[400],
                                     );
                             },
-                                    
+
                             itemBuilder: (context, sectionIndex) {
                               return sectionIndex == 2
                                   ? Column(
-                                      mainAxisAlignment: MainAxisAlignment.start,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
                                       children: [
                                         SizedBox(
                                           height: 154,
@@ -239,7 +229,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                               autoPlayAnimationDuration:
                                                   const Duration(
                                                       milliseconds: 800),
-                                              autoPlayCurve: Curves.fastOutSlowIn,
+                                              autoPlayCurve:
+                                                  Curves.fastOutSlowIn,
                                               enlargeCenterPage: true,
                                               scrollDirection: Axis.horizontal,
                                               onPageChanged: (index, reason) {
@@ -257,18 +248,20 @@ class _HomeScreenState extends State<HomeScreen> {
                                                     154,
                                                 decoration: BoxDecoration(
                                                     borderRadius:
-                                                        BorderRadius.circular(15),
+                                                        BorderRadius.circular(
+                                                            15),
                                                     color: Color(0xFFFBBC05)),
                                                 child: Padding(
-                                                  padding:
-                                                      const EdgeInsets.symmetric(
-                                                          horizontal: 16,
-                                                          vertical: 25),
+                                                  padding: const EdgeInsets
+                                                      .symmetric(
+                                                      horizontal: 16,
+                                                      vertical: 25),
                                                   child: Column(
                                                     mainAxisAlignment:
                                                         MainAxisAlignment.start,
                                                     crossAxisAlignment:
-                                                        CrossAxisAlignment.start,
+                                                        CrossAxisAlignment
+                                                            .start,
                                                     children: [
                                                       Text(
                                                         'MIN 14%\nOFF',
@@ -286,8 +279,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                                           height: 28,
                                                           width: 90,
                                                           child: ElevatedButton(
-                                                            style: ElevatedButton
-                                                                .styleFrom(
+                                                            style:
+                                                                ElevatedButton
+                                                                    .styleFrom(
                                                               padding: EdgeInsets
                                                                   .symmetric(
                                                                       horizontal:
@@ -314,7 +308,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                 style: TextStyle(
                                                                     color: Colors
                                                                         .white,
-                                                                    fontSize: 8)),
+                                                                    fontSize:
+                                                                        8)),
                                                           ))
                                                     ],
                                                   ),
@@ -323,15 +318,16 @@ class _HomeScreenState extends State<HomeScreen> {
                                               Container(
                                                 //  height:154,
                                                 child: Padding(
-                                                  padding:
-                                                      const EdgeInsets.symmetric(
-                                                          horizontal: 16,
-                                                          vertical: 25),
+                                                  padding: const EdgeInsets
+                                                      .symmetric(
+                                                      horizontal: 16,
+                                                      vertical: 25),
                                                   child: Column(
                                                     mainAxisAlignment:
                                                         MainAxisAlignment.start,
                                                     crossAxisAlignment:
-                                                        CrossAxisAlignment.start,
+                                                        CrossAxisAlignment
+                                                            .start,
                                                     children: [
                                                       Text(
                                                         'MIN 15%\nOFF',
@@ -349,8 +345,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                                           height: 28,
                                                           width: 90,
                                                           child: ElevatedButton(
-                                                            style: ElevatedButton
-                                                                .styleFrom(
+                                                            style:
+                                                                ElevatedButton
+                                                                    .styleFrom(
                                                               padding: EdgeInsets
                                                                   .symmetric(
                                                                       horizontal:
@@ -377,7 +374,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                 style: TextStyle(
                                                                     color: Colors
                                                                         .white,
-                                                                    fontSize: 8)),
+                                                                    fontSize:
+                                                                        8)),
                                                           ))
                                                     ],
                                                   ),
@@ -389,7 +387,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                                     154,
                                                 decoration: BoxDecoration(
                                                     borderRadius:
-                                                        BorderRadius.circular(15),
+                                                        BorderRadius.circular(
+                                                            15),
                                                     color: Color(0xFFFBBC05)),
                                               ),
                                               Container(
@@ -400,18 +399,20 @@ class _HomeScreenState extends State<HomeScreen> {
                                                     154,
                                                 decoration: BoxDecoration(
                                                     borderRadius:
-                                                        BorderRadius.circular(15),
+                                                        BorderRadius.circular(
+                                                            15),
                                                     color: Color(0xFFFBBC05)),
                                                 child: Padding(
-                                                  padding:
-                                                      const EdgeInsets.symmetric(
-                                                          horizontal: 16,
-                                                          vertical: 25),
+                                                  padding: const EdgeInsets
+                                                      .symmetric(
+                                                      horizontal: 16,
+                                                      vertical: 25),
                                                   child: Column(
                                                     mainAxisAlignment:
                                                         MainAxisAlignment.start,
                                                     crossAxisAlignment:
-                                                        CrossAxisAlignment.start,
+                                                        CrossAxisAlignment
+                                                            .start,
                                                     children: [
                                                       Text(
                                                         'MIN 16%\nOFF',
@@ -429,8 +430,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                                           height: 28,
                                                           width: 90,
                                                           child: ElevatedButton(
-                                                            style: ElevatedButton
-                                                                .styleFrom(
+                                                            style:
+                                                                ElevatedButton
+                                                                    .styleFrom(
                                                               padding: EdgeInsets
                                                                   .symmetric(
                                                                       horizontal:
@@ -457,7 +459,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                 style: TextStyle(
                                                                     color: Colors
                                                                         .white,
-                                                                    fontSize: 8)),
+                                                                    fontSize:
+                                                                        8)),
                                                           ))
                                                     ],
                                                   ),
@@ -471,18 +474,20 @@ class _HomeScreenState extends State<HomeScreen> {
                                                     154,
                                                 decoration: BoxDecoration(
                                                     borderRadius:
-                                                        BorderRadius.circular(15),
+                                                        BorderRadius.circular(
+                                                            15),
                                                     color: Color(0xFFFBBC05)),
                                                 child: Padding(
-                                                  padding:
-                                                      const EdgeInsets.symmetric(
-                                                          horizontal: 16,
-                                                          vertical: 25),
+                                                  padding: const EdgeInsets
+                                                      .symmetric(
+                                                      horizontal: 16,
+                                                      vertical: 25),
                                                   child: Column(
                                                     mainAxisAlignment:
                                                         MainAxisAlignment.start,
                                                     crossAxisAlignment:
-                                                        CrossAxisAlignment.start,
+                                                        CrossAxisAlignment
+                                                            .start,
                                                     children: [
                                                       Text(
                                                         'MIN 17%\nOFF',
@@ -500,8 +505,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                                           height: 28,
                                                           width: 90,
                                                           child: ElevatedButton(
-                                                            style: ElevatedButton
-                                                                .styleFrom(
+                                                            style:
+                                                                ElevatedButton
+                                                                    .styleFrom(
                                                               padding: EdgeInsets
                                                                   .symmetric(
                                                                       horizontal:
@@ -528,7 +534,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                 style: TextStyle(
                                                                     color: Colors
                                                                         .white,
-                                                                    fontSize: 8)),
+                                                                    fontSize:
+                                                                        8)),
                                                           ))
                                                     ],
                                                   ),
@@ -542,18 +549,20 @@ class _HomeScreenState extends State<HomeScreen> {
                                                     154,
                                                 decoration: BoxDecoration(
                                                     borderRadius:
-                                                        BorderRadius.circular(15),
+                                                        BorderRadius.circular(
+                                                            15),
                                                     color: Color(0xFFFBBC05)),
                                                 child: Padding(
-                                                  padding:
-                                                      const EdgeInsets.symmetric(
-                                                          horizontal: 16,
-                                                          vertical: 25),
+                                                  padding: const EdgeInsets
+                                                      .symmetric(
+                                                      horizontal: 16,
+                                                      vertical: 25),
                                                   child: Column(
                                                     mainAxisAlignment:
                                                         MainAxisAlignment.start,
                                                     crossAxisAlignment:
-                                                        CrossAxisAlignment.start,
+                                                        CrossAxisAlignment
+                                                            .start,
                                                     children: [
                                                       Text(
                                                         'MIN 18%\nOFF',
@@ -571,8 +580,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                                           height: 28,
                                                           width: 90,
                                                           child: ElevatedButton(
-                                                            style: ElevatedButton
-                                                                .styleFrom(
+                                                            style:
+                                                                ElevatedButton
+                                                                    .styleFrom(
                                                               padding: EdgeInsets
                                                                   .symmetric(
                                                                       horizontal:
@@ -599,7 +609,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                 style: TextStyle(
                                                                     color: Colors
                                                                         .white,
-                                                                    fontSize: 8)),
+                                                                    fontSize:
+                                                                        8)),
                                                           ))
                                                     ],
                                                   ),
@@ -635,11 +646,12 @@ class _HomeScreenState extends State<HomeScreen> {
                                                         horizontal: 4.0),
                                                 decoration: BoxDecoration(
                                                   borderRadius:
-                                                      BorderRadius.circular(5.0),
+                                                      BorderRadius.circular(
+                                                          5.0),
                                                   color: _currentIndex == index
                                                       ? Colors.blue
-                                                      : Colors.grey
-                                                          .withValues(alpha: 0.5),
+                                                      : Colors.grey.withValues(
+                                                          alpha: 0.5),
                                                 ),
                                               ),
                                             ),
@@ -661,7 +673,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                               children: [
                                                 Text(
                                                   controller
-                                                      .category[sectionIndex].name
+                                                      .category[sectionIndex]
+                                                      .name
                                                       .toString(),
                                                   style: TextStyle(
                                                     fontSize: 14,
@@ -670,8 +683,11 @@ class _HomeScreenState extends State<HomeScreen> {
                                                   ),
                                                 ),
                                                 Spacer(),
-                                                controller.category[sectionIndex]
-                                                            .products!.length <=
+                                                controller
+                                                            .category[
+                                                                sectionIndex]
+                                                            .products!
+                                                            .length <=
                                                         3
                                                     ? SizedBox.shrink()
                                                     : InkWell(
@@ -767,17 +783,20 @@ class _HomeScreenState extends State<HomeScreen> {
                                                     ),
                                                     itemBuilder:
                                                         (context, index) {
-                                                      final category = controller
-                                                          .category[sectionIndex]
-                                                          .products;
+                                                      final category =
+                                                          controller
+                                                              .category[
+                                                                  sectionIndex]
+                                                              .products;
                                                       return GestureDetector(
                                                         onTap: () {
                                                           showDialog(
                                                             barrierDismissible:
                                                                 false,
                                                             context: context,
-                                                            builder: (BuildContext
-                                                                context) {
+                                                            builder:
+                                                                (BuildContext
+                                                                    context) {
                                                               return StatefulBuilder(
                                                                 builder: (context,
                                                                     setState) {
@@ -785,16 +804,14 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                     insetPadding:
                                                                         EdgeInsets
                                                                             .zero,
-                                                                    contentPadding:
-                                                                        EdgeInsets.only(
-                                                                            right:
-                                                                                16,
-                                                                            left:
-                                                                                24,
-                                                                            top:
-                                                                                0,
-                                                                            bottom:
-                                                                                16),
+                                                                    contentPadding: EdgeInsets.only(
+                                                                        right:
+                                                                            16,
+                                                                        left:
+                                                                            24,
+                                                                        top: 0,
+                                                                        bottom:
+                                                                            16),
                                                                     backgroundColor:
                                                                         Colors.grey[
                                                                             100],
@@ -808,17 +825,12 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                               Alignment.topLeft,
                                                                           child:
                                                                               Text(
-                                                                            category[index]
-                                                                                .name
-                                                                                .toString(),
+                                                                            category[index].name.toString(),
                                                                             style:
                                                                                 TextStyle(
-                                                                              fontSize:
-                                                                                  14,
-                                                                              fontFamily:
-                                                                                  'Roboto',
-                                                                              fontWeight:
-                                                                                  FontWeight.w600,
+                                                                              fontSize: 14,
+                                                                              fontFamily: 'Roboto',
+                                                                              fontWeight: FontWeight.w600,
                                                                             ),
                                                                           ),
                                                                         ),
@@ -836,7 +848,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                         // Text(
                                                                         //     "This is a popup modal!"),
                                                                         Container(
-                                                                      height: 273,
+                                                                      height:
+                                                                          273,
                                                                       decoration:
                                                                           BoxDecoration(
                                                                               //  color: Colors.grey[400]
@@ -844,8 +857,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                       child:
                                                                           Column(
                                                                         mainAxisAlignment:
-                                                                            MainAxisAlignment
-                                                                                .start,
+                                                                            MainAxisAlignment.start,
                                                                         children: [
                                                                           Row(
                                                                             mainAxisAlignment:
@@ -873,19 +885,19 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                                 alignment: Alignment.topRight,
                                                                                 child: IconButton(
                                                                                     onPressed: () async {
-                                                                                      if(category[index].isFavorite){
+                                                                                      if (category[index].isFavorite) {
                                                                                         // Remove from favorites
                                                                                         controller.removeFavorite(category[index].id!);
                                                                                         print('Removing from favorites');
-                                                                                        }
+                                                                                      }
                                                                                       var result = await controller.addFavorite(category[index].id!);
-                                                                                      setState(()  {
+                                                                                      setState(() {
                                                                                         //isSet = !isSet;
                                                                                         category[index].isFavorite = !category[index].isFavorite;
-                                                                                       
-                                                                                       if(!result){
-                                                                                        category[index].isFavorite = !category[index].isFavorite;
-                                                                                       }
+
+                                                                                        if (!result) {
+                                                                                          category[index].isFavorite = !category[index].isFavorite;
+                                                                                        }
                                                                                       });
                                                                                     },
                                                                                     icon: category[index].isFavorite ? Icon(Icons.favorite_rounded) : Icon(Icons.favorite_border_rounded)),
@@ -899,9 +911,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                                 Text(
                                                                               //"${category[index].stock} Portion Available",
                                                                               "${category[index].ingredients!.length} Ingredients in food",
-                                    
-                                                                              style:
-                                                                                  TextStyle(
+
+                                                                              style: TextStyle(
                                                                                 color: Colors.grey[600],
                                                                                 fontSize: 14,
                                                                                 fontFamily: 'Roboto',
@@ -912,18 +923,49 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                           Container(
                                                                             height:
                                                                                 150,
-                                                                            decoration: BoxDecoration(
-                                                                                borderRadius: BorderRadius.all(Radius.circular(20)),
-                                                                                border: Border.all(width: 10, color: Colors.white)),
+                                                                            decoration:
+                                                                                BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(20)), border: Border.all(width: 10, color: Colors.white)),
                                                                             child:
                                                                                 Container(
                                                                               // widthFactor: 10.5,
                                                                               // heightFactor: 10.5,
                                                                               child: category[index].imageUrl != null
-                                                                                  ? Image.network(
-                                                                                      category[index].imageUrl.toString(),
-                                                                                      fit: BoxFit.contain,
-                                                                                    )
+                                                                                  ?
+                                                                                  //  Image.network(
+                                                                                  //     category[index].imageUrl.toString(),
+                                                                                  //     fit: BoxFit.cover,
+                                                                                  //   )
+                                                                                  ClipRRect(
+                                                                        borderRadius:
+                                                                            BorderRadius.circular(
+                                                                                20),
+                                                                        child:
+                                                                            CachedNetworkImage(
+                                                                          imageUrl: category[index]
+                                                                              .imageUrl
+                                                                              .toString(),
+                                                                          placeholder: (context, url) =>
+                                                                              const Padding(
+                                                                            padding:
+                                                                                EdgeInsets.all(8.0),
+                                                                            child:
+                                                                                Center(
+                                                                              child: const SpinKitPulse(
+                                                                                color: Colors.amber, // You can use any color
+                                                                                size: 24.0, // Customize size
+                                                                              ),
+                                                                            ),
+                                                                          ),
+                                                                          errorWidget: (context, url, error) =>
+                                                                              const Icon(Icons.error),
+                                                                          width:
+                                                                              context.width * 0.6,
+                                                                          height:
+                                                                              40,
+                                                                          fit: BoxFit
+                                                                              .cover,
+                                                                        ))
+
                                                                                   : SvgPicture.asset('assets/images/product_image.svg'),
                                                                             ),
                                                                           ),
@@ -936,9 +978,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                                 EdgeInsets.all(8),
                                                                             height:
                                                                                 53,
-                                                                            decoration: BoxDecoration(
-                                                                                borderRadius: BorderRadius.all(Radius.circular(12)),
-                                                                                color: Colors.amber[50]),
+                                                                            decoration:
+                                                                                BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(12)), color: Colors.amber[50]),
                                                                             child:
                                                                                 Text('*${category[index].description}\n We also Offer meal prep as well!!!'),
                                                                           )
@@ -946,24 +987,14 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                       ),
                                                                     ),
                                                                     actions: [
-                                                                      // TextButton(
-                                                                      //   child: Text(
-                                                                      //       "Close"),
-                                                                      //   onPressed: () =>
-                                                                      //       Navigator.of(
-                                                                      //               context)
-                                                                      //           .pop(),
-                                                                      // )
                                                                       Row(
                                                                         spacing:
                                                                             context.width *
                                                                                 0.02,
                                                                         children: [
                                                                           SizedBox(
-                                                                              height:
-                                                                                  40,
-                                                                              width:
-                                                                                  110,
+                                                                              height: 40,
+                                                                              width: 110,
                                                                               child: ElevatedButton(
                                                                                   style: ElevatedButton.styleFrom(
                                                                                     elevation: 0,
@@ -982,19 +1013,22 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                                     //           item: category[index],
                                                                                     //         )));
                                                                                     print('Add to cart pressed ${category[index].id}');
-                                    
+
                                                                                     cartController.addToCart(CartItem(
                                                                                       id: category[index].id!,
                                                                                       name: category[index].name!,
                                                                                       description: category[index].description ?? 'N/A',
                                                                                       price: double.tryParse(category[index].price!.toString()) ?? 0.0,
                                                                                       originalPrice: double.tryParse(category[index].price!.toString()) ?? 0.0,
-                                                                                      ingredients: category[index].ingredients!.map((ingredient) => Ingredients(
-                                                                                        id: ingredient.id!,
-                                                                                        name: ingredient.name,
-                                                                                        description: ingredient.description,
-                                                                                        price: double.tryParse(ingredient.price.toString()) ?? 0.0,
-                                                                                      )).toList(),
+                                                                                      ingredients: category[index]
+                                                                                          .ingredients!
+                                                                                          .map((ingredient) => Ingredients(
+                                                                                                id: ingredient.id!,
+                                                                                                name: ingredient.name,
+                                                                                                description: ingredient.description,
+                                                                                                price: double.tryParse(ingredient.price.toString()) ?? 0.0,
+                                                                                              ))
+                                                                                          .toList(),
                                                                                     ));
                                                                                     // print(category[index].id!);
                                                                                     // print(category[index].name!);
@@ -1010,7 +1044,10 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                                         color: Colors.blueGrey,
                                                                                         size: 16,
                                                                                       ),
-                                                                                      Text('Add To Cart',style: TextStyle(color: Colors.blueGrey,fontSize: 12),)
+                                                                                      Text(
+                                                                                        'Add To Cart',
+                                                                                        style: TextStyle(color: Colors.blueGrey, fontSize: 12),
+                                                                                      )
                                                                                     ],
                                                                                   ))),
                                                                           Expanded(
@@ -1048,14 +1085,6 @@ class _HomeScreenState extends State<HomeScreen> {
                                                               'Tapped on category: $category');
                                                           myLog.log(
                                                               'product image ${category[sectionIndex].imageUrl}');
-                                                          //  Get.toNamed('/soupList_screen');
-                                                          // CupertinoPageRoute(builder: (context) => const SoupListScreen(item: {}),);
-                                    
-                                                          //       Navigator.push(
-                                                          // Get.context!,
-                                                          // CupertinoPageRoute(
-                                                          //   builder: (context) => const SoupListScreen(item: {}),
-                                                          // ),);
                                                         },
                                                         child: Column(
                                                           children: [
@@ -1079,23 +1108,36 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                 child: category[index]
                                                                             .imageUrl !=
                                                                         null
-                                                                    ? CircleAvatar(
-                                                                        radius:
-                                                                            20,
+                                                                    ? ClipRRect(
+                                                                        borderRadius:
+                                                                            BorderRadius.circular(
+                                                                                20),
                                                                         child:
-                                                                            ClipOval(
-                                                                          child: Image
-                                                                              .network(
-                                                                            category[index]
-                                                                                .imageUrl
-                                                                                .toString(),
-                                                                            fit: BoxFit
-                                                                                .contain,
-                                                                            // width: 30,
-                                                                            // height: 30,
+                                                                            CachedNetworkImage(
+                                                                          imageUrl: category[index]
+                                                                              .imageUrl
+                                                                              .toString(),
+                                                                          placeholder: (context, url) =>
+                                                                              const Padding(
+                                                                            padding:
+                                                                                EdgeInsets.all(8.0),
+                                                                            child:
+                                                                                Center(
+                                                                              child: const SpinKitPulse(
+                                                                                color: Colors.amber, // You can use any color
+                                                                                size: 24.0, // Customize size
+                                                                              ),
+                                                                            ),
                                                                           ),
-                                                                        ),
-                                                                      )
+                                                                          errorWidget: (context, url, error) =>
+                                                                              const Icon(Icons.error),
+                                                                          width:
+                                                                              40,
+                                                                          height:
+                                                                              40,
+                                                                          fit: BoxFit
+                                                                              .cover,
+                                                                        ))
                                                                     : SvgPicture
                                                                         .asset(
                                                                             'assets/images/product_image.svg'),
@@ -1117,7 +1159,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                   //     2, // Set to any number of lines you want
                                                                   // overflow: TextOverflow
                                                                   //     .ellipsis, // Optional: adds "..." at the end
-                                                                  category[index]
+                                                                  category[
+                                                                          index]
                                                                       .name
                                                                       .toString(),
                                                               style: TextStyle(

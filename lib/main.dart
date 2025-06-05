@@ -6,6 +6,7 @@ import 'package:get/get.dart';
 import 'package:jara_market/config/local_storage.dart';
 import 'package:jara_market/config/routes.dart';
 import 'package:jara_market/screens/main_screen/main_screen.dart';
+import 'package:overlay_kit/overlay_kit.dart';
 // import 'screens/splash/splash_screen.dart';
 
 void main() async {
@@ -33,18 +34,20 @@ class MyApp extends StatelessWidget {
   final String initialRoute;
   @override
   Widget build(BuildContext context) {
-    return GetMaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'Auth App',
-      theme: ThemeData(
-        primaryColor: const Color(0xFFFFAA00),
-        scaffoldBackgroundColor: Colors.white,
-        fontFamily: 'Roboto',
-        //fontFamilyFallback: ['Roboto'],
+    return OverlayKit(
+      child: GetMaterialApp(
+        debugShowCheckedModeBanner: false,
+        title: 'Auth App',
+        theme: ThemeData(
+          primaryColor: const Color(0xFFFFAA00),
+          scaffoldBackgroundColor: Colors.white,
+          fontFamily: 'Roboto',
+          //fontFamilyFallback: ['Roboto'],
+        ),
+        // home: const SplashScreen(),
+        initialRoute: initialRoute,
+        getPages: AppRoutes.pages,
       ),
-      // home: const SplashScreen(),
-      initialRoute: initialRoute,
-      getPages: AppRoutes.pages,
     );
   }
 }

@@ -1,24 +1,18 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_sound/flutter_sound.dart';
 import 'package:get/get.dart';
 import 'package:jara_market/config/routes.dart';
 import 'package:jara_market/screens/cart_screen/controller/cart_controller.dart';
-import 'package:jara_market/screens/checkout_address_change/checkout_address_change.dart';
 import 'package:jara_market/screens/checkout_screen/controller/checkout_controller.dart';
 import 'package:jara_market/screens/main_screen/main_screen.dart';
 import 'package:jara_market/widgets/cart_widgets/cart_summary_card.dart';
-import 'package:jara_market/widgets/cart_widgets/checkout_button.dart';
 import 'package:jara_market/widgets/cart_widgets/checkout_button_paystack.dart';
-import 'package:jara_market/widgets/custom_button.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:jara_market/services/api_service.dart';
 import '../../widgets/payment_method_card.dart';
 import '../../widgets/address_card.dart';
 import '../../widgets/summary_breakdown_card.dart';
 import '../../widgets/message_box.dart';
-import '../wallet_screen/wallet_screen.dart';
 import 'package:jara_market/screens/cart_screen/models/models.dart';
 
 CheckoutController controller = Get.put(CheckoutController());
@@ -28,12 +22,13 @@ class CheckoutScreen extends StatefulWidget {
   final double totalAmount;
   final List<CartItem> cartItems;
   final Map<String, dynamic> orderAddress;
+  final double balance;
 
   const CheckoutScreen({
     Key? key,
     required this.totalAmount,
     required this.cartItems,
-    required this.orderAddress,
+    required this.orderAddress, required this.balance,
   }) : super(key: key);
 
   @override
@@ -55,12 +50,10 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
 
   final TextEditingController _messageController = TextEditingController();
   final FlutterSoundRecorder _recorder = FlutterSoundRecorder();
-  ApiService _apiService = ApiService(Duration(seconds: 60 * 5));
   bool _isRecording = false;
   bool _isPaused = false;
   String? _recordingPath;
   bool _isRecorderInitialized = false;
-  bool _isLoading = false;
 
   @override
   void initState() {
@@ -232,31 +225,6 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
 
   double get deliveryFee => 0;
 
-  Future<void> _createOrder() async {
-    final orderData = {
-      'user_id': 'userId', // Replace with actual user ID
-      'total': widget.totalAmount,
-      'shipping_fee': deliveryFee,
-      'status': 'pending',
-      'items': widget.cartItems.map((item) {
-        return {
-          'product_id': item.id ?? 'unknown',
-          'quantity': item.quantity ?? 1,
-        };
-      }).toList(),
-    };
-
-    final response = await _apiService.postOrder(orderData);
-    if (response.statusCode == 200) {
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => const WalletScreen()),
-      );
-    } else {
-      print('Failed to create order: ${response.body}');
-    }
-  }
-
   void _selectPaymentMethod(String method) {
     setState(() {
       _selectedPaymentMethod = method;
@@ -347,7 +315,14 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                   ),
                   const SizedBox(height: 24),
                   Obx((){
-                    return CheckoutButtonPaystack(
+                    return (widget.balance < widget.totalAmount) ? AbsorbPointer(
+                      child: CheckoutButtonPaystack(
+                        color: Colors.grey[400],
+                      title: 'Insufficient Balance ${widget.balance}',
+                      amount: widget.totalAmount,
+                                        ),
+                    ) :
+                  CheckoutButtonPaystack(
                     title: controller.isLoading.value ? 'Initializing Payment...' :'Check Out',
                     amount: widget.totalAmount,
                   );

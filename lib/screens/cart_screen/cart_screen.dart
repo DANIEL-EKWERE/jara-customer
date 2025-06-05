@@ -1,17 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jara_market/screens/cart_screen/controller/cart_controller.dart';
-import 'package:jara_market/screens/checkout_screen/checkout_screen.dart';
-import 'package:jara_market/screens/home_screen/models/food_model.dart';
 import 'package:jara_market/screens/cart_screen/models/models.dart';
 import 'package:jara_market/widgets/cart_widgets/cart_ingredient.dart';
-// import '../../models/cart_item.dart';
-import '../../widgets/cart_widgets/cart_item_card.dart';
 import '../../widgets/cart_widgets/checkout_button.dart';
 import '../../widgets/cart_widgets/payment_methods.dart';
 import '../../widgets/cart_widgets/cart_summary.dart';
-import '../../services/cart_service.dart';
-// import 'package:jara_market/screens/cart_screen/models/models.dart';
 
 var controller = Get.find<CartController>();
 
@@ -23,11 +17,6 @@ class CartScreen extends StatefulWidget {
 }
 
 class _CartScreenState extends State<CartScreen> {
-  final CartService _cartService = CartService();
-  List<CartItem> _cartItems = [];
-  bool _isLoading = true;
-  String? _errorMessage;
-  int? _currentCartId;
   
 
   @override

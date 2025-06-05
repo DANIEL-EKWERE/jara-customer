@@ -7,9 +7,10 @@ CheckoutController checkoutController = Get.find<CheckoutController>();
 class CheckoutButtonPaystack extends StatelessWidget {
  final String title;
  final double amount;
+ final Color? color;
 
   const CheckoutButtonPaystack(
-      {super.key,required this.title, required this.amount
+      {super.key,required this.title, required this.amount, this.color
       });
 
   @override
@@ -34,7 +35,7 @@ class CheckoutButtonPaystack extends StatelessWidget {
           print('paystack calling here');
         },
         style: ElevatedButton.styleFrom(
-          backgroundColor: const Color(0xFFFF9800),
+          backgroundColor: color ?? const Color(0xFFFF9800),
           foregroundColor: Colors.black,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(16),

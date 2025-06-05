@@ -186,6 +186,38 @@ Future<http.Response> fetchCountry() async {
   return response;
 }
 
+Future<http.Response> fetchTransactions() async {
+  var token = await dataBase.getToken();
+  final url = Uri.parse('$baseUrl/payments');
+  _logRequest('GET', url);
+  final response = await http.get(
+    url,
+    headers: <String, String>{
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer $token',
+    },
+  );
+  _logResponse(response);
+  return response;
+}
+
+Future<http.Response> fetchTransaction(int id) async {
+  var token = await dataBase.getToken();
+  final url = Uri.parse('$baseUrl/payments/$id');
+  _logRequest('GET', url);
+  final response = await http.get(
+    url,
+    headers: <String, String>{
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer $token',
+    },
+  );
+  _logResponse(response);
+  return response;
+}
+
 Future<http.Response> fetchWallet() async {
   var token = await dataBase.getToken();
   final url = Uri.parse('$baseUrl/fetch-wallet');
