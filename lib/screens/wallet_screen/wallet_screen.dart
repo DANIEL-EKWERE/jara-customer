@@ -121,24 +121,27 @@ void onRefresh(){
                                     itemCount: controller.transactions.length,
                                     itemBuilder: (context, index) {
                                       final transaction = controller.transactions[index];
-                                      return controller.isTransactionLoading1.value ? Center(child: CircularProgressIndicator(color: Colors.amber,),) : ListTile(
-                                        onTap: (){
-                                          controller.fetchTransaction(transaction.id);
-                                        },
-                                        tileColor: Colors.grey[100],
-                                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8),side: BorderSide(width: 1,color: Color(0xff1919190D))),
-                                        //BeveledRectangleBorder(borderRadius: BorderRadius.circular(8)),
-                                        leading: Icon(
-                                          transaction.status == 'success' ? Icons.arrow_upward : Icons.arrow_downward,
-                                          color: transaction.status == 'success' ? Colors.green : Colors.red,
-                                        ),
-                                        title: Text(transaction.gatewayResponse),
-                                        subtitle: Text(transaction.createdAt),
-                                        trailing: Text(
-                                          '${transaction.status == 'success' ? '+' : '-'}${transaction.amount}',
-                                          style: TextStyle(
+                                      return controller.isTransactionLoading1.value ? Center(child: CircularProgressIndicator(color: Colors.amber,),) : Padding(
+                                        padding: const EdgeInsets.symmetric(vertical: 10),
+                                        child: ListTile(
+                                          onTap: (){
+                                            controller.fetchTransaction(transaction.id);
+                                          },
+                                          tileColor: Colors.grey[100],
+                                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8),side: BorderSide(width: 1,color: Color(0xff1919190D))),
+                                          //BeveledRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                                          leading: Icon(
+                                            transaction.status == 'success' ? Icons.arrow_upward : Icons.arrow_downward,
                                             color: transaction.status == 'success' ? Colors.green : Colors.red,
-                                            fontWeight: FontWeight.bold,
+                                          ),
+                                          title: Text(transaction.gatewayResponse),
+                                          subtitle: Text(transaction.createdAt),
+                                          trailing: Text(
+                                            '${transaction.status == 'success' ? '+' : '-'}${transaction.amount}',
+                                            style: TextStyle(
+                                              color: transaction.status == 'success' ? Colors.green : Colors.red,
+                                              fontWeight: FontWeight.bold,
+                                            ),
                                           ),
                                         ),
                                       );
