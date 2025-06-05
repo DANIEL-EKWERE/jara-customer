@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:developer' as myLog;
 import 'package:flutter/material.dart';
 import 'package:flutter_sound/flutter_sound.dart';
@@ -76,6 +77,16 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
     getName();
   }
 
+
+Timer? _timer;
+int _recordDuration = 0;
+String get _durationText {
+  final minutes = (_recordDuration ~/ 60).toString().padLeft(2, '0');
+  final seconds = (_recordDuration % 60).toString().padLeft(2, '0');
+  return '$minutes:$seconds';
+}
+
+
   Future<void> _initializeRecorder() async {
     final status = await Permission.microphone.request();
     if (status != PermissionStatus.granted) {
@@ -107,6 +118,15 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
       await _initializeRecorder();
       if (!_isRecorderInitialized) return;
     }
+
+
+_recordDuration = 0;
+  _timer?.cancel();
+  _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
+    setState(() {
+      _recordDuration++;
+    });
+  });
 
     try {
       final directory = await getApplicationDocumentsDirectory();
@@ -197,7 +217,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
 
   Future<void> _stopRecording() async {
     if (!_isRecording) return;
-
+_timer?.cancel();
     try {
       final recordingResult = await _recorder.stopRecorder();
       setState(() {
@@ -326,6 +346,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                     isStoped: isStoped,
                     isRecording: _isRecording,
                     filePath: recordingPath,
+                    recordingDuration: _durationText,
                     onVoicePressedDelete: (){
                       setState(() {
                         recordingPath = '';

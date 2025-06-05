@@ -127,7 +127,7 @@ isRecording?
   ),
 ),
         Text(
-          '00:13', // <- Replace with actual timer text from parent widget
+          recordingDuration ?? '00:00', // <- Replace with actual timer text from parent widget
           style: const TextStyle(
             color: Colors.red,
             fontWeight: FontWeight.bold,
