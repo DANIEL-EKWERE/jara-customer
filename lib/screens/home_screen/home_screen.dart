@@ -936,36 +936,23 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                                   //     fit: BoxFit.cover,
                                                                                   //   )
                                                                                   ClipRRect(
-                                                                        borderRadius:
-                                                                            BorderRadius.circular(
-                                                                                20),
-                                                                        child:
-                                                                            CachedNetworkImage(
-                                                                          imageUrl: category[index]
-                                                                              .imageUrl
-                                                                              .toString(),
-                                                                          placeholder: (context, url) =>
-                                                                              const Padding(
-                                                                            padding:
-                                                                                EdgeInsets.all(8.0),
-                                                                            child:
-                                                                                Center(
-                                                                              child: const SpinKitPulse(
-                                                                                color: Colors.amber, // You can use any color
-                                                                                size: 24.0, // Customize size
-                                                                              ),
-                                                                            ),
-                                                                          ),
-                                                                          errorWidget: (context, url, error) =>
-                                                                              const Icon(Icons.error),
-                                                                          width:
-                                                                              context.width * 0.6,
-                                                                          height:
-                                                                              40,
-                                                                          fit: BoxFit
-                                                                              .cover,
-                                                                        ))
-
+                                                                                      borderRadius: BorderRadius.circular(20),
+                                                                                      child: CachedNetworkImage(
+                                                                                        imageUrl: category[index].imageUrl.toString(),
+                                                                                        placeholder: (context, url) => const Padding(
+                                                                                          padding: EdgeInsets.all(8.0),
+                                                                                          child: Center(
+                                                                                            child: const SpinKitPulse(
+                                                                                              color: Colors.amber, // You can use any color
+                                                                                              size: 24.0, // Customize size
+                                                                                            ),
+                                                                                          ),
+                                                                                        ),
+                                                                                        errorWidget: (context, url, error) => const Icon(Icons.error),
+                                                                                        width: context.width * 0.6,
+                                                                                        height: 40,
+                                                                                        fit: BoxFit.cover,
+                                                                                      ))
                                                                                   : SvgPicture.asset('assets/images/product_image.svg'),
                                                                             ),
                                                                           ),

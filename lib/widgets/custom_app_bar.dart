@@ -4,11 +4,12 @@ import 'package:flutter_svg/flutter_svg.dart';
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String title;
   final bool showCart;
+  final VoidCallback? onBackPressed;
 
   const CustomAppBar({
     Key? key,
     required this.title,
-    this.showCart = true, required void Function() onBackPressed, required MaterialColor titleColor,
+    this.showCart = true, required this.onBackPressed, required MaterialColor titleColor,
   }) : super(key: key);
 
   @override
@@ -19,7 +20,10 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
       elevation: 0,
       leading: IconButton(
         icon: const Icon(Icons.close, color: Colors.black),
-        onPressed: () => Navigator.pop(context),
+        onPressed: () {
+          onBackPressed == null ?
+          Navigator.pop(context) : onBackPressed!();
+        },
       ),
       title: Text(
         title,
@@ -38,7 +42,11 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
           //     // TODO: Implement cart navigation
           //   },
           // ),
-          SvgPicture.asset('assets/images/bag.svg'),
+          GestureDetector(
+            onTap: (){
+              
+            },
+            child: SvgPicture.asset('assets/images/bag.svg')),
           SizedBox(width: 16,)
       ],
     );

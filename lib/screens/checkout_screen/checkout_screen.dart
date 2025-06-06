@@ -79,11 +79,54 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
 
 
 Timer? _timer;
-int _recordDuration = 0;
+Duration _recordingDuration = Duration.zero;
+DateTime? _pauseStartTime;
+// bool _isPaused = false;
+
+
+
 String get _durationText {
-  final minutes = (_recordDuration ~/ 60).toString().padLeft(2, '0');
-  final seconds = (_recordDuration % 60).toString().padLeft(2, '0');
+  final minutes = _recordingDuration.inMinutes.remainder(60).toString().padLeft(2, '0');
+  final seconds = _recordingDuration.inSeconds.remainder(60).toString().padLeft(2, '0');
   return '$minutes:$seconds';
+}
+
+
+
+void _startTimer() {
+  _recordingDuration = Duration.zero;
+  _timer = Timer.periodic(Duration(seconds: 1), (_) {
+    setState(() {
+      _recordingDuration += Duration(seconds: 1);
+    });
+  });
+}
+
+void _pauseTimer() {
+  if (_timer != null && _timer!.isActive) {
+    _timer!.cancel();
+    _isPaused = true;
+    _pauseStartTime = DateTime.now();
+  }
+}
+
+
+void _resumeTimer() {
+  if (_isPaused) {
+    _timer = Timer.periodic(Duration(seconds: 1), (_) {
+      setState(() {
+        _recordingDuration += Duration(seconds: 1);
+      });
+    });
+    _isPaused = false;
+  }
+}
+
+
+void _stopTimer() {
+  _timer?.cancel();
+  _recordingDuration = Duration.zero;
+  _isPaused = false;
 }
 
 
@@ -120,13 +163,13 @@ String get _durationText {
     }
 
 
-_recordDuration = 0;
-  _timer?.cancel();
-  _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
-    setState(() {
-      _recordDuration++;
-    });
-  });
+// _recordDuration = 0;
+//   _timer?.cancel();
+//   _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
+//     setState(() {
+//       _recordDuration++;
+//     });
+//   });
 
     try {
       final directory = await getApplicationDocumentsDirectory();
@@ -217,7 +260,7 @@ _recordDuration = 0;
 
   Future<void> _stopRecording() async {
     if (!_isRecording) return;
-_timer?.cancel();
+//_timer?.cancel();
     try {
       final recordingResult = await _recorder.stopRecorder();
       setState(() {
@@ -337,45 +380,50 @@ _timer?.cancel();
                   ),
                   const SizedBox(height: 24),
                 //  ElevatedButton(onPressed: (){print('starting');_startRecording();}, child: Text('start recode')),
-                  MessageBox(
-                    controller: _messageController,
-                    hintText: 'Add a message...',
-                    isPaused: _isPaused,
-                    isPlayed: isPlayed,
-                    isResumed: isResumed,
-                    isStoped: isStoped,
-                    isRecording: _isRecording,
-                    filePath: recordingPath,
-                    recordingDuration: _durationText,
-                    onVoicePressedDelete: (){
-                      setState(() {
-                        recordingPath = '';
-                      });
-                    },
-                    onVoicePressedPlay: () {
-                      _playRecording(recordingPath);
-                    },
-                    onVoicePressedStop: () {
-                      _stopRecording();
-                    },
-                    onVoicePressed: () {
-                      print('starting');
-                      if (_isRecording) {
-                        myLog.log('is Recording');
-                        if (_isPaused) {
-                          myLog.log('is paused new resuming');
-                          _resumeRecording();
-                        } else {
-                          myLog.log('it was playing now resuming');
-                          _pauseRecording();
-                        }
-                      } else {
-                        myLog.log('stoping rcorder');
-                        _startRecording();
-                      }
-                    },
-                  ),
-                  const SizedBox(height: 24),
+                  // MessageBox(
+                  //   controller: _messageController,
+                  //   hintText: 'Add a message...',
+                  //   isPaused: _isPaused,
+                  //   isPlayed: isPlayed,
+                  //   isResumed: isResumed,
+                  //   isStoped: isStoped,
+                  //   isRecording: _isRecording,
+                  //   filePath: recordingPath,
+                  //   recordingDuration: _durationText,
+                  //   onVoicePressedDelete: (){
+                  //     setState(() {
+                  //       recordingPath = '';
+                  //        _stopTimer();
+                  //        _stopRecording(); // Optional depending on your logic
+                  //     });
+                  //   },
+                  //   onVoicePressedPlay: () {
+                  //     _playRecording(recordingPath);
+                  //   },
+                  //   onVoicePressedStop: () {
+                  //     _stopRecording();
+                  //   },
+                  //   onVoicePressed: () {
+                  //     print('starting');
+                  //     if (_isRecording) {
+                  //       myLog.log('is Recording');
+                  //       if (_isPaused) {
+                  //         myLog.log('is paused new resuming');
+                  //         _resumeRecording();
+                  //          _resumeTimer();
+                  //       } else {
+                  //         myLog.log('it was playing now resuming');
+                  //         _pauseRecording();
+                  //           _pauseTimer();
+                  //       }
+                  //     } else {
+                  //       myLog.log('stoping rcorder');
+                  //       _startRecording();
+                  //        _startTimer();
+                  //     }
+                  //   },
+                  // ),
+                  // const SizedBox(height: 24),
                   SummaryBreakdown(
                     mealPrep: cartController.mealPrepPrice,
                     itemsTotal: widget.totalAmount,

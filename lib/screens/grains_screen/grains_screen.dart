@@ -1,116 +1,511 @@
+import 'dart:developer' as myLog;
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:jara_market/screens/cart_screen/controller/cart_controller.dart';
 import 'package:jara_market/screens/grains_screen/controller/grains_controller.dart';
+import 'package:pull_to_refresh_flutter3/pull_to_refresh_flutter3.dart';
 import '../../widgets/custom_app_bar.dart';
-import '../../widgets/product_card.dart';
 import '../grains_detailed_screen/grains_detailed_screen.dart'; // Import GrainsDetailedScreen
-import '../../services/favorites_service.dart'; // Import FavoritesService
+import 'package:jara_market/screens/cart_screen/models/models.dart';
 
 GrainsController controller = Get.put(GrainsController());
-
+CartController cartController = Get.find<CartController>();
 class GrainsScreen extends StatefulWidget {
-  const GrainsScreen({Key? key}) : super(key: key);
-
+  const GrainsScreen({Key? key, required this.forProduct}) : super(key: key);
+  final bool forProduct;
   @override
   State<GrainsScreen> createState() => _GrainsScreenState();
 }
 
 class _GrainsScreenState extends State<GrainsScreen> {
-  // List to track favorite status of products
-  final List<bool> _favorites = List.generate(6, (_) => false);
-
+List<Ingredients> ingredients = [];
   @override
   void initState() {
     super.initState();
-    _loadFavorites();
+    //controller.fetchIngredients();
+    controller.fetchIngredientByCondition();
   }
 
-  // Load saved favorites from service
-  Future<void> _loadFavorites() async {
-    for (int i = 0; i < _favorites.length; i++) {
-      final productId = 'grain_$i'; // Create unique product IDs
-      // final isFavorite = await FavoritesService().isFavorite(productId);
-      if (mounted) {
-        setState(() {
-          _favorites[i] = true;
-        });
-      }
-    }
+  RefreshController _refreshController =
+      RefreshController(initialRefresh: false);
+
+  void _onrefresh() {
+    controller.fetchIngredients();
   }
+
+
+  final TextEditingController _searchController = TextEditingController();
+
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: CustomAppBar(
-        title: 'Grains',
+        title: 'Ingredients',
         titleColor: Colors.orange,
         onBackPressed: () {
-          Navigator.pop(context);
+          //Navigator.pop(context);
+          myLog.log(ingredients.toString());
+          if(Navigator.canPop(context)){
+            myLog.log('i can pop');
+            Navigator.pop(context, {
+              "result":ingredients
+            });
+          }else{
+            myLog.log('i can\'t pop');
+          }
+print('object');
         },
       ),
-      body: GridView.builder(
-        padding: const EdgeInsets.all(16),
-        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 2,
-          childAspectRatio: 0.75,
-          crossAxisSpacing: 16,
-          mainAxisSpacing: 16,
-        ),
-        itemCount: 6,
-        itemBuilder: (context, index) {
-          return ProductCard(
-            imageAsset: 'assets/images/mama-gold-rice.jpg',
-            title: index % 2 == 0 ? 'Rice' : 'Beans',
-            rating: 4.3,
-            reviews: 41,
-            isMostOrdered: index == 0,
-            isFavorite: _favorites[index], // Pass current favorite status
-            onFavoritePressed: () {
-              // Implement favorite toggle
-              final productId = 'grain_$index';
-              setState(() {
-                _favorites[index] = !_favorites[index];
-              });
-
-              // Update favorite status in service
-              if (_favorites[index]) {
-                FavoritesService().addToFavorites(int.parse(productId));
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text(
-                        'Added ${index % 2 == 0 ? 'Rice' : 'Beans'} to favorites'),
-                    duration: const Duration(seconds: 2),
-                    action: SnackBarAction(
-                      label: 'UNDO',
-                      onPressed: () {
-                        setState(() {
-                          _favorites[index] = false;
-                        });
-                        FavoritesService()
-                            .removeFromFavorites(int.parse(productId));
-                      },
-                    ),
+      body: SmartRefresher(
+        onRefresh: _onrefresh,
+        controller: _refreshController,
+        child: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: TextField(
+                controller: _searchController,
+                decoration: InputDecoration(
+                  hintText: 'Search ingredients...',
+                  prefixIcon: const Icon(Icons.search),
+                  suffixIcon: _searchController.text.isNotEmpty
+                      ? IconButton(
+                          icon: const Icon(Icons.clear),
+                          onPressed: () {
+                            _searchController.clear();
+                            // Uncomment when implemented
+                            // _filterItems();
+                          },
+                        )
+                      : null,
+                  filled: true,
+                  fillColor: Colors.grey[100],
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                    borderSide: BorderSide.none,
                   ),
-                );
-              } else {
-                FavoritesService().removeFromFavorites(int.parse(productId));
-              }
-            },
-            onTap: () {
-              if (index % 2 == 0) {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => const GrainsDetailedScreen()),
-                );
-              }
-            },
-            price: 85000.0,
-            originalPrice: 90000.0,
-            isTopSeller: true,
-          );
-        },
+                ),
+              ),
+            ),
+            const SizedBox(height: 24),
+            Expanded(
+              child:
+                 
+                  Obx((){
+                    return controller.isLoading.value ? Center(child: CircularProgressIndicator(color: Colors.amber,),) : GridView.builder(
+                physics:
+                    NeverScrollableScrollPhysics(), // Disable grid scrolling
+                itemCount:
+                    // controller.category[sectionIndex].products!.length - 1 > 8
+                    //     ? 8
+                    //     :
+                    controller.dataList.length,
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 4,
+                  crossAxisSpacing: 4.0,
+                  mainAxisSpacing: 7.0,
+                  childAspectRatio: 1.2,
+                ),
+                itemBuilder: (context, index) {
+                  final ingredient = controller.dataList[index];
+                  return GestureDetector(
+                    onTap: () {
+                      showDialog(
+                        barrierDismissible: false,
+                        context: context,
+                        builder: (BuildContext context) {
+                          return StatefulBuilder(
+                            builder: (context, setState) {
+                              return AlertDialog(
+                                insetPadding: EdgeInsets.zero,
+                                contentPadding: EdgeInsets.only(
+                                    right: 16, left: 24, top: 0, bottom: 16),
+                                backgroundColor: Colors.grey[100],
+                                title: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Align(
+                                      alignment: Alignment.topLeft,
+                                      child: Text(
+                                        ingredient.name.toString(),
+                                        style: TextStyle(
+                                          fontSize: 14,
+                                          fontFamily: 'Roboto',
+                                          fontWeight: FontWeight.w600,
+                                        ),
+                                      ),
+                                    ),
+                                    Align(
+                                        alignment: Alignment.topRight,
+                                        child: GestureDetector(
+                                            onTap: () {
+                                              Navigator.of(context).pop();
+                                            },
+                                            child: Icon(Icons
+                                                .cancel_presentation_rounded))),
+                                  ],
+                                ),
+                                content:
+                                    // Text(
+                                    //     "This is a popup modal!"),
+                                    Container(
+                                  height: 273,
+                                  decoration: BoxDecoration(
+                                      //  color: Colors.grey[400]
+                                      ),
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    children: [
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        children: [
+                                          Align(
+                                            alignment: Alignment.topLeft,
+                                            child: Text(
+                                              "\u20A6${ingredient.price}",
+                                              style: TextStyle(
+                                                fontSize: 14,
+                                                fontFamily: 'Roboto',
+                                                fontWeight: FontWeight.w600,
+                                              ),
+                                            ),
+                                          ),
+                                          Text(
+                                            ' Per Portion',
+                                            style: TextStyle(
+                                                color: Colors.grey[400],
+                                                fontSize: 10),
+                                          ),
+                                          Spacer(),
+                                          Align(
+                                            alignment: Alignment.topRight,
+                                            child: IconButton(
+                                                onPressed: () async {
+                                                  // if (category[index]
+                                                  //     .isFavorite) {
+                                                  //   // Remove from favorites
+                                                  //   controller.removeFavorite(
+                                                  //       category[index].id!);
+                                                  //   print(
+                                                  //       'Removing from favorites');
+                                                  // }
+                                                  // var result = await controller
+                                                  //     .addFavorite(
+                                                  //         category[index].id!);
+                                                  // setState(() {
+                                                  //   //isSet = !isSet;
+                                                  //   category[index].isFavorite =
+                                                  //       !category[index]
+                                                  //           .isFavorite;
+
+                                                  //   if (!result) {
+                                                  //     category[index].isFavorite =
+                                                  //         !category[index]
+                                                  //             .isFavorite;
+                                                  //   }
+                                                  // });
+                                                },
+                                                icon:
+                                                    //  category[index].isFavorite
+                                                    //     ? Icon(Icons.favorite_rounded)
+                                                    //     :
+                                                    Icon(Icons
+                                                        .favorite_border_rounded)),
+                                          )
+                                        ],
+                                      ),
+                                      Align(
+                                        alignment: Alignment.topLeft,
+                                        child: Text(
+                                          //"${category[index].stock} Portion Available",
+                                          "${ingredient.unit} unit of measurement",
+
+                                          style: TextStyle(
+                                            color: Colors.grey[600],
+                                            fontSize: 14,
+                                            fontFamily: 'Roboto',
+                                            fontWeight: FontWeight.w400,
+                                          ),
+                                        ),
+                                      ),
+                                      Container(
+                                        height: 150,
+                                        decoration: BoxDecoration(
+                                            borderRadius: BorderRadius.all(
+                                                Radius.circular(20)),
+                                            border: Border.all(
+                                                width: 10,
+                                                color: Colors.white)),
+                                        child: Container(
+                                          // widthFactor: 10.5,
+                                          // heightFactor: 10.5,
+                                          child: ingredient.imageUrl != null
+                                              ?
+                                              //  Image.network(
+                                              //     category[index].imageUrl.toString(),
+                                              //     fit: BoxFit.cover,
+                                              //   )
+                                              ClipRRect(
+                                                  borderRadius:
+                                                      BorderRadius.circular(20),
+                                                  child: CachedNetworkImage(
+                                                    imageUrl: ingredient
+                                                        .imageUrl
+                                                        .toString(),
+                                                    placeholder:
+                                                        (context, url) =>
+                                                            const Padding(
+                                                      padding:
+                                                          EdgeInsets.all(8.0),
+                                                      child: Center(
+                                                        child:
+                                                            const SpinKitPulse(
+                                                          color: Colors
+                                                              .amber, // You can use any color
+                                                          size:
+                                                              24.0, // Customize size
+                                                        ),
+                                                      ),
+                                                    ),
+                                                    errorWidget: (context, url,
+                                                            error) =>
+                                                        const Icon(Icons.error),
+                                                    width: context.width * 0.6,
+                                                    height: 40,
+                                                    fit: BoxFit.cover,
+                                                  ))
+                                              : SvgPicture.asset(
+                                                  'assets/images/product_image.svg'),
+                                        ),
+                                      ),
+                                      SizedBox(
+                                        height: 10,
+                                      ),
+                                      Container(
+                                        padding: EdgeInsets.all(8),
+                                        height: 53,
+                                        decoration: BoxDecoration(
+                                            borderRadius: BorderRadius.all(
+                                                Radius.circular(12)),
+                                            color: Colors.amber[50]),
+                                        child: Text(
+                                            '*${ingredient.description}\n We also Offer meal prep as well!!!'),
+                                      )
+                                    ],
+                                  ),
+                                ),
+                                actions: [
+                                  Row(
+                                    spacing: context.width * 0.02,
+                                    children: [
+                                      Expanded(
+                                        child: SizedBox(
+                                            height: 40,
+                                         //   width: 110,
+                                            child: ElevatedButton(
+                                                style: ElevatedButton.styleFrom(
+                                                  elevation: 0,
+                                                  padding: EdgeInsets.symmetric(
+                                                      horizontal: 8, vertical: 6),
+                                                  backgroundColor: Colors.white,
+                                                  foregroundColor:
+                                                      Color(0xffffffff),
+                                                  shape: RoundedRectangleBorder(
+                                                    borderRadius:
+                                                        BorderRadius.circular(4),
+                                                    side: BorderSide(
+                                                        color: Colors.blueGrey),
+                                                  ),
+                                                ),
+                                                onPressed: () {
+                                                  // Navigator.of(context).pop();
+                                                  // Navigator.of(context).push(CupertinoPageRoute(
+                                                  //     builder: (context) => FoodDetailScreen(
+                                                  //           item: category[index],
+                                                  //         )));
+                                                  print(
+                                                      'Add to cart pressed ${ingredient.name}');
+                                                  //TODO: implemet popping back to ingredient in food or just ingredient
+                                                  // cartController.addToCart(CartItem(
+                                                  //   id: category[index].id!,
+                                                  //   name: category[index].name!,
+                                                  //   description: category[index]
+                                                  //           .description ??
+                                                  //       'N/A',
+                                                  //   price: double.tryParse(
+                                                  //           category[index]
+                                                  //               .price!
+                                                  //               .toString()) ??
+                                                  //       0.0,
+                                                  //   originalPrice: double.tryParse(
+                                                  //           category[index]
+                                                  //               .price!
+                                                  //               .toString()) ??
+                                                  //       0.0,
+                                                  //   ingredients: category[index]
+                                                  //       .ingredients!
+                                                  //       .map((ingredient) =>
+                                                  //           Ingredients(
+                                                  //             id: ingredient.id!,
+                                                  //             name: ingredient.name,
+                                                  //             description:
+                                                  //                 ingredient
+                                                  //                     .description,
+                                                  //             price: double.tryParse(
+                                                  //                     ingredient
+                                                  //                         .price
+                                                  //                         .toString()) ??
+                                                  //                 0.0,
+                                                  //           ))
+                                                  //       .toList(),
+                                                  // ));
+                                        if(widget.forProduct) ingredients.add(Ingredients(id: ingredient.id!,createdAt: ingredient.createdAt, description: ingredient.description, imageUrl: ingredient.imageUrl, name: ingredient.name, price: double.tryParse(ingredient.price.toString()) ?? 0.0, quantity: 1));
+                                        else myLog.log('Adding ingredient separately');
+                                        myLog.log('added to cart ${ingredients.toList()}');
+                                                  //TODO:it end here tho
+                                        
+                                                  // print(category[index].id!);
+                                                  // print(category[index].name!);
+                                                  // print(category[index].description!);
+                                                  // print(category[index].price!);
+                                                  // Add your add to cart logic here
+                                                },
+                                                child: Row(
+                                                  spacing: 4,
+                                                  children: [
+                                                    Icon(
+                                                      Icons
+                                                          .shopping_cart_outlined,
+                                                      color: Colors.blueGrey,
+                                                      size: 16,
+                                                    ),
+                                                    Text(
+                                                      'Add To Cart',
+                                                      style: TextStyle(
+                                                          color: Colors.blueGrey,
+                                                          fontSize: 12),
+                                                    )
+                                                  ],
+                                                ))),
+                                      ),
+                                   widget.forProduct ? SizedBox.shrink() : Expanded(
+                                        child: SizedBox(
+                                            height: 40,
+                                            child: ElevatedButton(
+                                              style: ElevatedButton.styleFrom(
+                                                padding: EdgeInsets.symmetric(
+                                                    horizontal: 8, vertical: 6),
+                                                backgroundColor:
+                                                    Color(0xffCC6522),
+                                                foregroundColor:
+                                                    Color(0xffffffff),
+                                                shape: RoundedRectangleBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(4),
+                                                ),
+                                              ),
+                                              onPressed: () {
+                                                Navigator.of(context).pop();
+                                                Navigator.of(context).push(
+                                                    CupertinoPageRoute(
+                                                        builder: (context) =>
+                                                            GrainsDetailedScreen(
+                                                                // item: category[index],
+                                                                )));
+                                              },
+                                              child: Text('GET INGREDIENT',
+                                                  style: TextStyle(
+                                                      color: Colors.white,
+                                                      fontSize: 12)),
+                                            )),
+                                      )
+                                    ],
+                                  )
+                                ],
+                              );
+                            },
+                          );
+                        },
+                      );
+                      // Handle category tap
+                      print('Tapped on category: ${ingredient}');
+                      myLog.log('product image ${ingredient.imageUrl}');
+                    },
+                    child: Column(
+                      children: [
+                        Container(
+                          //  margin: EdgeInsets.all(5),
+                          padding: EdgeInsets.all(
+                              ingredient.imageUrl != null ? 0 : 5),
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: Colors.grey[200],
+                            // borderRadius: BorderRadius.circular(12),
+                          ),
+                          child: Center(
+                            child: ingredient.imageUrl != null
+                                ? ClipRRect(
+                                    borderRadius: BorderRadius.circular(20),
+                                    child: CachedNetworkImage(
+                                      imageUrl: ingredient.imageUrl.toString(),
+                                      placeholder: (context, url) =>
+                                          const Padding(
+                                        padding: EdgeInsets.all(8.0),
+                                        child: Center(
+                                          child: const SpinKitPulse(
+                                            color: Colors
+                                                .amber, // You can use any color
+                                            size: 24.0, // Customize size
+                                          ),
+                                        ),
+                                      ),
+                                      errorWidget: (context, url, error) =>
+                                          const Icon(Icons.error),
+                                      width: 40,
+                                      height: 40,
+                                      fit: BoxFit.cover,
+                                    ))
+                                : SvgPicture.asset(
+                                    'assets/images/product_image.svg'),
+                          ),
+                        ),
+                        SizedBox(
+                          height: 5,
+                        ),
+                        Text(
+                          ingredient.name.toString().length > 10
+                              ? '${ingredient.name!.substring(0, 7)}...'
+                              :
+                              // softWrap: true,
+                              // maxLines:
+                              //     2, // Set to any number of lines you want
+                              // overflow: TextOverflow
+                              //     .ellipsis, // Optional: adds "..." at the end
+                              ingredient.name.toString(),
+                          style: TextStyle(
+                              fontSize: 12,
+                              fontWeight: FontWeight.w400,
+                              fontFamily: 'Roboto'),
+                        )
+                      ],
+                    ),
+                  );
+                },
+              );
+                  })
+            ),
+          ],
+        ),
       ),
     );
   }

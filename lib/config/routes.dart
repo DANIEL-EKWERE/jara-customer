@@ -155,7 +155,7 @@ class AppRoutes {
         bindings: [GrainsDetailedBindings()]),
     GetPage(
         name: grainsScreen,
-        page: () => const GrainsScreen(),
+        page: () => const GrainsScreen(forProduct: false,),
         bindings: [GrainsBindings()]),
     GetPage(
       name: homeScreen,

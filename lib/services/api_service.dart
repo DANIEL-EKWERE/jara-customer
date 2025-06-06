@@ -435,13 +435,16 @@ Future<http.Response> getCheckoutAddress() async {
 
   // Fetch ingredients
   Future<http.Response> fetchIngredients() async {
-    final url = Uri.parse('$baseUrl/fetch-product?type=ingredient');
+    final url = Uri.parse('$baseUrl/fetch/ingredients');
+    var token = await dataBase.getToken();
     _logRequest('GET', url);
     return _retryRequest(() async {
       final response = await http.get(
         url,
         headers: <String, String>{
-          'Content-Type': 'application/json; charset=UTF-8',
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+          'Authorization': 'Bearer $token'
         },
       ).timeout(
         const Duration(seconds: 10),

@@ -1,8 +1,15 @@
+import 'dart:developer' as myLog;
+import 'dart:async';
+import 'package:path_provider/path_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_sound/public/flutter_sound_player.dart';
+import 'package:flutter_sound/public/flutter_sound_recorder.dart';
 import 'package:get/get.dart';
 import 'package:jara_market/screens/cart_screen/controller/cart_controller.dart';
 import 'package:jara_market/screens/cart_screen/models/models.dart';
 import 'package:jara_market/widgets/cart_widgets/cart_ingredient.dart';
+import 'package:jara_market/widgets/message_box.dart';
+import 'package:permission_handler/permission_handler.dart';
 import '../../widgets/cart_widgets/checkout_button.dart';
 import '../../widgets/cart_widgets/payment_methods.dart';
 import '../../widgets/cart_widgets/cart_summary.dart';
@@ -19,98 +26,275 @@ class CartScreen extends StatefulWidget {
 class _CartScreenState extends State<CartScreen> {
   
 
+  // @override
+  // void initState() {
+  //   super.initState();
+  //  // _fetchCart();
+  // }
+
+    final TextEditingController _messageController = TextEditingController();
+  final FlutterSoundRecorder _recorder = FlutterSoundRecorder();
+  final FlutterSoundPlayer _player = FlutterSoundPlayer();
+
+
+
+  @override
+  void dispose() {
+    _recorder.closeRecorder();
+    _player.closePlayer();
+    super.dispose();
+  }
+
+  bool _isRecording = false;
+  bool _isPaused = false;
+  String? _recordingPath;
+  bool _isRecorderInitialized = false;
+  bool isPlayed = false;
+  bool isResumed = false;
+  bool isStoped = false;
+  String? recordingPath;
   @override
   void initState() {
     super.initState();
-   // _fetchCart();
+    _initializeRecorder();
+    // getName();
   }
 
-  // Future<void> _fetchCart() async {
-  //   try {
-  //     setState(() {
-  //       _isLoading = true;
-  //       _errorMessage = null;
-  //     });
 
-  //     final cart = await _cartService.getActiveCart();
-  //     _currentCartId = cart['id'];
+Timer? _timer;
+Duration _recordingDuration = Duration.zero;
+DateTime? _pauseStartTime;
+// bool _isPaused = false;
 
-  //     setState(() {
-  //       _isLoading = false;
-  //       _cartItems = ((cart['items'] ?? []) as List).map((item) {
-  //         final product = item['product'] ?? {};
 
-  //         // Parse price values safely
-  //         double parsePrice(dynamic value) {
-  //           if (value == null) return 0.0;
-  //           if (value is num) return value.toDouble();
-  //           if (value is String) {
-  //             try {
-  //               return double.parse(value);
-  //             } catch (e) {
-  //               return 0.0;
-  //             }
-  //           }
-  //           return 0.0;
-  //         }
 
-  //         return CartItem(
-  //           ingredients: [],
-  //           id: item.id,
-  //           name: product['name']?.toString() ?? 'Unknown Product',
-  //           description: product['description']?.toString() ?? '',
-  //           price: parsePrice(item['price']),
-  //           originalPrice: parsePrice(product['price']),
-  //           quantity: item['quantity'] ?? 1,
-  //         );
-  //       }).toList();
-  //     });
-  //   } catch (e) {
-  //     setState(() {
-  //       _isLoading = false;
-  //       _errorMessage = 'Error fetching cart: $e';
-  //     });
-  //     debugPrint(_errorMessage);
-  //   }
-  // }
+String get _durationText {
+  final minutes = _recordingDuration.inMinutes.remainder(60).toString().padLeft(2, '0');
+  final seconds = _recordingDuration.inSeconds.remainder(60).toString().padLeft(2, '0');
+  return '$minutes:$seconds';
+}
 
-  // Future<void> _updateQuantity(String itemId, int newQuantity) async {
-  //   if (_currentCartId == null) return;
 
-  //   try {
-  //     await _cartService.updateCartItem(
-  //       _currentCartId!,
-  //       int.parse(itemId),
-  //       newQuantity,
-  //     );
-  //     await _fetchCart(); // Refresh the cart
-  //   } catch (e) {
-  //     ScaffoldMessenger.of(context).showSnackBar(
-  //       const SnackBar(content: Text('Failed to update quantity')),
-  //     );
-  //   }
-  // }
 
-  // Future<void> _removeItem(String itemId) async {
-  //   if (_currentCartId == null) return;
+void _startTimer() {
+  _recordingDuration = Duration.zero;
+  _timer = Timer.periodic(Duration(seconds: 1), (_) {
+    setState(() {
+      _recordingDuration += Duration(seconds: 1);
+    });
+  });
+}
 
-  //   try {
-  //     await _cartService.removeCartItem(
-  //       _currentCartId!,
-  //       int.parse(itemId),
-  //     );
-  //     await _fetchCart(); // Refresh the cart
-  //   } catch (e) {
-  //     ScaffoldMessenger.of(context).showSnackBar(
-  //       const SnackBar(content: Text('Failed to remove item')),
-  //     );
-  //   }
-  // }
+void _pauseTimer() {
+  if (_timer != null && _timer!.isActive) {
+    _timer!.cancel();
+    _isPaused = true;
+    _pauseStartTime = DateTime.now();
+  }
+}
 
-  // double get _totalAmount {
-  //   return _cartItems.fold(
-  //       0, (sum, item) => sum + (item.price * item.quantity.value));
-  // }
+
+void _resumeTimer() {
+  if (_isPaused) {
+    _timer = Timer.periodic(Duration(seconds: 1), (_) {
+      setState(() {
+        _recordingDuration += Duration(seconds: 1);
+      });
+    });
+    _isPaused = false;
+  }
+}
+
+
+void _stopTimer() {
+  _timer?.cancel();
+  _recordingDuration = Duration.zero;
+  _isPaused = false;
+}
+
+
+  Future<void> _initializeRecorder() async {
+    final status = await Permission.microphone.request();
+    if (status != PermissionStatus.granted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Microphone permission is required for voice notes'),
+          backgroundColor: Colors.red,
+        ),
+      );
+      return;
+    }
+
+    try {
+      await _recorder.openRecorder();
+      _isRecorderInitialized = true;
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Failed to initialize recorder: $e'),
+          backgroundColor: Colors.red,
+        ),
+      );
+    }
+  }
+
+  Future<void> _startRecording() async {
+    
+    if (!_isRecorderInitialized) {
+      await _initializeRecorder();
+      if (!_isRecorderInitialized) return;
+    }
+
+
+// _recordDuration = 0;
+//   _timer?.cancel();
+//   _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
+//     setState(() {
+//       _recordDuration++;
+//     });
+//   });
+
+    try {
+      final directory = await getApplicationDocumentsDirectory();
+      _recordingPath =
+          '${directory.path}/voice_note_${DateTime.now().millisecondsSinceEpoch}.aac';
+
+      await _recorder.startRecorder(toFile: _recordingPath);
+      setState(() {
+        _isRecording = true;
+        _isPaused = false;
+        isResumed = false;
+        isStoped = false;
+        recordingPath = _recordingPath;
+      });
+
+      // Show recording indicator
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Recording started...'),
+          duration: Duration(seconds: 1),
+          backgroundColor: Colors.green,
+        ),
+      );
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Failed to start recording: $e'),
+          backgroundColor: Colors.red,
+        ),
+      );
+    }
+  }
+
+  Future<void> _pauseRecording() async {
+    if (!_isRecording) return;
+
+    try {
+      await _recorder.pauseRecorder();
+      setState(() {
+        _isPaused = true;
+        isResumed = true;
+        isStoped = false;
+        isPlayed = false;
+      });
+
+      // Show paused indicator
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Recording paused'),
+          duration: Duration(seconds: 1),
+        ),
+      );
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Failed to pause recording: $e'),
+          backgroundColor: Colors.red,
+        ),
+      );
+    }
+  }
+
+  Future<void> _resumeRecording() async {
+    if (!_isRecording || !_isPaused) return;
+
+    try {
+      await _recorder.resumeRecorder();
+      setState(() {
+        _isPaused = false;
+      });
+
+      // Show resumed indicator
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Recording resumed'),
+          duration: Duration(seconds: 1),
+        ),
+      );
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Failed to resume recording: $e'),
+          backgroundColor: Colors.red,
+        ),
+      );
+    }
+  }
+
+  Future<void> _stopRecording() async {
+    if (!_isRecording) return;
+//_timer?.cancel();
+    try {
+      final recordingResult = await _recorder.stopRecorder();
+      setState(() {
+        _isRecording = false;
+        _isPaused = false;
+        isResumed = false;
+        isStoped = true;
+        isPlayed = true;
+      });
+
+      // Show success message with recording path
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: const Text('Voice note recorded successfully'),
+          action: SnackBarAction(
+            label: 'PLAY',
+            onPressed: () {
+              // Implement playback functionality
+              _playRecording(recordingResult);
+            },
+          ),
+        ),
+      );
+
+      // Here you would typically upload the voice note to your server
+      // _uploadVoiceNote(recordingResult);
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Failed to stop recording: $e'),
+          backgroundColor: Colors.red,
+        ),
+      );
+    }
+  }
+
+  Future<void> _playRecording(String? path) async {
+    if (path == null) return;
+
+    // Implement playback functionality
+    // This would typically use FlutterSoundPlayer
+
+    await _player.openPlayer();
+    await _player.startPlayer(fromURI: path);
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text('Playing voice note...'),
+        duration: Duration(seconds: 2),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -145,7 +329,7 @@ class _CartScreenState extends State<CartScreen> {
                                   return ListView.separated(
                                     padding: const EdgeInsets.symmetric(
                                         horizontal: 16),
-                                    itemCount: controller.cartItems.length + 1,
+                                    itemCount: controller.cartItems.length + 2,
                                     separatorBuilder: (context, index) =>
                                         const Divider(
                                       height: 0.5,
@@ -211,6 +395,53 @@ class _CartScreenState extends State<CartScreen> {
                                             ],
                                           ),
                                         );
+                                      }else if(index ==
+                                          controller.cartItems.length + 1){
+
+return MessageBox(
+                    controller: _messageController,
+                    hintText: 'Add a message...',
+                    isPaused: _isPaused,
+                    isPlayed: isPlayed,
+                    isResumed: isResumed,
+                    isStoped: isStoped,
+                    isRecording: _isRecording,
+                    filePath: recordingPath,
+                    recordingDuration: _durationText,
+                    onVoicePressedDelete: (){
+                      setState(() {
+                        recordingPath = '';
+                         _stopTimer();
+                         _stopRecording(); // Optional depending on your logic
+                      });
+                    },
+                    onVoicePressedPlay: () {
+                      _playRecording(recordingPath);
+                    },
+                    onVoicePressedStop: () {
+                      _stopRecording();
+                    },
+                    onVoicePressed: () {
+                      print('starting');
+                      if (_isRecording) {
+                        myLog.log('is Recording');
+                        if (_isPaused) {
+                          myLog.log('is paused new resuming');
+                          _resumeRecording();
+                           _resumeTimer();
+                        } else {
+                          myLog.log('it was playing now resuming');
+                          _pauseRecording();
+                            _pauseTimer();
+                        }
+                      } else {
+                        myLog.log('stoping rcorder');
+                        _startRecording();
+                         _startTimer();
+                      }
+                    },
+                  );
+                  //const SizedBox(height: 24),
                                       }
                                       final item = controller.cartItems[index];
                                       final RxList<Ingredients> ingredients =

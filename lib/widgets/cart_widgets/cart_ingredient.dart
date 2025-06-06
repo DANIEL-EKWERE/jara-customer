@@ -1,8 +1,11 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:jara_market/screens/cart_screen/controller/cart_controller.dart';
+import 'package:jara_market/screens/cart_screen/models/models.dart';
+import 'package:jara_market/screens/grains_screen/grains_screen.dart';
 import 'package:jara_market/screens/cart_screen/models/models.dart';
 
 import 'package:jara_market/widgets/custom_text_field.dart';
@@ -64,20 +67,21 @@ class _CartItemCardState extends State<CartItemCard1> {
       : widget.basePrice * widget.quantity.value;
 
   void _showDeleteConfirmationDialog(
-      BuildContext context, int itemId, int ingredientId) {
+      BuildContext context, int itemId, int ingredientId,String name) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
+          backgroundColor: Colors.white,
           title: const Text('Delete Item'),
-          content: const Text(
-              'Are you sure you want to delete this item from your cart?'),
+          content:  Text(
+              'Are you sure you want to delete ${name.toUpperCase()} from your cart?'),
           actions: [
             TextButton(
               onPressed: () {
                 Navigator.of(context).pop(); // Close the dialog
               },
-              child: const Text('Cancel'),
+              child: const Text('Cancel', style: TextStyle(color: Colors.black)),
             ),
             TextButton(
               onPressed: () {
@@ -97,6 +101,7 @@ class _CartItemCardState extends State<CartItemCard1> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
+          backgroundColor: Colors.white,
           title: const Text('Delete Item'),
           content: const Text(
               'Are you sure you want to delete this item from your cart?'),
@@ -105,7 +110,8 @@ class _CartItemCardState extends State<CartItemCard1> {
               onPressed: () {
                 Navigator.of(context).pop(); // Close the dialog
               },
-              child: const Text('Cancel'),
+              child:
+                  const Text('Cancel', style: TextStyle(color: Colors.black)),
             ),
             TextButton(
               onPressed: () {
@@ -113,6 +119,41 @@ class _CartItemCardState extends State<CartItemCard1> {
                 controller.removeFromCart(itemId);
               },
               child: const Text('Delete', style: TextStyle(color: Colors.red)),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void _showAddConfirmationDialog1(BuildContext context, String name) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          backgroundColor: Colors.white,
+          title: const Text('Add Item'),
+          content: Text(
+              'Do you want to add more ingredients to ${name.toUpperCase()} in your cart?'),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(); // Close the dialog
+              },
+              child:
+                  const Text('Cancel', style: TextStyle(color: Colors.black)),
+            ),
+            TextButton(
+              onPressed: () async {
+                Navigator.of(context).pop(); // Close the dialog
+               // controller.removeFromCart(itemId);
+               Map<String, List<Ingredients>> list = await Navigator.push(context, CupertinoPageRoute(builder: (context)=> GrainsScreen(forProduct: true,)));
+               List<Ingredients> result = list['result']!;
+               if (result != null || result != []){
+                widget.ingredients.addAll(result.toList());
+               }
+              },
+              child: const Text('Add', style: TextStyle(color: Colors.green)),
             ),
           ],
         );
@@ -128,7 +169,7 @@ class _CartItemCardState extends State<CartItemCard1> {
         if (widget.ingredients.isNotEmpty)
           Container(
               width: double.infinity,
-              height: 73,
+              height: 90,
               decoration: BoxDecoration(
                 color: Colors.grey.shade200,
                 borderRadius: BorderRadius.circular(5),
@@ -136,11 +177,33 @@ class _CartItemCardState extends State<CartItemCard1> {
               child: Column(
                 children: [
                   const SizedBox(height: 10),
-                  Center(
-                      child: Text(
-                    widget.name,
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                  )),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        "   ${widget.ingredients.length} ingredients",
+                        style: TextStyle(
+                          color: Colors.grey[500],
+                          fontSize: 14,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                      Text(
+                        widget.name,
+                        style: TextStyle(
+                            fontSize: 16, fontWeight: FontWeight.bold),
+                      ),
+                      IconButton(
+                        icon: Icon(
+                          Icons.add,
+                          weight: 5,
+                          color: Colors.green,
+                        ), //SvgPicture.asset('assets/images/add.svg'),
+                        onPressed: () =>
+                            _showAddConfirmationDialog1(context, widget.name),
+                      ),
+                    ],
+                  ),
                   Row(
                     children: [
                       const SizedBox(width: 10),
@@ -160,7 +223,7 @@ class _CartItemCardState extends State<CartItemCard1> {
                         onPressed: () =>
                             _showDeleteConfirmationDialog1(context, widget.id),
                       ),
-                      const SizedBox(width: 10),
+                      //const SizedBox(width: 1),
                     ],
                   )
                 ],
@@ -345,7 +408,7 @@ class _CartItemCardState extends State<CartItemCard1> {
                                 onPressed: () => _showDeleteConfirmationDialog(
                                     context,
                                     widget.id,
-                                    widget.ingredients[index].id),
+                                    widget.ingredients[index].id,widget.ingredients[index].name!),
                               ),
                               Container(
                                 decoration: BoxDecoration(

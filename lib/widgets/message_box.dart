@@ -1,7 +1,8 @@
 // lib/widgets/message_box.dart
+import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:flutter/material.dart';
 
-class MessageBox extends StatelessWidget {
+class MessageBox extends StatefulWidget {
   final TextEditingController controller;
   final String? hintText;
   final VoidCallback? onVoicePressed;
@@ -34,7 +35,43 @@ class MessageBox extends StatelessWidget {
   }) : super(key: key);
 
   @override
+  State<MessageBox> createState() => _MessageBoxState();
+}
+
+class _MessageBoxState extends State<MessageBox> {
+  @override
   Widget build(BuildContext context) {
+
+    void _showDeleteConfirmationDialog1(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          backgroundColor: Colors.white,
+          title: const Text('Delete Voice Note'),
+          content: const Text(
+              'Are you sure you want to delete this Voice Note?'),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(); // Close the dialog
+              },
+              child: const Text('Cancel', style: TextStyle(color: Colors.black)),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(); // Close the dialog
+                // controller.removeFromCart(itemId);
+                widget.onVoicePressedDelete;
+              },
+              child: const Text('Delete', style: TextStyle(color: Colors.red)),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -66,83 +103,149 @@ class MessageBox extends StatelessWidget {
           ),
           child: Stack(
             children: [
-              TextField(
-                controller: controller,
-                maxLines: 5,
-                decoration: InputDecoration(
-                  hintText: hintText,
-                  border: InputBorder.none,
-                  contentPadding: const EdgeInsets.all(16),
-                ),
-              ),
-           filePath != null ?   Positioned(
-                  bottom: 8,
-                  left: 8,
-                  child: Row(
-                    children: [
-                      IconButton(
-                        icon: Container(
-                          padding: const EdgeInsets.all(8),
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: Colors.grey.shade200,
+              // TextField(
+              //   controller: controller,
+              //   maxLines: 5,
+              //   decoration: InputDecoration(
+              //     hintText: hintText,
+              //     border: InputBorder.none,
+              //     contentPadding: const EdgeInsets.all(16),
+              //   ),
+              // ),
+               // Animated hintText (only if empty)
+    if (widget.controller.text.isEmpty)
+                          Padding(
+                            padding: const EdgeInsets.all(16),
+                            child: AnimatedTextKit(
+                              repeatForever: true,
+                              animatedTexts: [
+                                FadeAnimatedText(
+                                  duration: Duration(milliseconds: 5000),
+                                  fadeOutBegin: 0.8,
+                                  'Add a message...',
+                                  textStyle: TextStyle(color: Colors.grey.shade400),
+                                ),
+                                FadeAnimatedText(
+                                  duration: Duration(milliseconds: 5000),
+                                  fadeOutBegin: 0.8,
+                                  'You can give a description of what you want',
+                                  textStyle: TextStyle(color: Colors.grey.shade400),
+                                ),
+                                 FadeAnimatedText(
+                                  duration: Duration(milliseconds: 5000),
+                                  fadeOutBegin: 0.8,
+                                  'Need to specific type of ingredient?',
+                                  textStyle: TextStyle(color: Colors.grey.shade400),
+                                ),
+                                FadeAnimatedText(
+                                  duration: Duration(milliseconds: 5000),
+                                  fadeOutBegin: 0.8,
+                                  'You can tell us about!!!',
+                                  textStyle: TextStyle(color: Colors.grey.shade400),
+                                ),
+                                FadeAnimatedText(
+                                  duration: Duration(milliseconds: 5000),
+                                  fadeOutBegin: 0.8,
+                                  'Or better still leave a voice Note for us.',
+                                  textStyle: TextStyle(color: Colors.grey.shade400),
+                                ),
+                                FadeAnimatedText(
+                                  duration: Duration(milliseconds: 5000),
+                                  fadeOutBegin: 0.8,
+                                  'Thank you, Happy shopping in advance.',
+                                  textStyle: TextStyle(color: Colors.grey.shade400),
+                                ),
+                              ],
+                            ),
                           ),
-                          child: const Icon(
-                            Icons.play_arrow,
-                            color: Colors.grey,
-                            size: 20,
+                        TextField(
+                          onChanged: (value) {
+                            setState((){});
+                          },
+                          controller: widget.controller,
+                          maxLines: 5,
+                          decoration: const InputDecoration(
+                            border: InputBorder.none,
+                            contentPadding: EdgeInsets.all(16),
                           ),
                         ),
-                        onPressed: onVoicePressedPlay,
-                      ),
-                      IconButton(
-                        icon: Container(
-                          padding: const EdgeInsets.all(8),
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: Colors.grey.shade200,
+                    
+                    
+              (widget.filePath != null && widget.filePath!.isNotEmpty)
+                  ? Positioned(
+                      bottom: 8,
+                      left: 8,
+                      child: Row(
+                        children: [
+                          IconButton(
+                            icon: Container(
+                              padding: const EdgeInsets.all(8),
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: Colors.grey.shade200,
+                              ),
+                              child: const Icon(
+                                Icons.play_arrow,
+                                color: Colors.grey,
+                                size: 20,
+                              ),
+                            ),
+                            onPressed: widget.onVoicePressedPlay,
                           ),
-                          child: const Icon(
-                            Icons.delete,
-                            color: Colors.grey,
-                            size: 20,
+                          IconButton(
+                            icon: Container(
+                              padding: const EdgeInsets.all(8),
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: Colors.grey.shade200,
+                              ),
+                              child: const Icon(
+                                Icons.delete,
+                                color: Colors.grey,
+                                size: 20,
+                              ),
+                            ),
+                            onPressed: (){
+                              _showDeleteConfirmationDialog1(context);
+                            }   //widget.onVoicePressedDelete,
                           ),
-                        ),
-                        onPressed: onVoicePressedDelete,
-                      ),
-
-
-isRecording?
- Row(children: [
-  AnimatedOpacity(
-  duration: const Duration(milliseconds: 500),
-  opacity: isRecording ? 1.0 : 0.0,
-  child: Container(
-    width: 8,
-    height: 8,
-    decoration: BoxDecoration(
-      shape: BoxShape.circle,
-      color: Colors.red,
-    ),
-  ),
-),
-        Text(
-          recordingDuration ?? '00:00', // <- Replace with actual timer text from parent widget
-          style: const TextStyle(
-            color: Colors.red,
-            fontWeight: FontWeight.bold,
-          ),
-        )
- ],) : SizedBox.shrink()
-
-                    ],
-                  )): SizedBox.shrink(),
+                          widget.isRecording
+                              ? Row(
+                                  children: [
+                                    AnimatedOpacity(
+                                      duration:
+                                          const Duration(milliseconds: 500),
+                                      opacity: widget.isRecording ? 1.0 : 0.0,
+                                      child: Container(
+                                        width: 8,
+                                        height: 8,
+                                        decoration: BoxDecoration(
+                                          shape: BoxShape.circle,
+                                          color: Colors.red,
+                                        ),
+                                      ),
+                                    ),
+                                    SizedBox(width:5),
+                                    Text(
+                                      widget.recordingDuration ??
+                                          '00:00', // <- Replace with actual timer text from parent widget
+                                      style: const TextStyle(
+                                        color: Colors.red,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    )
+                                  ],
+                                )
+                              : SizedBox.shrink()
+                        ],
+                      ))
+                  : SizedBox.shrink(),
               Positioned(
                 right: 8,
                 bottom: 8,
                 child: Row(
                   children: [
-                    isRecording
+                    widget.isRecording
                         ? IconButton(
                             icon: Container(
                               padding: const EdgeInsets.all(8),
@@ -156,38 +259,40 @@ isRecording?
                                 size: 20,
                               ),
                             ),
-                            onPressed: onVoicePressedStop,
+                            onPressed: widget.onVoicePressedStop,
                           )
                         : SizedBox.shrink(),
-                  isRecording ? IconButton(
-                      icon: Container(
-                        padding: const EdgeInsets.all(8),
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: Colors.grey.shade200,
-                        ),
-                        child:  Icon(
-                        isPaused ? Icons.play_circle : Icons.pause,
-                          color: Colors.grey,
-                          size: 20,
-                        ),
-                      ),
-                      onPressed: onVoicePressed,
-                    )  : IconButton(
-                      icon: Container(
-                        padding: const EdgeInsets.all(8),
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: Colors.grey.shade200,
-                        ),
-                        child: const Icon(
-                          Icons.mic,
-                          color: Colors.grey,
-                          size: 20,
-                        ),
-                      ),
-                      onPressed: onVoicePressed,
-                    ),
+                    widget.isRecording
+                        ? IconButton(
+                            icon: Container(
+                              padding: const EdgeInsets.all(8),
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: Colors.grey.shade200,
+                              ),
+                              child: Icon(
+                                widget.isPaused ? Icons.play_circle : Icons.pause,
+                                color: Colors.grey,
+                                size: 20,
+                              ),
+                            ),
+                            onPressed: widget.onVoicePressed,
+                          )
+                        : IconButton(
+                            icon: Container(
+                              padding: const EdgeInsets.all(8),
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: Colors.grey.shade200,
+                              ),
+                              child: const Icon(
+                                Icons.mic,
+                                color: Colors.grey,
+                                size: 20,
+                              ),
+                            ),
+                            onPressed: widget.onVoicePressed,
+                          ),
                   ],
                 ),
               ),
