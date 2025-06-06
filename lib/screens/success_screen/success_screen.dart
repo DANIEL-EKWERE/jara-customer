@@ -93,7 +93,7 @@ class _SuccessScreenState extends State<SuccessScreen> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       SizedBox(
-                        height: 40,
+                        height: 80,
                         width: 150,
                         child: ElevatedButton.icon(
                           onPressed: () {
@@ -125,7 +125,7 @@ class _SuccessScreenState extends State<SuccessScreen> {
                       ),
                       const SizedBox(width: 15),
                       SizedBox(
-                        height: 40,
+                        height: 80,
                         width: 150,
                         child: ElevatedButton(
                           onPressed: () {
