@@ -33,7 +33,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   @override
   void initState() {
     super.initState();
-    controller.fetchUserProfile();
+    controller.fetchUserProfileByCondition();
   }
 
   

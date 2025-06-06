@@ -30,8 +30,15 @@ RxList<Ingredient> ingredient = <Ingredient>[].obs;
   @override
   void onInit() {
     super.onInit();
-    fetchFoodCategories();
+    fetchFoodCategoriesByCondition();
   //  fetchFoods();
+  }
+
+  fetchFoodCategoriesByCondition(){
+    if(category.isNotEmpty){
+      return;
+    }
+    fetchFoodCategories();
   }
 
   // void filterFoodCategories(String query) {

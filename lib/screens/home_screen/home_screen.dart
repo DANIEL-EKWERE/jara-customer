@@ -99,7 +99,7 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     super.initState();
     getUserName();
-    controller.fetchFoodCategories();
+    controller.fetchFoodCategoriesByCondition();
     // Uncomment this when you implement filtering
     // _searchController.addListener(_filterItems);
     carouselController = CarouselSliderController();

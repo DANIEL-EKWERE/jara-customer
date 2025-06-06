@@ -27,6 +27,12 @@ class ProfileController extends GetxController {
 
   RxString? errorMessage = ''.obs;
 
+void fetchUserProfileByCondition() {
+  // Replace 'id' with a field that is always present in ProfileData and indicates data presence
+  if (data.id != null) return;
+  fetchUserProfile();
+}
+
   Future<void> fetchUserProfile() async {
     isLoading.value = true;
     try {

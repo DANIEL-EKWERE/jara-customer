@@ -23,6 +23,7 @@ class GrainsScreen extends StatefulWidget {
 
 class _GrainsScreenState extends State<GrainsScreen> {
 List<Ingredients> ingredients = [];
+List<Ingredients> ingredientShoping = [];
   @override
   void initState() {
     super.initState();
@@ -191,45 +192,16 @@ print('object');
                                             alignment: Alignment.topRight,
                                             child: IconButton(
                                                 onPressed: () async {
-                                                  // if (category[index]
-                                                  //     .isFavorite) {
-                                                  //   // Remove from favorites
-                                                  //   controller.removeFavorite(
-                                                  //       category[index].id!);
-                                                  //   print(
-                                                  //       'Removing from favorites');
-                                                  // }
-                                                  // var result = await controller
-                                                  //     .addFavorite(
-                                                  //         category[index].id!);
-                                                  // setState(() {
-                                                  //   //isSet = !isSet;
-                                                  //   category[index].isFavorite =
-                                                  //       !category[index]
-                                                  //           .isFavorite;
-
-                                                  //   if (!result) {
-                                                  //     category[index].isFavorite =
-                                                  //         !category[index]
-                                                  //             .isFavorite;
-                                                  //   }
-                                                  // });
                                                 },
                                                 icon:
-                                                    //  category[index].isFavorite
-                                                    //     ? Icon(Icons.favorite_rounded)
-                                                    //     :
-                                                    Icon(Icons
-                                                        .favorite_border_rounded)),
+                                                    Icon(Icons.favorite_border_rounded)),
                                           )
                                         ],
                                       ),
                                       Align(
                                         alignment: Alignment.topLeft,
                                         child: Text(
-                                          //"${category[index].stock} Portion Available",
                                           "${ingredient.unit} unit of measurement",
-
                                           style: TextStyle(
                                             color: Colors.grey[600],
                                             fontSize: 14,
@@ -251,10 +223,6 @@ print('object');
                                           // heightFactor: 10.5,
                                           child: ingredient.imageUrl != null
                                               ?
-                                              //  Image.network(
-                                              //     category[index].imageUrl.toString(),
-                                              //     fit: BoxFit.cover,
-                                              //   )
                                               ClipRRect(
                                                   borderRadius:
                                                       BorderRadius.circular(20),
@@ -370,8 +338,21 @@ print('object');
                                                   //       .toList(),
                                                   // ));
                                         if(widget.forProduct) ingredients.add(Ingredients(id: ingredient.id!,createdAt: ingredient.createdAt, description: ingredient.description, imageUrl: ingredient.imageUrl, name: ingredient.name, price: double.tryParse(ingredient.price.toString()) ?? 0.0, quantity: 1));
-                                        else myLog.log('Adding ingredient separately');
+                                        else cartController.addToCart(CartItem(id: 100, name: 'Ingredients', description: 'ingredient shoping', price: 0.0, ingredients: ingredientShoping.map((e){
+                                          return Ingredients(
+                                            id: e.id,
+                                            createdAt: e.createdAt,
+                                            description: e.description,
+                                            imageUrl: e.imageUrl,
+                                            name: e.name,
+                                            price: e.price,
+                                            quantity: e.quantity,
+                                            unit: e.unit,
+                                          );
+                                        }).toList())); //add(ingredient)));
                                         myLog.log('added to cart ${ingredients.toList()}');
+                                        Get.snackbar('Success', 'Item added to cart',colorText: Colors.white,backgroundColor: Colors.green);
+                                        Navigator.pop(context);
                                                   //TODO:it end here tho
                                         
                                                   // print(category[index].id!);

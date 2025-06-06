@@ -178,21 +178,26 @@ class _CartItemCardState extends State<CartItemCard1> {
                 children: [
                   const SizedBox(height: 10),
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
-                      Text(
-                        "   ${widget.ingredients.length} ingredients",
+                      
+                      Obx((){
+                        return Text(
+                        "${widget.ingredients.length} ingredients",
                         style: TextStyle(
                           color: Colors.grey[500],
                           fontSize: 14,
                           fontWeight: FontWeight.w500,
                         ),
-                      ),
+                      );
+                      }),
+                      SizedBox(width: 15,),
                       Text(
                         widget.name,
                         style: TextStyle(
                             fontSize: 16, fontWeight: FontWeight.bold),
                       ),
+                      SizedBox(width: 15,),
                       IconButton(
                         icon: Icon(
                           Icons.add,
@@ -223,7 +228,7 @@ class _CartItemCardState extends State<CartItemCard1> {
                         onPressed: () =>
                             _showDeleteConfirmationDialog1(context, widget.id),
                       ),
-                      //const SizedBox(width: 1),
+                      const SizedBox(width: 3),
                     ],
                   )
                 ],

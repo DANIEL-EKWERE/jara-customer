@@ -26,7 +26,7 @@ late CartController cartController;
 
   initState() {
     super.initState();
-    controller.fetchFoodCategories();
+    controller.fetchFoodCategoriesByCondition();
     cartController = Get.put(CartController());
     //controller.fetchFoods();
   }
