@@ -13,6 +13,7 @@ WalletController walletController = Get.put(WalletController());
 class CheckoutButton extends StatefulWidget {
   final bool isEnabled;
   final double totalAmount;
+  final String? path;
 
   final bool loading;
   final List<CartItem> cartItems;
@@ -22,6 +23,7 @@ class CheckoutButton extends StatefulWidget {
       required this.isEnabled,
       required this.totalAmount,
       required this.cartItems,
+      this.path,
       required this.loading});
 
   @override
@@ -57,6 +59,7 @@ class _CheckoutButtonState extends State<CheckoutButton> {
                         cartItems: widget.cartItems,
                         orderAddress: data,
                         balance: balance,
+                        path: widget.path!,
                       ),
                     ),
                   );
@@ -72,6 +75,7 @@ class _CheckoutButtonState extends State<CheckoutButton> {
                         cartItems: widget.cartItems,
                         orderAddress: {},
                         balance: balance,
+                        path: widget.path!,
                       ),
                     ),
                   );

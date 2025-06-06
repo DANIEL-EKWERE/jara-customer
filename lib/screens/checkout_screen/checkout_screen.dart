@@ -25,13 +25,14 @@ class CheckoutScreen extends StatefulWidget {
   final List<CartItem> cartItems;
   final Map<String, dynamic> orderAddress;
   final double balance;
+  final String path;
 
   const CheckoutScreen({
     Key? key,
     required this.totalAmount,
     required this.cartItems,
     required this.orderAddress,
-    required this.balance,
+    required this.balance, required this.path,
   }) : super(key: key);
 
   @override
@@ -379,6 +380,23 @@ void _stopTimer() {
                     },
                   ),
                   const SizedBox(height: 24),
+                  IconButton(
+                            icon: Container(
+                              padding: const EdgeInsets.all(8),
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: Colors.grey.shade200,
+                              ),
+                              child: const Icon(
+                                Icons.play_arrow,
+                                color: Colors.grey,
+                                size: 20,
+                              ),
+                            ),
+                            onPressed: (){
+                              _playRecording(widget.path);
+                            },
+                          ),
                 //  ElevatedButton(onPressed: (){print('starting');_startRecording();}, child: Text('start recode')),
                   // MessageBox(
                   //   controller: _messageController,
@@ -423,7 +441,7 @@ void _stopTimer() {
                   //     }
                   //   },
                   // ),
-                  // const SizedBox(height: 24),
+                  const SizedBox(height: 24),
                   SummaryBreakdown(
                     mealPrep: cartController.mealPrepPrice,
                     itemsTotal: widget.totalAmount,
