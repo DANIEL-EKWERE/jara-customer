@@ -631,10 +631,15 @@ class _CartScreenState extends State<CartScreen> {
                                                       children: [
                                                         const SizedBox(
                                                             width: 10),
-                                                        //Obx(() {
-                                                        //return
+                                                        Obx(() {
+                                                        return
                                                         Text(
-                                                          '0.0', // '\u20A6${controller.ingredientList.fold(0.0, (sum, ingredient) => sum + ingredient.price! * 0.0).toString()}',
+                                                          '\u20A6${controller.ingredientList.fold<double>(0.0, (sum, ingredient) {
+    final price = double.tryParse(ingredient.price.toString()) ?? 0.0;
+    final quantity = ingredient.quantity?.value ?? 1;
+    return sum + (price * quantity);
+  })}',
+
                                                           style: TextStyle(
                                                             color: Colors
                                                                 .grey[500],
@@ -642,8 +647,8 @@ class _CartScreenState extends State<CartScreen> {
                                                             fontWeight:
                                                                 FontWeight.w500,
                                                           ),
-                                                        ),
-                                                        //   }),
+                                                        );
+                                                       }),
                                                         const Spacer(),
                                                         IconButton(
                                                             icon: SvgPicture.asset(

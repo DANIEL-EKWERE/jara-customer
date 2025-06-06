@@ -38,7 +38,7 @@ class Data {
   int? id;
   String? name;
   String? description;
-  dynamic? price;
+  double? price;
   String? unit;
   String? stock;
   String? imageUrl;
@@ -59,7 +59,7 @@ class Data {
     id = json['id'];
     name = json['name'];
     description = json['description'];
-    price = json['price'];
+    price = double.tryParse(json['price'] ?? 0.0);
     unit = json['unit'];
     stock = json['stock'];
     imageUrl = json['image_url'];

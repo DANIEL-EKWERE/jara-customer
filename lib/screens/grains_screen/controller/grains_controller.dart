@@ -12,7 +12,7 @@ class GrainsController extends GetxController {
   RxBool isLoading = false.obs;
 
   IngredientResorceModel ingredientResorceModel = IngredientResorceModel(message: 'something went wrong',data: []);
-  Data data = Data(createdAt: '',description: '',id: -1,imageUrl: '',name: '',price: '',stock: '',unit: '');
+  Data data = Data(createdAt: '',description: '',id: -1,imageUrl: '',name: '',price: 0.0,stock: '',unit: '');
   RxList<Data> dataList = <Data>[].obs;
 @override
 onInit(){
