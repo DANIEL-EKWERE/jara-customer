@@ -4,14 +4,15 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jara_market/screens/cart_screen/models/models.dart';
 import 'package:jara_market/services/api_service.dart';
-
+import 'package:jara_market/screens/grains_screen/models/models.dart';
 
 ApiService _apiService = ApiService(Duration(seconds: 60 * 5));
 class CartController extends GetxController {
   
 
   RxList<CartItem> cartItems = <CartItem>[].obs;
-
+  RxList<Data> ingredientList = <Data>[].obs;
+  RxBool isSet = false.obs;
    RxDouble? itemsCost;
   var mealCost = 0.0.obs;
   var serviceChargeValue = 0.0.obs;
@@ -53,14 +54,50 @@ class CartController extends GetxController {
    // print('Item added to cart: ${item.name}, Quantity: ${item.quantity}');
   }
 
+    void addIngredientToCart(Data item) {
+    print(item.name);
+    int index = ingredientList.indexWhere((ingredientItem) => ingredientItem.id == item.id);
+    print('Index found: $index');
+    if (index == -1) {
+      ingredientList.add(item);
+      print(ingredientList.length);
+      isSet.value = true;
+      print('Item added to cart: ${item.name}, Quantity: ${item.quantity}');
+    } else {
+      if (ingredientList[index].stock != null) {
+        ingredientList[index].quantity = ingredientList[index].quantity! + item.quantity!.value;
+      }
+      print(ingredientList.length);
+      print(ingredientList[index].quantity);
+    }
+   // print('Item added to cart: ${item.name}, Quantity: ${item.quantity}');
+  }
+
   void removeFromCart(int itemId) {
     print('removing $itemId');
     cartItems.removeWhere((item) => item.id == itemId);
   }
 
+    void removeIngredientFromCart(int itemId) {
+    print('removing $itemId');
+    ingredientList.removeWhere((item) => item.id == itemId);
+  }
+
   void updateItemQuantity(int itemId, int quantity) {
     print(quantity);
     int index = cartItems.indexWhere((item) => item.id == itemId);
+    if (index != -1) {
+      if (quantity <= 0) {
+        cartItems.removeAt(index);
+      } else {
+        cartItems[index].quantity.value = quantity;
+      }
+    }
+  }
+
+    void updateIngredientQuantity(int itemId, int quantity) {
+    print(quantity);
+    int index = ingredientList.indexWhere((item) => item.id == itemId);
     if (index != -1) {
       if (quantity <= 0) {
         cartItems.removeAt(index);

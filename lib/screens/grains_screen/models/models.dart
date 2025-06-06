@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:get/get_rx/src/rx_types/rx_types.dart';
+
 IngredientResorceModel ingredientResorceModelFromJson(String str) =>
     IngredientResorceModel.fromJson(jsonDecode(str));
 
@@ -36,11 +38,12 @@ class Data {
   int? id;
   String? name;
   String? description;
-  String? price;
+  dynamic? price;
   String? unit;
   String? stock;
   String? imageUrl;
   String? createdAt;
+  RxInt? quantity;
 
   Data(
       {this.id,
@@ -50,7 +53,7 @@ class Data {
       this.unit,
       this.stock,
       this.imageUrl,
-      this.createdAt});
+      this.createdAt,quatity = 1} );
 
   Data.fromJson(Map<String, dynamic> json) {
     id = json['id'];

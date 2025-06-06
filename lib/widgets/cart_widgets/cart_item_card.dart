@@ -3,7 +3,8 @@ import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 // import 'package:jara_market/screens/home_screen/models/models.dart';
-import 'package:jara_market/screens/cart_screen/models/models.dart';
+// import 'package:jara_market/screens/cart_screen/models/models.dart';
+import 'package:jara_market/screens/grains_screen/models/models.dart';
 import 'package:jara_market/widgets/custom_text_field.dart';
 
 class CartItemCard extends StatefulWidget {
@@ -12,6 +13,7 @@ class CartItemCard extends StatefulWidget {
   final double basePrice;
   final double? originalPrice;
   final RxInt quantity;
+  final String ingredientLenght;
   // final Function(int) addQuantity;
   // final Function(int) removeQuantity;
   final Function() addQuantity;
@@ -20,10 +22,11 @@ class CartItemCard extends StatefulWidget {
   final TextEditingController textController;
   final bool isSelected;
   final Function(bool?) onCheckboxChanged;
-  final List<Ingredients> ingredients;
+  final List<Data> ingredients;
 
   const CartItemCard({
     Key? key,
+    required this.ingredientLenght,
     required this.name,
     required this.unit,
     required this.basePrice,
@@ -87,6 +90,7 @@ class _CartItemCardState extends State<CartItemCard> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [

@@ -338,18 +338,42 @@ print('object');
                                                   //       .toList(),
                                                   // ));
                                         if(widget.forProduct) ingredients.add(Ingredients(id: ingredient.id!,createdAt: ingredient.createdAt, description: ingredient.description, imageUrl: ingredient.imageUrl, name: ingredient.name, price: double.tryParse(ingredient.price.toString()) ?? 0.0, quantity: 1));
-                                        else cartController.addToCart(CartItem(id: 100, name: 'Ingredients', description: 'ingredient shoping', price: 0.0, ingredients: ingredientShoping.map((e){
-                                          return Ingredients(
-                                            id: e.id,
-                                            createdAt: e.createdAt,
-                                            description: e.description,
-                                            imageUrl: e.imageUrl,
-                                            name: e.name,
-                                            price: e.price,
-                                            quantity: e.quantity,
-                                            unit: e.unit,
-                                          );
-                                        }).toList())); //add(ingredient)));
+                                        else cartController.addIngredientToCart(ingredient );
+                                        // ingredientList.map((e) {
+                                        //   Ingredients(id: DateTime.now().millisecondsSinceEpoch,
+                                        //   price: e.price,
+                                        //   description: e.description,
+                                        //   name: e.name,
+                                        //   );
+                                        // });
+                                        // cartController.addToCart(CartItem(id: 110, name: 'Ingredients',originalPrice: 0.0, description: 'ingredient shoping', price: 0.0, ingredients: ingredientShoping.map((e){
+                                        //   return Ingredients(
+                                        //     id: e.id,
+                                        //     //createdAt: e.createdAt,
+                                        //     description: e.description,
+                                        //     //imageUrl: e.imageUrl,
+                                        //     name: e.name,
+                                        //     price: e.price,
+                                        //    // quantity: e.quantity,
+                                        //    // unit: e.unit,
+                                        //   );
+                                        // }).toList())); //add(ingredient)));
+                                        // cartController.addToCart(CartItem(
+                                        //                                               id: category[index].id!,
+                                        //                                               name: category[index].name!,
+                                        //                                               description: category[index].description ?? 'N/A',
+                                        //                                               price: double.tryParse(category[index].price!.toString()) ?? 0.0,
+                                        //                                               originalPrice: double.tryParse(category[index].price!.toString()) ?? 0.0,
+                                        //                                               ingredients: category[index]
+                                        //                                                   .ingredients!
+                                        //                                                   .map((ingredient) => Ingredients(
+                                        //                                                         id: ingredient.id!,
+                                        //                                                         name: ingredient.name,
+                                        //                                                         description: ingredient.description,
+                                        //                                                         price: double.tryParse(ingredient.price.toString()) ?? 0.0,
+                                        //                                                       ))
+                                        //                                                   .toList(),
+                                        //                                             ));
                                         myLog.log('added to cart ${ingredients.toList()}');
                                         Get.snackbar('Success', 'Item added to cart',colorText: Colors.white,backgroundColor: Colors.green);
                                         Navigator.pop(context);
