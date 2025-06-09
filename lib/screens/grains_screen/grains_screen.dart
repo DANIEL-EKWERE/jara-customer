@@ -423,8 +423,10 @@ class _GrainsScreenState extends State<GrainsScreen> {
                                                   Spacer(),
                                                   
                                                   Row(
+                                                    mainAxisAlignment: MainAxisAlignment.end,
                                                     children: [
                                                       Checkbox(
+                                                        side: BorderSide(width: 1.5),
                                                         value:
                                                             _shopWithYourPrice,
                                                         onChanged: (value) {
@@ -439,40 +441,21 @@ class _GrainsScreenState extends State<GrainsScreen> {
                                                       const Text(
                                                         'Shop with your price',
                                                         style: TextStyle(
-                                                            fontSize: 16),
+                                                            fontSize: 10),
                                                       ),
+                                                      SizedBox(width: 7,)
                                                     ],
                                                   ),
-                                                  const SizedBox(height: 16),
-                                                  TextField(
-                                                    controller:
-                                                        _priceController,
-                                                    enabled: _shopWithYourPrice,
-                                                    keyboardType:
-                                                        TextInputType.number,
-                                                    decoration: InputDecoration(
-                                                      hintText:
-                                                          'Enter your price',
-                                                      filled: true,
-                                                      fillColor:
-                                                          _shopWithYourPrice
-                                                              ? Colors.white
-                                                              : Colors
-                                                                  .grey[200],
-                                                      border:
-                                                          OutlineInputBorder(
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(8),
-                                                        borderSide:
-                                                            BorderSide.none,
-                                                      ),
-                                                    ),
-                                                  ),
-                                                  const SizedBox(height: 16),
-                                                  const SizedBox(height: 16),
-                                                  SizedBox(
-                                                    width: double.infinity,
+                                                //  const SizedBox(height: 8),
+                                                  Row(
+                                                    mainAxisAlignment: MainAxisAlignment.center,
+                                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                                    children: [
+                                                    
+                                                    
+                                                  // const SizedBox(height: 16),
+                                                  
+                                                  Expanded(
                                                     child: ElevatedButton(
                                                       onPressed: () {
                                                         // TODO: Implement add to cart functionality
@@ -495,13 +478,48 @@ class _GrainsScreenState extends State<GrainsScreen> {
                                                       child: const Text(
                                                         'Add to Cart',
                                                         style: TextStyle(
-                                                          fontSize: 18,
+                                                          fontSize: 12,
+                                                          color: Colors.black,
                                                           fontWeight:
                                                               FontWeight.bold,
                                                         ),
                                                       ),
                                                     ),
                                                   ),
+                                                  const SizedBox(width: 10),
+                                                  Expanded(
+                                                    child: SizedBox(
+                                                      height: 35,
+                                                      child: TextField(
+                                                        
+                                                        controller:
+                                                            _priceController,
+                                                        enabled: _shopWithYourPrice,
+                                                        keyboardType:
+                                                            TextInputType.number,
+                                                        decoration: InputDecoration(
+                                                          hintText:
+                                                              'Enter your price',
+                                                          filled: true,
+                                                          hintStyle: TextStyle(fontSize: 12),
+                                                          fillColor:
+                                                              _shopWithYourPrice
+                                                                  ? Colors.white
+                                                                  : Colors
+                                                                      .grey[200],
+                                                          border:
+                                                              OutlineInputBorder(
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(8),
+                                                            borderSide:
+                                                                BorderSide.none,
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  ],)
                                                 ],
                                               ),
                                             )
