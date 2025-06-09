@@ -32,7 +32,7 @@ class SummaryBreakdown extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             const Text('Service Charge',style: TextStyle(fontSize: 12,fontWeight: FontWeight.w600,fontFamily: 'Poppins'),),
-            Text('\u20A6${serviceChargePercentage.toStringAsFixed(0)}(7%)'),
+            Text('\u20A6${serviceChargePercentage.toStringAsFixed(0)}(10%)'),
           ],
         ),
         const SizedBox(height: 8),

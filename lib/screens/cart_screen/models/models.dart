@@ -45,6 +45,7 @@ class Ingredients {
   String? name;
   String? description;
   double? price;
+  double? basePrice;
   String? unit;
   String? stock;
   String? imageUrl;
@@ -61,6 +62,7 @@ class Ingredients {
       this.unit,
       this.stock,
       this.imageUrl, 
+      required this.basePrice,
       this.createdAt,
       quantity = 1,
   }) : quantity = RxInt(quantity), isSelected = RxBool(false);

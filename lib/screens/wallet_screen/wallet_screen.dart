@@ -63,7 +63,7 @@ void onRefresh(){
                               balance: controller.isLoading.value
                                   ? 'Loading...'
                                   : (controller.walletModel.data?.balance?.toString() ?? '0.00'),
-                              subtitle: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit',
+                              subtitle: 'JaraWallet - Seamless Pay',
                               isBalanceVisible: _isBalanceVisible,
                               onToggleVisibility: () {
                                 setState(() {

@@ -11,18 +11,20 @@ import 'package:pull_to_refresh_flutter3/pull_to_refresh_flutter3.dart';
 import '../../widgets/custom_app_bar.dart';
 import '../grains_detailed_screen/grains_detailed_screen.dart'; // Import GrainsDetailedScreen
 import 'package:jara_market/screens/cart_screen/models/models.dart';
+// import 'package:jara_market/screens/cart_screen/models/models.dart';
 
 GrainsController controller = Get.put(GrainsController());
 CartController cartController = Get.find<CartController>();
 class GrainsScreen extends StatefulWidget {
-  const GrainsScreen({Key? key, required this.forProduct}) : super(key: key);
+  const GrainsScreen({Key? key, required this.forProduct, this.ingredients}) : super(key: key);
   final bool forProduct;
+  final List<Ingredients>? ingredients;
   @override
   State<GrainsScreen> createState() => _GrainsScreenState();
 }
 
 class _GrainsScreenState extends State<GrainsScreen> {
-List<Ingredients> ingredients = [];
+// List<Ingredients> ingredients = [];
 List<Ingredients> ingredientShoping = [];
   @override
   void initState() {
@@ -50,17 +52,17 @@ List<Ingredients> ingredientShoping = [];
         title: 'Ingredients',
         titleColor: Colors.orange,
         onBackPressed: () {
-          //Navigator.pop(context);
-          myLog.log(ingredients.toString());
+          Navigator.pop(context);
+          myLog.log(widget.ingredients.toString());
           if(Navigator.canPop(context)){
             myLog.log('i can pop');
-            Navigator.pop(context, {
-              "result":ingredients
-            });
+            // Navigator.pop(context, {
+            //   "result":ingredients
+            // });
           }else{
             myLog.log('i can\'t pop');
           }
-print('object');
+    print('object');
         },
       ),
       body: SmartRefresher(
@@ -337,7 +339,7 @@ print('object');
                                                   //           ))
                                                   //       .toList(),
                                                   // ));
-                                        if(widget.forProduct) ingredients.add(Ingredients(id: ingredient.id!,createdAt: ingredient.createdAt, description: ingredient.description, imageUrl: ingredient.imageUrl, name: ingredient.name, price: double.tryParse(ingredient.price.toString()) ?? 0.0, quantity: 1));
+                                        if(widget.forProduct) widget.ingredients!.add(Ingredients(id: ingredient.id!,createdAt: ingredient.createdAt, description: ingredient.description, imageUrl: ingredient.imageUrl, name: ingredient.name, price: double.tryParse(ingredient.price.toString()) ?? 0.0,basePrice: double.tryParse(ingredient.price.toString()) ?? 0.0, quantity: 1));
                                         else cartController.addIngredientToCart(ingredient );
                                         // ingredientList.map((e) {
                                         //   Ingredients(id: DateTime.now().millisecondsSinceEpoch,
@@ -374,16 +376,12 @@ print('object');
                                         //                                                       ))
                                         //                                                   .toList(),
                                         //                                             ));
-                                        myLog.log('added to cart ${ingredients.toList()}');
+                                      //  myLog.log('added to cart ${widget.ingredients!.toList()}');
                                         Get.snackbar('Success', 'Item added to cart',colorText: Colors.white,backgroundColor: Colors.green);
                                         Navigator.pop(context);
-                                                  //TODO:it end here tho
+                                              
                                         
-                                                  // print(category[index].id!);
-                                                  // print(category[index].name!);
-                                                  // print(category[index].description!);
-                                                  // print(category[index].price!);
-                                                  // Add your add to cart logic here
+                                                 
                                                 },
                                                 child: Row(
                                                   spacing: 4,

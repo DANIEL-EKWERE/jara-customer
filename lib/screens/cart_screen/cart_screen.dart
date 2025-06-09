@@ -1,6 +1,7 @@
 import 'dart:developer' as myLog;
 import 'dart:async';
 import 'package:animated_text_kit/animated_text_kit.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:jara_market/screens/grains_screen/grains_screen.dart';
 import 'package:jara_market/widgets/cart_widgets/cart_item_card.dart';
@@ -59,6 +60,103 @@ class _CartScreenState extends State<CartScreen> {
     super.initState();
     _initializeRecorder();
     // getName();
+  }
+
+  void showDeleteConfirmationDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          backgroundColor: Colors.white,
+          title: const Text('Delete Ingredients'),
+          content: const Text(
+              'Are you sure you want to delete this list of ingredients from your cart?'),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(); // Close the dialog
+              },
+              child:
+                  const Text('Cancel', style: TextStyle(color: Colors.black)),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(); // Close the dialog
+                controller.deleteIngredientList();
+              },
+              child: const Text('Delete', style: TextStyle(color: Colors.red)),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void showDeleteConfirmationDialogIngredient(
+      BuildContext context, int itemId, String name) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          backgroundColor: Colors.white,
+          title: const Text('Delete Ingredient'),
+          content: Text(
+              'Are you sure you want to delete ${name.toUpperCase()} ingredients from your cart?'),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(); // Close the dialog
+              },
+              child:
+                  const Text('Cancel', style: TextStyle(color: Colors.black)),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(); // Close the dialog
+                controller.removeIngredientFromCart(itemId);
+              },
+              child: const Text('Delete', style: TextStyle(color: Colors.red)),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void showAddConfirmationDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          backgroundColor: Colors.white,
+          title: const Text('Add Ingredient'),
+          content: Text(
+              'Do you want to add more ingredients to your list of ingredients in your cart?'),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(); // Close the dialog
+              },
+              child:
+                  const Text('Cancel', style: TextStyle(color: Colors.black)),
+            ),
+            TextButton(
+              onPressed: () async {
+                Navigator.of(context).pop(); // Close the dialog
+                // controller.removeFromCart(itemId);
+                await Navigator.push(
+                    context,
+                    CupertinoPageRoute(
+                        builder: (context) => GrainsScreen(
+                              forProduct: false,
+                            )));
+              },
+              child: const Text('Add', style: TextStyle(color: Colors.green)),
+            ),
+          ],
+        );
+      },
+    );
   }
 
   Timer? _timer;
@@ -444,9 +542,9 @@ class _CartScreenState extends State<CartScreen> {
                                               ),
                                             ),
                                             Text(
-                                              'Lorem ipsum dolor sit amet, consectetur adipiscing elit\ntempor incididunt ut labore et dolore magna aliqua.',
+                                              'Every great meal begins with ingredient prep.\nWe\'ve got you covered.',
                                               style: TextStyle(
-                                                fontSize: 9,
+                                                fontSize: 12,
                                                 color: Colors.grey[400],
                                                 fontWeight: FontWeight.w400,
                                                 fontFamily: 'Roboto',
@@ -466,97 +564,110 @@ class _CartScreenState extends State<CartScreen> {
                                     SizedBox(
                                       height: 10,
                                     ),
-                                    Align(
-                                        alignment: Alignment.centerLeft,
-                                        child: Text(
-                                          'Shop By Ingredient?',
-                                          style: TextStyle(
-                                            fontSize: 14,
-                                            color: Colors.grey,
-                                            fontFamily: 'Roboto',
-                                            fontWeight: FontWeight.w400,
-                                          ),
-                                        )),
-                                    SizedBox(
-                                      height: 10,
-                                    ),
-                                    AnimatedTextKit(
-                                      repeatForever: true,
-                                      animatedTexts: [
-                                        TyperAnimatedText(
-                                          speed: Duration(milliseconds: 40),
-                                          'Aside your normal product ordering',
-                                          textStyle: TextStyle(
-                                              color: Colors.grey.shade400),
-                                        ),
-                                        TyperAnimatedText(
-                                          speed: Duration(milliseconds: 40),
-                                          'You can decide to shop for ingredient separately on a different list.',
-                                          textStyle: TextStyle(
-                                              color: Colors.grey.shade400),
-                                        ),
-                                        TyperAnimatedText(
-                                          speed: Duration(milliseconds: 40),
-                                          'This order or will be processed together with your food ',
-                                          textStyle: TextStyle(
-                                              color: Colors.grey.shade400),
-                                        ),
-                                        TyperAnimatedText(
-                                          speed: Duration(milliseconds: 40),
-                                          'Order can be placed on ingredient only within your cart',
-                                          textStyle: TextStyle(
-                                              color: Colors.grey.shade400),
-                                        ),
-                                        TyperAnimatedText(
-                                          speed: Duration(milliseconds: 40),
-                                          'click the "shop by ingredient" button to see list our ingredients.',
-                                          textStyle: TextStyle(
-                                              color: Colors.grey.shade400),
-                                        ),
-                                        TyperAnimatedText(
-                                          speed: Duration(milliseconds: 40),
-                                          'Thank you, Happy shopping in advance.',
-                                          textStyle: TextStyle(
-                                              color: Colors.grey.shade400),
-                                        ),
-                                      ],
-                                    ),
-                                    SizedBox(
-                                      height: 20,
-                                    ),
-                                    SizedBox(
-                                      height: 60,
-                                      child: CustomButton(
-                                          text: 'Shop Ingredients',
-                                          onPressed: () {
-                                            myLog
-                                                .log('Shoping for ingredients');
-                                            Get.to(() => GrainsScreen(
-                                                forProduct: false));
-                                          }),
-                                    ),
-                                    // ElevatedButton(
-                                    //     onPressed: () {
-                                    //       for (int i = 0;
-                                    //           i <
-                                    //               controller
-                                    //                   .ingredientList.length;
-                                    //           i++) {
-                                    //         myLog.log(controller
-                                    //             .ingredientList[i].name!);
-                                    //         myLog.log(controller
-                                    //             .ingredientList[i].id
-                                    //             .toString());
-                                    //       }
-                                    //     },
-                                    //     child: Text('list cart lisr')),
-                                    SizedBox(
-                                      height: 15,
-                                    ),
-                                    Divider(
-                                      height: 0.5,
-                                      color: Color.fromARGB(57, 228, 228, 228),
-                                    ),
+                                    Obx(() {
+                                      return !controller
+                                              .ingredientList.isNotEmpty
+                                          ? Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                Align(
+                                                    alignment:
+                                                        Alignment.centerLeft,
+                                                    child: Text(
+                                                      'Shop By Ingredients?',
+                                                      style: TextStyle(
+                                                        fontSize: 14,
+                                                        color: Colors.grey,
+                                                        fontFamily: 'Roboto',
+                                                        fontWeight:
+                                                            FontWeight.w400,
+                                                      ),
+                                                    )),
+                                                SizedBox(
+                                                  height: 10,
+                                                ),
+                                                AnimatedTextKit(
+                                                  repeatForever: true,
+                                                  animatedTexts: [
+                                                    TyperAnimatedText(
+                                                      speed: Duration(
+                                                          milliseconds: 40),
+                                                      'Aside your normal product ordering',
+                                                      textStyle: TextStyle(
+                                                          color: Colors
+                                                              .grey.shade400),
+                                                    ),
+                                                    TyperAnimatedText(
+                                                      speed: Duration(
+                                                          milliseconds: 40),
+                                                      'You can decide to shop for ingredient separately on a different list.',
+                                                      textStyle: TextStyle(
+                                                          color: Colors
+                                                              .grey.shade400),
+                                                    ),
+                                                    TyperAnimatedText(
+                                                      speed: Duration(
+                                                          milliseconds: 40),
+                                                      'This order or will be processed together with your food ',
+                                                      textStyle: TextStyle(
+                                                          color: Colors
+                                                              .grey.shade400),
+                                                    ),
+                                                    TyperAnimatedText(
+                                                      speed: Duration(
+                                                          milliseconds: 40),
+                                                      'Order can be placed on ingredient only within your cart',
+                                                      textStyle: TextStyle(
+                                                          color: Colors
+                                                              .grey.shade400),
+                                                    ),
+                                                    TyperAnimatedText(
+                                                      speed: Duration(
+                                                          milliseconds: 40),
+                                                      'click the "shop by ingredient" button to see list our ingredients.',
+                                                      textStyle: TextStyle(
+                                                          color: Colors
+                                                              .grey.shade400),
+                                                    ),
+                                                    TyperAnimatedText(
+                                                      speed: Duration(
+                                                          milliseconds: 40),
+                                                      'Thank you, Happy shopping in advance.',
+                                                      textStyle: TextStyle(
+                                                          color: Colors
+                                                              .grey.shade400),
+                                                    ),
+                                                  ],
+                                                ),
+                                                SizedBox(
+                                                  height: 20,
+                                                ),
+                                                SizedBox(
+                                                  height: 60,
+                                                  child: CustomButton(
+                                                      text: 'Shop Ingredients',
+                                                      onPressed: () {
+                                                        myLog.log(
+                                                            'Shoping for ingredients');
+                                                        Get.to(() =>
+                                                            GrainsScreen(
+                                                                forProduct:
+                                                                    false));
+                                                      }),
+                                                ),
+                                                SizedBox(
+                                                  height: 15,
+                                                ),
+                                                Divider(
+                                                  height: 0.5,
+                                                  color: Color.fromARGB(
+                                                      57, 228, 228, 228),
+                                                ),
+                                              ],
+                                            )
+                                          : SizedBox.shrink();
+                                    })
                                   ],
                                 ),
                               );
@@ -582,7 +693,7 @@ class _CartScreenState extends State<CartScreen> {
                                                 ),
                                                 child: Column(
                                                   children: [
-                                                    const SizedBox(height: 10),
+                                                    //  const SizedBox(height: 10),
                                                     Row(
                                                       mainAxisAlignment:
                                                           MainAxisAlignment
@@ -622,7 +733,10 @@ class _CartScreenState extends State<CartScreen> {
                                                               color:
                                                                   Colors.green,
                                                             ), //SvgPicture.asset('assets/images/add.svg'),
-                                                            onPressed: () {}
+                                                            onPressed: () {
+                                                              showAddConfirmationDialog(
+                                                                  context);
+                                                            }
                                                             // _showAddConfirmationDialog1(context, widget.name),
                                                             ),
                                                       ],
@@ -632,28 +746,40 @@ class _CartScreenState extends State<CartScreen> {
                                                         const SizedBox(
                                                             width: 10),
                                                         Obx(() {
-                                                        return
-                                                        Text(
-                                                          '\u20A6${controller.ingredientList.fold<double>(0.0, (sum, ingredient) {
-    final price = double.tryParse(ingredient.price.toString()) ?? 0.0;
-    final quantity = ingredient.quantity?.value ?? 1;
-    return sum + (price * quantity);
-  })}',
-
-                                                          style: TextStyle(
-                                                            color: Colors
-                                                                .grey[500],
-                                                            fontSize: 14,
-                                                            fontWeight:
-                                                                FontWeight.w500,
-                                                          ),
-                                                        );
-                                                       }),
+                                                          return Text(
+                                                            '\u20A6${controller.ingredientList.fold<double>(0.0, (sum, ingredient) {
+                                                              final price = double.tryParse(
+                                                                      ingredient
+                                                                          .price
+                                                                          .toString()) ??
+                                                                  0.0;
+                                                              final quantity =
+                                                                  ingredient
+                                                                          .quantity
+                                                                          ?.value ??
+                                                                      1;
+                                                              return sum +
+                                                                  (price *
+                                                                      quantity);
+                                                            })}',
+                                                            style: TextStyle(
+                                                              color: Colors
+                                                                  .grey[500],
+                                                              fontSize: 14,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w500,
+                                                            ),
+                                                          );
+                                                        }),
                                                         const Spacer(),
                                                         IconButton(
                                                             icon: SvgPicture.asset(
                                                                 'assets/images/delete.svg'),
-                                                            onPressed: () {}
+                                                            onPressed: () {
+                                                              showDeleteConfirmationDialog(
+                                                                  context);
+                                                            }
                                                             //   _showDeleteConfirmationDialog1(context, widget.id),
                                                             ),
                                                         const SizedBox(
@@ -666,7 +792,7 @@ class _CartScreenState extends State<CartScreen> {
                                               height: (cartController
                                                           .ingredientList
                                                           .length *
-                                                      95.0)
+                                                      110.0)
                                                   .clamp(0.0, 300.0),
                                               child: Column(
                                                 children: [
@@ -846,6 +972,7 @@ class _CartScreenState extends State<CartScreen> {
                             // );
                             return CartItemCard1(
                               id: item.id,
+                              
                               ingredients: ingredients,
                               name: item.name,
                               unit: item.description,
@@ -875,13 +1002,16 @@ class _CartScreenState extends State<CartScreen> {
               padding: const EdgeInsets.all(16),
               child: Column(
                 children: [
-                  CartSummary(
-                    itemsCost: controller.totalIngredientPrice,
+                  Obx((){
+                    return CartSummary(
+                    itemsCost: controller.totalItems,
                     mealCost: controller.mealPrepPrice,
-                    serviceCharge: controller.calculatedServiceCharge,
+                    serviceCharge: controller.calculatedServiceCharge +
+                        controller.calculatedServiceChargeForIngredient,
                     shippingCost: controller.shippingCost.value,
                     totalAmount: controller.total.obs,
-                  ),
+                  );
+                  }),
                   const SizedBox(height: 16),
                   Obx(() {
                     return CheckoutButton(
@@ -889,6 +1019,7 @@ class _CartScreenState extends State<CartScreen> {
                       totalAmount: controller.total,
                       cartItems: controller.cartItems,
                       loading: controller.isLoading.value,
+                      path: recordingPath,
                       // onPressed: () {
                       //   // Handle checkout button press
                       //   controller.getCheckoutAddress();

@@ -1,12 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:jara_market/screens/cart_screen/controller/cart_controller.dart';
 import 'package:jara_market/screens/cart_screen/models/models.dart';
 import 'package:jara_market/screens/grains_screen/grains_screen.dart';
-import 'package:jara_market/screens/cart_screen/models/models.dart';
 
 import 'package:jara_market/widgets/custom_text_field.dart';
 
@@ -28,14 +26,6 @@ class CartItemCard1 extends StatefulWidget {
   final bool isSelected;
   final Function(bool?) onCheckboxChanged;
   final RxList<Ingredients> ingredients;
-// int? id;
-//   String? name;
-//   String? description;
-//   String? price;
-//   String? unit;
-//   String? stock;
-//   String? imageUrl;
-//   String? createdAt;
 
   const CartItemCard1({
     Key? key,
@@ -59,7 +49,7 @@ class CartItemCard1 extends StatefulWidget {
 }
 
 class _CartItemCardState extends State<CartItemCard1> {
-  TextEditingController textController = TextEditingController();
+  // TextEditingController textController = TextEditingController();
   int count = 0;
   double? result;
   double get totalPrice => widget.isSelected
@@ -67,21 +57,22 @@ class _CartItemCardState extends State<CartItemCard1> {
       : widget.basePrice * widget.quantity.value;
 
   void _showDeleteConfirmationDialog(
-      BuildContext context, int itemId, int ingredientId,String name) {
+      BuildContext context, int itemId, int ingredientId, String name) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
           backgroundColor: Colors.white,
           title: const Text('Delete Item'),
-          content:  Text(
+          content: Text(
               'Are you sure you want to delete ${name.toUpperCase()} from your cart?'),
           actions: [
             TextButton(
               onPressed: () {
                 Navigator.of(context).pop(); // Close the dialog
               },
-              child: const Text('Cancel', style: TextStyle(color: Colors.black)),
+              child:
+                  const Text('Cancel', style: TextStyle(color: Colors.black)),
             ),
             TextButton(
               onPressed: () {
@@ -146,12 +137,14 @@ class _CartItemCardState extends State<CartItemCard1> {
             TextButton(
               onPressed: () async {
                 Navigator.of(context).pop(); // Close the dialog
-               // controller.removeFromCart(itemId);
-               Map<String, List<Ingredients>> list = await Navigator.push(context, CupertinoPageRoute(builder: (context)=> GrainsScreen(forProduct: true,)));
-               List<Ingredients> result = list['result']!;
-               if (result != null || result != []){
-                widget.ingredients.addAll(result.toList());
-               }
+                // controller.removeFromCart(itemId);
+                Navigator.push(
+                    context,
+                    CupertinoPageRoute(
+                        builder: (context) => GrainsScreen(
+                              forProduct: true,
+                              ingredients: widget.ingredients,
+                            )));
               },
               child: const Text('Add', style: TextStyle(color: Colors.green)),
             ),
@@ -176,28 +169,31 @@ class _CartItemCardState extends State<CartItemCard1> {
               ),
               child: Column(
                 children: [
-                  const SizedBox(height: 10),
+                  //  const SizedBox(height: 5),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
-                      
-                      Obx((){
+                      Obx(() {
                         return Text(
-                        "${widget.ingredients.length} ingredients",
-                        style: TextStyle(
-                          color: Colors.grey[500],
-                          fontSize: 14,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      );
+                          "${widget.ingredients.length} ingredients",
+                          style: TextStyle(
+                            color: Colors.grey[500],
+                            fontSize: 14,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        );
                       }),
-                      SizedBox(width: 15,),
+                      SizedBox(
+                        width: 15,
+                      ),
                       Text(
                         widget.name,
                         style: TextStyle(
                             fontSize: 16, fontWeight: FontWeight.bold),
                       ),
-                      SizedBox(width: 15,),
+                      SizedBox(
+                        width: 15,
+                      ),
                       IconButton(
                         icon: Icon(
                           Icons.add,
@@ -289,7 +285,7 @@ class _CartItemCardState extends State<CartItemCard1> {
                                                     .controller.text.isEmpty
                                             ? Text(
                                                 //  'N${widget.originalPrice!.toStringAsFixed(0)}',
-                                                '\u20A6${totalPrice.toStringAsFixed(0)}',
+                                                '\u20A6${(widget.ingredients[index].price! * widget.ingredients[index].quantity!.value).toStringAsFixed(0)}',
                                                 style: TextStyle(
                                                   color: Colors.grey[500],
                                                   decoration: TextDecoration
@@ -312,11 +308,27 @@ class _CartItemCardState extends State<CartItemCard1> {
                                                     ),
                                                   ),
                                                   //if (widget.originalPrice != null) ...[
-                                                  if (isSelected) ...[
+
+                                                  if (!widget
+                                                          .ingredients[index]
+                                                          .controller
+                                                          .text
+                                                          .isEmpty &&
+                                                      widget
+                                                              .ingredients[
+                                                                  index]
+                                                              .controller
+                                                              .text !=
+                                                          widget
+                                                              .ingredients[
+                                                                  index]
+                                                              .basePrice!
+                                                              .toStringAsFixed(
+                                                                  0)) ...[
                                                     const SizedBox(width: 8),
                                                     Text(
                                                       //  'N${widget.originalPrice!.toStringAsFixed(0)}',
-                                                      '\u20A6${totalPrice.toStringAsFixed(0)}',
+                                                      '\u20A6${(widget.ingredients[index].basePrice)!.toStringAsFixed(0)}',
                                                       style: TextStyle(
                                                         color: Colors.grey[500],
                                                         decoration:
@@ -357,46 +369,53 @@ class _CartItemCardState extends State<CartItemCard1> {
                                 ),
                                 Row(
                                   children: [
-                                    Checkbox(
-                                        focusColor: Colors.grey,
-                                        activeColor: Colors.black,
-                                        side: const BorderSide(
-                                          color: Color(
-                                              0xff868D94), // Change this to your desired stroke color
-                                          width:
-                                              2, // Optional: stroke thickness
-                                        ),
-                                        checkColor: Colors.white,
-                                        value: widget.ingredients[index]
-                                            .isSelected.value,
-                                        onChanged: (bool? value) {
-                                          widget.onCheckboxChanged(value);
-                                          setState(() {
-                                            // count++;
-                                            // isSelected = value ?? false;
-                                            // if (value! && count == 0) {
-                                            //   result = widget
-                                            //       .ingredients[index].price;
-                                            // } else if (!value && count > 0) {
-                                            //   widget.ingredients[index].price =
-                                            //       result;
-                                            // }
-
-                                            controller.toggleItemSelection(
-                                                widget.id,
-                                                widget.ingredients[index].id);
+                                    Obx(() {
+                                      return Checkbox(
+                                          // focusColor: widget.ingredients[index].controller.text.isNotEmpty ? Colors.green : Colors.grey,
+                                          activeColor: Colors.black,
+                                          fillColor: !widget.ingredients[index]
+                                                  .controller.text.isEmpty
+                                              ? WidgetStateProperty.all(
+                                                  Colors.green)
+                                              : null,
+                                          side: const BorderSide(
+                                            color: Color(
+                                                0xff868D94), // Change this to your desired stroke color
+                                            width:
+                                                2, // Optional: stroke thickness
+                                          ),
+                                          checkColor: Colors.white,
+                                          value: widget.ingredients[index]
+                                              .isSelected.value,
+                                          onChanged: (bool? value) {
+                                            widget.onCheckboxChanged(value);
+                                            setState(() {
+                                              controller.toggleItemSelection(
+                                                  widget.id,
+                                                  widget.ingredients[index].id);
+                                            });
                                           });
-                                        }),
+                                    }),
                                     //SizedBox(width: 2,),
-                                    Text(
-                                      'Custom Price',
-                                      style: TextStyle(
-                                        color: Colors.grey,
-                                        fontWeight: FontWeight.w400,
-                                        fontSize: 12,
-                                        fontFamily: 'Inter',
-                                      ),
-                                    ),
+                                    !widget.ingredients[index].isSelected.value
+                                        ? Text(
+                                            'Custom Price',
+                                            style: TextStyle(
+                                              color: Colors.grey,
+                                              fontWeight: FontWeight.w400,
+                                              fontSize: 12,
+                                              fontFamily: 'Inter',
+                                            ),
+                                          )
+                                        : Text(
+                                            'Click Back to Update',
+                                            style: TextStyle(
+                                              color: Colors.grey,
+                                              fontWeight: FontWeight.w400,
+                                              fontSize: 9,
+                                              fontFamily: 'Inter',
+                                            ),
+                                          )
                                   ],
                                 )
                               ],
@@ -413,7 +432,8 @@ class _CartItemCardState extends State<CartItemCard1> {
                                 onPressed: () => _showDeleteConfirmationDialog(
                                     context,
                                     widget.id,
-                                    widget.ingredients[index].id,widget.ingredients[index].name!),
+                                    widget.ingredients[index].id,
+                                    widget.ingredients[index].name!),
                               ),
                               Container(
                                 decoration: BoxDecoration(
@@ -427,8 +447,18 @@ class _CartItemCardState extends State<CartItemCard1> {
                                         height: 36,
                                         child: CustomTextField(
                                           keyboardType: TextInputType.number,
-                                          controller: textController,
+                                          controller: widget
+                                              .ingredients[index].controller,
                                           onChanged: (p0) {
+                                            setState(() {
+                                              controller
+                                                  .calculatedServiceCharge;
+                                              controller.totalIngredientPrice();
+                                              controller
+                                                  .calculatedServiceChargeForIngredient;
+                                              controller.total;
+                                              controller.totalItems.value;
+                                            });
                                             controller.updateCustomPrice(
                                                 widget.id,
                                                 widget.ingredients[index].id,
@@ -520,24 +550,6 @@ class _CartItemCardState extends State<CartItemCard1> {
                           ),
                         ],
                       ),
-
-                      // ListView.builder(
-                      // itemCount: widget.ingredients.length, shrinkWrap: true, physics: NeverScrollableScrollPhysics(),
-                      // itemBuilder: (context, index) {
-                      //   final ingredient = widget.ingredients[index];
-                      //   return Padding(
-                      //     padding: const EdgeInsets.symmetric(vertical: 4),
-                      //     child: Text(
-                      //       '${ingredient.name} - \u20A6${ingredient.price}',
-                      //       style: const TextStyle(
-                      //         fontSize: 12,
-                      //         fontFamily: 'Inter',
-                      //         fontWeight: FontWeight.w400,
-                      //       ),
-                      //     ),
-                      //   );
-                      // }
-                      // ),
                     ],
                   ),
                 );

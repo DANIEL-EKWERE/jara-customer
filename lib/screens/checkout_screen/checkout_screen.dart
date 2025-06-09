@@ -380,6 +380,7 @@ void _stopTimer() {
                     },
                   ),
                   const SizedBox(height: 24),
+                  widget.path.isEmpty || widget.path == '' ?  SizedBox.shrink() :
                   IconButton(
                             icon: Container(
                               padding: const EdgeInsets.all(8),
@@ -396,7 +397,7 @@ void _stopTimer() {
                             onPressed: (){
                               _playRecording(widget.path);
                             },
-                          ),
+                          ) ,
                 //  ElevatedButton(onPressed: (){print('starting');_startRecording();}, child: Text('start recode')),
                   // MessageBox(
                   //   controller: _messageController,

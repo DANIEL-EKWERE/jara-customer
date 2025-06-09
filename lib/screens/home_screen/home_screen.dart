@@ -1,4 +1,3 @@
-import 'dart:async';
 import 'dart:developer' as myLog;
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -12,6 +11,7 @@ import 'package:jara_market/screens/cart_screen/controller/cart_controller.dart'
 import 'package:jara_market/screens/egusi_soup_detail_screen/egusi_soup_detail_screen.dart';
 import 'package:jara_market/screens/home_screen/controller/home_controller.dart';
 import 'package:jara_market/screens/main_screen/main_screen.dart';
+import 'package:jara_market/widgets/custom_button.dart';
 import 'package:pull_to_refresh_flutter3/pull_to_refresh_flutter3.dart';
 import '../soup_list_screen/soup_list_screen.dart';
 
@@ -138,7 +138,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   ))
                 : Column(
                     children: [
-                      //  ElevatedButton(onPressed: (){dataBase.logOut();}, child: Text('clear local db')),
+                      // ElevatedButton(onPressed: (){dataBase.logOut();}, child: Text('clear local db')),
                       // Header
                       Padding(
                         padding: const EdgeInsets.all(16),
@@ -184,22 +184,22 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                       ),
                       const SizedBox(height: 24),
-
+                      //  CustomButton(text: 'Shop Ingredient', onPressed: () {}),
                       // Category sections inside ListView
                       Expanded(
                         child: SmartRefresher(
                           controller: _refreshController,
                           onRefresh: _onRefresh,
                           child: ListView.separated(
-                            //   padding: const EdgeInsets.symmetric(horizontal: 1),
-                            itemCount: controller.category
-                                .length, // Only one section for now, you can add more sections as needed
+                            physics: BouncingScrollPhysics(),
+                            itemCount: controller.category.length + 1, // Only one section for now, you can add more sections as needed
                             separatorBuilder: (context, index) {
-                              return index == 2
-                                  ? SizedBox(
+                               if(index == 0) return SizedBox(
                                       height: 24,
-                                    )
-                                  : Divider(
+                                    );
+                              // ? CustomButton(text: 'text', onPressed: (){}) : index == 2
+                                  
+                                  return Divider(
                                       height: 24,
                                       thickness: 0.5,
                                       color: Colors.grey[400],
@@ -207,7 +207,10 @@ class _HomeScreenState extends State<HomeScreen> {
                             },
 
                             itemBuilder: (context, sectionIndex) {
-                              return sectionIndex == 2
+                              if(sectionIndex == 0){
+                                return CustomButton(text: 'text', onPressed: (){});
+                              }
+                             return sectionIndex == 2
                                   ? Column(
                                       mainAxisAlignment:
                                           MainAxisAlignment.start,
@@ -659,13 +662,14 @@ class _HomeScreenState extends State<HomeScreen> {
                                         )
                                       ],
                                     )
-                                  : Padding(
+                                  :  Padding(
                                       padding: const EdgeInsets.symmetric(
                                           horizontal: 16),
                                       child: Column(
                                         crossAxisAlignment:
                                             CrossAxisAlignment.start,
                                         children: [
+                                          //CustomButton(text: 'Shop Ingredient', onPressed: (){}),
                                           Padding(
                                             padding: EdgeInsets.symmetric(
                                                 vertical: 8.0),
@@ -673,7 +677,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                               children: [
                                                 Text(
                                                   controller
-                                                      .category[sectionIndex]
+                                                      .category[sectionIndex -1]
                                                       .name
                                                       .toString(),
                                                   style: TextStyle(
@@ -685,7 +689,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                 Spacer(),
                                                 controller
                                                             .category[
-                                                                sectionIndex]
+                                                                sectionIndex -1]
                                                             .products!
                                                             .length <=
                                                         3
@@ -894,7 +898,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                                       setState(() {
                                                                                         //isSet = !isSet;
                                                                                         category[index].isFavorite = !category[index].isFavorite;
-
+                                              
                                                                                         if (!result) {
                                                                                           category[index].isFavorite = !category[index].isFavorite;
                                                                                         }
@@ -911,7 +915,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                                 Text(
                                                                               //"${category[index].stock} Portion Available",
                                                                               "${category[index].ingredients!.length} Ingredients in food",
-
+                                              
                                                                               style: TextStyle(
                                                                                 color: Colors.grey[600],
                                                                                 fontSize: 14,
@@ -1000,7 +1004,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                                     //           item: category[index],
                                                                                     //         )));
                                                                                     print('Add to cart pressed ${category[index].id}');
-
+                                              
                                                                                     cartController.addToCart(CartItem(
                                                                                       id: category[index].id!,
                                                                                       name: category[index].name!,
@@ -1010,6 +1014,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                                       ingredients: category[index]
                                                                                           .ingredients!
                                                                                           .map((ingredient) => Ingredients(
+                                                                                                basePrice: double.tryParse(ingredient.price.toString()) ?? 0.0,
                                                                                                 id: ingredient.id!,
                                                                                                 name: ingredient.name,
                                                                                                 description: ingredient.description,

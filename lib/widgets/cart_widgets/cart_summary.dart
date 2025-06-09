@@ -37,7 +37,7 @@ class CartSummary extends StatelessWidget {
             ),
             Obx((){
               return Text(
-              '\u20A6${controller.totalIngredientPrice.toStringAsFixed(2)}',
+              '\u20A6${controller.totalItems.value.toStringAsFixed(2)}',
             //  '\u20A6${itemsCost.toStringAsFixed(2)}',
               style: TextStyle(
                 fontSize: 12,
@@ -82,7 +82,7 @@ class CartSummary extends StatelessWidget {
             ),
             Obx((){
               return Text(
-              '\u20A6${controller.calculatedServiceCharge.toStringAsFixed(2)}',
+              '\u20A6${(controller.calculatedServiceCharge).toStringAsFixed(2)}',
               style: TextStyle(
                 fontSize: 12,
                 fontWeight: FontWeight.w500,

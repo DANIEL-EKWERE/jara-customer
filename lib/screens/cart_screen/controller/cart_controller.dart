@@ -78,10 +78,20 @@ class CartController extends GetxController {
     cartItems.removeWhere((item) => item.id == itemId);
   }
 
+  // void removeFromCart(int itemId) {
+  //   print('removing $itemId');
+  //   cartItems.removeWhere((item) => item.id == itemId);
+  // }
+
     void removeIngredientFromCart(int itemId) {
     print('removing $itemId');
     ingredientList.removeWhere((item) => item.id == itemId);
   }
+
+
+void deleteIngredientList(){
+  ingredientList.clear();
+}
 
   void updateItemQuantity(int itemId, int quantity) {
     print(quantity);
@@ -100,9 +110,10 @@ class CartController extends GetxController {
     int index = ingredientList.indexWhere((item) => item.id == itemId);
     if (index != -1) {
       if (quantity <= 0) {
-        cartItems.removeAt(index);
+        ingredientList.removeAt(index);
       } else {
-        cartItems[index].quantity.value = quantity;
+      //  myLog.log("====================${ingredientList[index].quantity!.value}");
+        ingredientList[index].quantity!.value = quantity;
       }
     }
   }
@@ -130,9 +141,18 @@ void updateShippingCost() {
   }
 }
 
+// double get calculatedServiceCharge{
+//   return calculatedServiceChargeForFood + (ingredientList.isNotEmpty ? calculatedServiceCharge : 0.0 ) ;
+// }
 
 double get calculatedServiceCharge {
-  return (totalIngredientPrice.value * 0.10) < 1000.0
+  return ((totalItems) * 0.10) < 1000.0
+      ? 1000.0
+      : (totalIngredientPrice.value * 0.10);
+}
+
+double get calculatedServiceChargeForIngredient {
+  return (totalIngredientPriceForIngredient.value * 0.10) < 1000.0
       ? 1000.0
       : (totalIngredientPrice.value * 0.10);
 }
@@ -151,8 +171,27 @@ RxDouble get totalIngredientPrice {
   return total.obs;
 }
 
+RxDouble get totalIngredientPriceForIngredient {
+  final total = ingredientList.fold<double>(
+    0.0,        
+          (ingredientSum, ingredient) =>
+              ingredientSum +
+              (ingredient.price! * ingredient.quantity!.value),
+
+  );
+  return total.obs;
+}
+
+RxDouble get totalItems {
+  return (totalIngredientPriceForIngredient.value + totalIngredientPrice.value).obs;
+}
+
 double get total {
-  return totalIngredientPrice.value + mealPrepPrice + calculatedServiceCharge + shippingCost.value; 
+  return totalIngredientPrice.value +
+      mealPrepPrice +
+      calculatedServiceCharge +
+      shippingCost.value +
+      (ingredientList.isNotEmpty ? totalIngredientPriceForIngredient.value : 0.0);
 }
 
   void incrementIngredientQuantity(int itemId, int ingredientId) {
@@ -242,7 +281,16 @@ double get total {
     if (index != -1) {
       final ingredientIndex = cartItems[index].ingredients.indexWhere((ing) => ing.id == id2);
       if (ingredientIndex != -1) {
-        cartItems[index].ingredients[ingredientIndex].price = double.tryParse(p0) ?? 0.0;
+        double? parsedPrice = double.tryParse(p0);
+        if (parsedPrice == null) return;
+        if (cartItems[index].ingredients[ingredientIndex].basePrice != null && parsedPrice < cartItems[index].ingredients[ingredientIndex].basePrice!) return;
+        cartItems[index].ingredients[ingredientIndex].price = parsedPrice;
+        totalItems();
+        totalIngredientPrice();
+        totalIngredientPriceForIngredient();
+        calculatedServiceCharge;
+      //  totalPrice();
+        update();
         print('Updated custom price for ingredient: ${cartItems[index].ingredients[ingredientIndex].name}, New Price: ${cartItems[index].ingredients[ingredientIndex].price}');
       } else {
         print('Ingredient with id $id2 not found in item $id.');

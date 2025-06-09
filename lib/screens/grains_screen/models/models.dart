@@ -43,7 +43,7 @@ class Data {
   String? stock;
   String? imageUrl;
   String? createdAt;
-  RxInt? quantity;
+  RxInt? quantity = 1.obs;
 
   Data(
       {this.id,
@@ -53,7 +53,8 @@ class Data {
       this.unit,
       this.stock,
       this.imageUrl,
-      this.createdAt,quatity = 1} );
+      this.createdAt,
+      int quantity = 1,}): quantity = RxInt(quantity);
 
   Data.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -64,6 +65,7 @@ class Data {
     stock = json['stock'];
     imageUrl = json['image_url'];
     createdAt = json['created_at'];
+    
   }
 
   Map<String, dynamic> toJson() {

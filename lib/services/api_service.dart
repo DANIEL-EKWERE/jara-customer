@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:async';
 import 'dart:math';
+import 'package:get/get.dart';
 import 'package:get/get_connect/connect.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/foundation.dart'; // Import foundation for kDebugMode
@@ -386,6 +387,9 @@ Future<http.Response> getCheckoutAddress() async {
 
   // Fetch food categories
   Future<http.Response> fetchFoodCategory() async {
+    if (Get.isSnackbarOpen) {
+      return Future.error('Snackbar is open');
+    }
     //final url = Uri.parse('$baseUrl/fetch-ProductCategory');
     //final url = Uri.parse('$baseUrl/fetch/categories-limit-products');
     final url = Uri.parse('$baseUrl/fetch/categories-all-products');

@@ -112,6 +112,7 @@ class _FoodDetailScreenState extends State<FoodDetailScreen> {
                       double.tryParse(widget.item.price!.toString()) ?? 0.0,
                   ingredients: widget.item.ingredients!
                       .map((ingredient) => Ingredients(
+                        basePrice: double.tryParse(ingredient.price.toString()) ?? 0.0,
                             id: ingredient.id!,
                             name: ingredient.name,
                             description: ingredient.description,
