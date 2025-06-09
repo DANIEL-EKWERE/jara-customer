@@ -9,6 +9,7 @@ import 'package:get/get.dart';
 import 'package:jara_market/screens/cart_screen/models/models.dart';
 import 'package:jara_market/screens/cart_screen/controller/cart_controller.dart';
 import 'package:jara_market/screens/egusi_soup_detail_screen/egusi_soup_detail_screen.dart';
+import 'package:jara_market/screens/grains_screen/grains_screen.dart';
 import 'package:jara_market/screens/home_screen/controller/home_controller.dart';
 import 'package:jara_market/screens/main_screen/main_screen.dart';
 import 'package:jara_market/widgets/custom_button.dart';
@@ -208,9 +209,23 @@ class _HomeScreenState extends State<HomeScreen> {
 
                             itemBuilder: (context, sectionIndex) {
                               if(sectionIndex == 0){
-                                return CustomButton(text: 'text', onPressed: (){});
+                                return Padding(
+                                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                                  child: SizedBox(
+                                    height: 94,
+                                  
+                                    child: Column(
+                                      children: [
+                                        Text('Shop for fresh ingredients, we deliver in minutes, You can\'t go wrong with Jara.',style: TextStyle(fontFamily: 'Monts', fontSize: 12, fontWeight: FontWeight.w400),),
+                                        SizedBox(height: 10,),
+                                        SizedBox(height: 50,child:  CustomButton(text: 'Shop For Ingredient', onPressed: (){
+                                          Navigator.push(context, CupertinoPageRoute(builder: (context)=> const GrainsScreen(forProduct: false,)));
+                                        })),
+                                      ],
+                                    )),
+                                );
                               }
-                             return sectionIndex == 2
+                             return sectionIndex == 3
                                   ? Column(
                                       mainAxisAlignment:
                                           MainAxisAlignment.start,
@@ -698,12 +713,12 @@ class _HomeScreenState extends State<HomeScreen> {
                                                         onTap: () {
                                                           // Handle "See All" tap
                                                           print(
-                                                              'Tapped on See All for category: ${controller.category[sectionIndex].name}');
+                                                              'Tapped on See All for category: ${controller.category[sectionIndex -1].name}');
                                                           // Navigate to the next screen or perform any action
                                                           Get.to(() => SoupListScreen(
                                                               item: controller
                                                                       .category[
-                                                                  sectionIndex]));
+                                                                  sectionIndex -1]));
                                                         },
                                                         child: Row(
                                                           children: [
@@ -737,7 +752,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                             height: 10,
                                           ),
                                           // Fixed height container for the grid
-                                          controller.category[sectionIndex]
+                                          controller.category[sectionIndex -1]
                                                   .products!.isEmpty
                                               ? Center(
                                                   child: Padding(
@@ -756,7 +771,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                   // Calculate height based on number of rows needed
                                                   height: (controller
                                                                   .category[
-                                                                      sectionIndex]
+                                                                      sectionIndex -1]
                                                                   .products!
                                                                   .length /
                                                               4)
@@ -767,7 +782,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                         NeverScrollableScrollPhysics(), // Disable grid scrolling
                                                     itemCount: controller
                                                                     .category[
-                                                                        sectionIndex]
+                                                                        sectionIndex -1]
                                                                     .products!
                                                                     .length -
                                                                 1 >
@@ -775,7 +790,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                         ? 8
                                                         : controller
                                                             .category[
-                                                                sectionIndex]
+                                                                sectionIndex -1]
                                                             .products!
                                                             .length,
                                                     gridDelegate:
@@ -790,7 +805,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                       final category =
                                                           controller
                                                               .category[
-                                                                  sectionIndex]
+                                                                  sectionIndex -1]
                                                               .products;
                                                       return GestureDetector(
                                                         onTap: () {
@@ -1076,7 +1091,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                           print(
                                                               'Tapped on category: $category');
                                                           myLog.log(
-                                                              'product image ${category[sectionIndex].imageUrl}');
+                                                              'product image ${category[sectionIndex -1].imageUrl}');
                                                         },
                                                         child: Column(
                                                           children: [
