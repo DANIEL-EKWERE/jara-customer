@@ -136,7 +136,6 @@ class _GrainsScreenState extends State<GrainsScreen> {
                                 return StatefulBuilder(
                                   builder: (context, setState) {
                                     return Dialog(
-
                                       backgroundColor: Colors.transparent,
                                       child: Container(
                                         width: double.infinity,
@@ -214,6 +213,8 @@ class _GrainsScreenState extends State<GrainsScreen> {
                                                                   10)),
                                                   color: Colors.white),
                                               child: Column(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.spaceBetween,
                                                 children: [
                                                   Row(
                                                     crossAxisAlignment:
@@ -230,172 +231,197 @@ class _GrainsScreenState extends State<GrainsScreen> {
                                                     height: 10,
                                                   ),
                                                   Align(
-                                                    alignment: Alignment.centerLeft,
-                                                    child: Text('Measurement')),
-                                                  Row(
-                                                    children: _measurementsRow1
-                                                        .map((measurement) {
-                                                      final isSelected =
-                                                          measurement ==
-                                                              _selectedMeasurement;
-                                                      return Padding(
-                                                        padding:
-                                                            const EdgeInsets
-                                                                .only(right: 8),
-                                                        child: SizedBox(width: 50,height: 25,
-                                                          child: ElevatedButton(
-                                                            onPressed:
-                                                                _shopWithYourPrice
-                                                                    ? null
-                                                                    : () {
-                                                                        setState(
-                                                                            () {
-                                                                          _selectedMeasurement =
-                                                                              measurement;
-                                                                        });
-                                                                      },
-                                                            style: ElevatedButton
-                                                                .styleFrom(
-                                                                  padding: EdgeInsets.zero,
-                                                              foregroundColor:
-                                                                  isSelected
-                                                                      ? Colors
-                                                                          .white
-                                                                      : Colors
-                                                                          .black,
-                                                                          textStyle: TextStyle(fontSize: 8),
-                                                              backgroundColor:
-                                                                  isSelected
-                                                                      ? Colors
-                                                                          .orange
-                                                                      : Colors.grey[
-                                                                          200],
-                                                              shape:
-                                                                  RoundedRectangleBorder(
-                                                                borderRadius:
-                                                                    BorderRadius
-                                                                        .circular(
-                                                                            8),
-                                                              ),
-                                                            ),
-                                                            child:
-                                                                Text(measurement),
-                                                          ),
-                                                        ),
-                                                      );
-                                                    }).toList(),
-                                                  ),
-                                                  const SizedBox(height: 8),
-                                                  Row(
-                                                    children: _measurementsRow2
-                                                        .map((measurement) {
-                                                      final isSelected =
-                                                          measurement ==
-                                                              _selectedMeasurement;
-                                                      return Padding(
-                                                        padding:
-                                                            const EdgeInsets
-                                                                .only(right: 8),
-                                                        child: SizedBox(
-                                                          width: 50,height: 25,
-                                                          child: ElevatedButton(
-                                                            onPressed:
-                                                                _shopWithYourPrice
-                                                                    ? null
-                                                                    : () {
-                                                                        setState(
-                                                                            () {
-                                                                          _selectedMeasurement =
-                                                                              measurement;
-                                                                        });
-                                                                      },
-                                                            style: ElevatedButton
-                                                                .styleFrom(
-                                                                  textStyle: TextStyle(fontSize: 8),
-                                                                  padding: EdgeInsets.zero,
-                                                              foregroundColor:
-                                                                  isSelected
-                                                                      ? Colors
-                                                                          .white
-                                                                      : Colors
-                                                                          .black,
-                                                              backgroundColor:
-                                                                  isSelected
-                                                                      ? Colors
-                                                                          .orange
-                                                                      : Colors.grey[
-                                                                          200],
-                                                              shape:
-                                                                  RoundedRectangleBorder(
-                                                                borderRadius:
-                                                                    BorderRadius
-                                                                        .circular(
-                                                                            8),
-                                                              ),
-                                                            ),
-                                                            child:
-                                                                Text(measurement),
-                                                          ),
-                                                        ),
-                                                      );
-                                                    }).toList(),
-                                                  ),
-                                                  const SizedBox(height: 16),
-                                                  Row(
+                                                      alignment:
+                                                          Alignment.centerLeft,
+                                                      child:
+                                                          Text('Measurement')),
+
+                                                  //   const SizedBox(height: 8),
+                                                 Row(
+                                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                  children: [
+                                                  
+                                                  Column(
+                                                    mainAxisAlignment: MainAxisAlignment.spaceAround,
                                                     children: [
-                                                      IconButton(
-                                                        icon: const Icon(Icons
-                                                            .remove_circle_outline),
-                                                        onPressed:
-                                                            _shopWithYourPrice
-                                                                ? null
-                                                                : () {
-                                                                    setState(
-                                                                        () {
-                                                                      _quantity = (_quantity -
-                                                                              1)
-                                                                          .clamp(
-                                                                              1,
-                                                                              99);
-                                                                    });
-                                                                  },
-                                                        color:
-                                                            _shopWithYourPrice
-                                                                ? Colors.grey
-                                                                : Colors.black,
-                                                      ),
-                                                      Text(
-                                                        _quantity.toString(),
-                                                        style: const TextStyle(
-                                                            fontSize: 18,
-                                                            fontWeight:
-                                                                FontWeight
-                                                                    .bold),
-                                                      ),
-                                                      IconButton(
-                                                        icon: const Icon(Icons
-                                                            .add_circle_outline),
-                                                        onPressed:
-                                                            _shopWithYourPrice
-                                                                ? null
-                                                                : () {
-                                                                    setState(
-                                                                        () {
-                                                                      _quantity = (_quantity +
-                                                                              1)
-                                                                          .clamp(
-                                                                              1,
-                                                                              99);
-                                                                    });
-                                                                  },
-                                                        color:
-                                                            _shopWithYourPrice
-                                                                ? Colors.grey
-                                                                : Colors.black,
+                                                     Row(
+                                                    // crossAxisAlignment: CrossAxisAlignment.start,
+                                                    children:
+                                                        _measurementsRow1.map(
+                                                            (measurement) {
+                                                      final isSelected =
+                                                          measurement ==
+                                                              _selectedMeasurement;
+                                                      return Padding(
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .only(
+                                                                right: 8),
+                                                        child: SizedBox(
+                                                          width: 50,
+                                                          height: 25,
+                                                          child:
+                                                              ElevatedButton(
+                                                            onPressed:
+                                                                _shopWithYourPrice
+                                                                    ? null
+                                                                    : () {
+                                                                        setState(() {
+                                                                          _selectedMeasurement = measurement;
+                                                                        });
+                                                                      },
+                                                            style: ElevatedButton
+                                                                .styleFrom(
+                                                              padding:
+                                                                  EdgeInsets
+                                                                      .zero,
+                                                              foregroundColor: isSelected
+                                                                  ? Colors
+                                                                      .white
+                                                                  : Colors
+                                                                      .black,
+                                                              textStyle:
+                                                                  TextStyle(
+                                                                      fontSize:
+                                                                          8),
+                                                              backgroundColor: isSelected
+                                                                  ? Colors
+                                                                      .orange
+                                                                  : Colors.grey[
+                                                                      200],
+                                                              shape:
+                                                                  RoundedRectangleBorder(
+                                                                borderRadius:
+                                                                    BorderRadius
+                                                                        .circular(8),
+                                                              ),
+                                                            ),
+                                                            child: Text(
+                                                                measurement),
+                                                          ),
+                                                        ),
+                                                      );
+                                                    }).toList(),
+                                                  ),
+                                                  SizedBox(height: 10,),
+                                                  Row(
+                                                    //  crossAxisAlignment: CrossAxisAlignment.start,
+                                                    children:
+                                                        _measurementsRow2.map(
+                                                            (measurement) {
+                                                      final isSelected =
+                                                          measurement ==
+                                                              _selectedMeasurement;
+                                                      return Padding(
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .only(
+                                                                right: 8),
+                                                        child: SizedBox(
+                                                          width: 50,
+                                                          height: 25,
+                                                          child:
+                                                              ElevatedButton(
+                                                            onPressed:
+                                                                _shopWithYourPrice
+                                                                    ? null
+                                                                    : () {
+                                                                        setState(() {
+                                                                          _selectedMeasurement = measurement;
+                                                                        });
+                                                                      },
+                                                            style: ElevatedButton
+                                                                .styleFrom(
+                                                              textStyle:
+                                                                  TextStyle(
+                                                                      fontSize:
+                                                                          8),
+                                                              padding:
+                                                                  EdgeInsets
+                                                                      .zero,
+                                                              foregroundColor: isSelected
+                                                                  ? Colors
+                                                                      .white
+                                                                  : Colors
+                                                                      .black,
+                                                              backgroundColor: isSelected
+                                                                  ? Colors
+                                                                      .orange
+                                                                  : Colors.grey[
+                                                                      200],
+                                                              shape:
+                                                                  RoundedRectangleBorder(
+                                                                borderRadius:
+                                                                    BorderRadius
+                                                                        .circular(8),
+                                                              ),
+                                                            ),
+                                                            child: Text(
+                                                                measurement),
+                                                          ),
+                                                        ),
+                                                      );
+                                                    }).toList(),
+                                                  ),
+                                                  ],),
+                                                  Column(children: [Column(
+                                                    children: [
+                                                      Text('Quantity'),
+                                                      Row(
+                                                        children: [
+                                                          IconButton(
+                                                            icon: const Icon(
+                                                                Icons
+                                                                    .remove_circle_outline),
+                                                            onPressed:
+                                                                _shopWithYourPrice
+                                                                    ? null
+                                                                    : () {
+                                                                        setState(() {
+                                                                          _quantity = (_quantity - 1).clamp(1, 99);
+                                                                        });
+                                                                      },
+                                                            color: _shopWithYourPrice
+                                                                ? Colors
+                                                                    .grey
+                                                                : Colors
+                                                                    .black,
+                                                          ),
+                                                          Text(
+                                                            _quantity
+                                                                .toString(),
+                                                            style: const TextStyle(
+                                                                fontSize:
+                                                                    18,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold),
+                                                          ),
+                                                          IconButton(
+                                                            icon: const Icon(
+                                                                Icons
+                                                                    .add_circle_outline),
+                                                            onPressed:
+                                                                _shopWithYourPrice
+                                                                    ? null
+                                                                    : () {
+                                                                        setState(() {
+                                                                          _quantity = (_quantity + 1).clamp(1, 99);
+                                                                        });
+                                                                      },
+                                                            color: _shopWithYourPrice
+                                                                ? Colors
+                                                                    .grey
+                                                                : Colors
+                                                                    .black,
+                                                          ),
+                                                        ],
                                                       ),
                                                     ],
-                                                  ),
-                                                  const SizedBox(height: 16),
+                                                  ),],)
+                                                 ],),
+                                                  Spacer(),
+                                                  
                                                   Row(
                                                     children: [
                                                       Checkbox(
