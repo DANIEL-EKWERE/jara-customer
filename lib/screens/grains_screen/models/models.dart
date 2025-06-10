@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:flutter/material.dart';
 import 'package:get/get_rx/src/rx_types/rx_types.dart';
 
 IngredientResorceModel ingredientResorceModelFromJson(String str) =>
@@ -44,6 +45,7 @@ class Data {
   String? imageUrl;
   String? createdAt;
   RxInt? quantity = 1.obs;
+  TextEditingController controller = TextEditingController();
 
   Data(
       {this.id,

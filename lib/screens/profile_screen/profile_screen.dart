@@ -836,7 +836,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
           TextButton(
             onPressed: () {
               if(controller.firstNameController.text.isEmpty || controller.lastNameController.text.isEmpty || controller.phoneController.text.isEmpty){
-                Get.snackbar('Error', 'All fields must be provided',colorText: Colors.white,backgroundColor: Colors.green);
+                Get.snackbar('Error', 'All fields must be provided',colorText: Colors.white,backgroundColor: Colors.red);
+                return;
               }
               Navigator.pop(context);
               controller.updateUserProfile();

@@ -9,6 +9,7 @@ import 'package:jara_market/screens/checkout_screen/controller/checkout_controll
 import 'package:jara_market/screens/main_screen/main_screen.dart';
 import 'package:jara_market/widgets/cart_widgets/cart_summary_card.dart';
 import 'package:jara_market/widgets/cart_widgets/checkout_button_paystack.dart';
+import 'package:jara_market/widgets/cart_widgets/checkout_summary_cart3.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:path_provider/path_provider.dart';
 import '../../widgets/payment_method_card.dart';
@@ -32,7 +33,8 @@ class CheckoutScreen extends StatefulWidget {
     required this.totalAmount,
     required this.cartItems,
     required this.orderAddress,
-    required this.balance, required this.path,
+    required this.balance,
+    required this.path,
   }) : super(key: key);
 
   @override
@@ -78,58 +80,52 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
     getName();
   }
 
-
-Timer? _timer;
-Duration _recordingDuration = Duration.zero;
-DateTime? _pauseStartTime;
+  Timer? _timer;
+  Duration _recordingDuration = Duration.zero;
+  DateTime? _pauseStartTime;
 // bool _isPaused = false;
 
-
-
-String get _durationText {
-  final minutes = _recordingDuration.inMinutes.remainder(60).toString().padLeft(2, '0');
-  final seconds = _recordingDuration.inSeconds.remainder(60).toString().padLeft(2, '0');
-  return '$minutes:$seconds';
-}
-
-
-
-void _startTimer() {
-  _recordingDuration = Duration.zero;
-  _timer = Timer.periodic(Duration(seconds: 1), (_) {
-    setState(() {
-      _recordingDuration += Duration(seconds: 1);
-    });
-  });
-}
-
-void _pauseTimer() {
-  if (_timer != null && _timer!.isActive) {
-    _timer!.cancel();
-    _isPaused = true;
-    _pauseStartTime = DateTime.now();
+  String get _durationText {
+    final minutes =
+        _recordingDuration.inMinutes.remainder(60).toString().padLeft(2, '0');
+    final seconds =
+        _recordingDuration.inSeconds.remainder(60).toString().padLeft(2, '0');
+    return '$minutes:$seconds';
   }
-}
 
-
-void _resumeTimer() {
-  if (_isPaused) {
+  void _startTimer() {
+    _recordingDuration = Duration.zero;
     _timer = Timer.periodic(Duration(seconds: 1), (_) {
       setState(() {
         _recordingDuration += Duration(seconds: 1);
       });
     });
+  }
+
+  void _pauseTimer() {
+    if (_timer != null && _timer!.isActive) {
+      _timer!.cancel();
+      _isPaused = true;
+      _pauseStartTime = DateTime.now();
+    }
+  }
+
+  void _resumeTimer() {
+    if (_isPaused) {
+      _timer = Timer.periodic(Duration(seconds: 1), (_) {
+        setState(() {
+          _recordingDuration += Duration(seconds: 1);
+        });
+      });
+      _isPaused = false;
+    }
+  }
+
+  void _stopTimer() {
+    _timer?.cancel();
+    _recordingDuration = Duration.zero;
     _isPaused = false;
   }
-}
-
-
-void _stopTimer() {
-  _timer?.cancel();
-  _recordingDuration = Duration.zero;
-  _isPaused = false;
-}
-
 
   Future<void> _initializeRecorder() async {
     final status = await Permission.microphone.request();
@@ -157,12 +153,10 @@ void _stopTimer() {
   }
 
   Future<void> _startRecording() async {
-    
     if (!_isRecorderInitialized) {
       await _initializeRecorder();
       if (!_isRecorderInitialized) return;
     }
-
 
 // _recordDuration = 0;
 //   _timer?.cancel();
@@ -359,10 +353,93 @@ void _stopTimer() {
                     shrinkWrap: true,
                     physics: NeverScrollableScrollPhysics(),
                     // padding: const EdgeInsets.symmetric(horizontal: 16),
-                    itemCount: widget.cartItems.length,
+                    itemCount: widget.cartItems.length + 1,
                     separatorBuilder: (context, index) =>
                         const Divider(height: 1),
                     itemBuilder: (context, index) {
+                      if (index == widget.cartItems.length) {
+                        return cartController.ingredientList.length == 0 ? SizedBox.shrink() : Column(
+                          children: [
+                            Container(
+                                width: double.infinity,
+                                height: 50,
+                                decoration: BoxDecoration(
+                                  color: Colors.grey.shade200,
+                                  borderRadius: BorderRadius.circular(5),
+                                ),
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    //  const SizedBox(height: 10),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                          crossAxisAlignment: CrossAxisAlignment.center,
+                                      children: [
+                                        
+                                        Text(
+                                          'Ingredients',
+                                          style: TextStyle(
+                                              fontSize: 16,
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                       
+                                      ],
+                                    ),
+                                   
+                                  ],
+                                )),
+                            SizedBox(
+                              height:
+                                  (cartController.ingredientList.length * 110.0)
+                                      .clamp(0.0, 300.0),
+                              child: Column(
+                                children: [
+                                  Expanded(
+                                    child: ListView.separated(
+                                        physics: NeverScrollableScrollPhysics(),
+                                        itemBuilder: (context, index) {
+                                          return CartItemCard3(
+                                            id: cartController
+                                                .ingredientList[index].id!,
+                                            ingredients:
+                                                cartController.ingredientList,
+                                            name: cartController
+                                                .ingredientList[index].name!,
+                                            unit: cartController
+                                                .ingredientList[index]
+                                                .description ?? 'N/A',
+                                            basePrice: cartController
+                                                .ingredientList[index].price!,
+                                            quantity:  cartController
+                                                .ingredientList[index]
+                                                .quantity!,
+                                            textController:
+                                                TextEditingController(
+                                              text: (cartController
+                                                      .ingredientList[index]
+                                                      .quantity)
+                                                  .toString(),
+                                            ),
+                                            isSelected: false,
+                                          );
+                                        },
+                                        separatorBuilder: (context, index) =>
+                                            const Divider(
+                                              height: 0.5,
+                                              color: Color.fromARGB(
+                                                  57, 228, 228, 228),
+                                            ),
+                                        itemCount: cartController
+                                            .ingredientList.length),
+                                  )
+                                ],
+                              ),
+                            ),
+                          ],
+                        );
+                      }
                       final item = cartController.cartItems[index];
                       final ingredients = item.ingredients;
                       return CartItemCard2(
@@ -380,68 +457,25 @@ void _stopTimer() {
                     },
                   ),
                   const SizedBox(height: 24),
-                  widget.path.isEmpty || widget.path == '' ?  SizedBox.shrink() :
-                  IconButton(
-                            icon: Container(
-                              padding: const EdgeInsets.all(8),
-                              decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                color: Colors.grey.shade200,
-                              ),
-                              child: const Icon(
-                                Icons.play_arrow,
-                                color: Colors.grey,
-                                size: 20,
-                              ),
+                  widget.path.isEmpty || widget.path == ''
+                      ? SizedBox.shrink()
+                      : IconButton(
+                          icon: Container(
+                            padding: const EdgeInsets.all(8),
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: Colors.grey.shade200,
                             ),
-                            onPressed: (){
-                              _playRecording(widget.path);
-                            },
-                          ) ,
-                //  ElevatedButton(onPressed: (){print('starting');_startRecording();}, child: Text('start recode')),
-                  // MessageBox(
-                  //   controller: _messageController,
-                  //   hintText: 'Add a message...',
-                  //   isPaused: _isPaused,
-                  //   isPlayed: isPlayed,
-                  //   isResumed: isResumed,
-                  //   isStoped: isStoped,
-                  //   isRecording: _isRecording,
-                  //   filePath: recordingPath,
-                  //   recordingDuration: _durationText,
-                  //   onVoicePressedDelete: (){
-                  //     setState(() {
-                  //       recordingPath = '';
-                  //        _stopTimer();
-                  //        _stopRecording(); // Optional depending on your logic
-                  //     });
-                  //   },
-                  //   onVoicePressedPlay: () {
-                  //     _playRecording(recordingPath);
-                  //   },
-                  //   onVoicePressedStop: () {
-                  //     _stopRecording();
-                  //   },
-                  //   onVoicePressed: () {
-                  //     print('starting');
-                  //     if (_isRecording) {
-                  //       myLog.log('is Recording');
-                  //       if (_isPaused) {
-                  //         myLog.log('is paused new resuming');
-                  //         _resumeRecording();
-                  //          _resumeTimer();
-                  //       } else {
-                  //         myLog.log('it was playing now resuming');
-                  //         _pauseRecording();
-                  //           _pauseTimer();
-                  //       }
-                  //     } else {
-                  //       myLog.log('stoping rcorder');
-                  //       _startRecording();
-                  //        _startTimer();
-                  //     }
-                  //   },
-                  // ),
+                            child: const Icon(
+                              Icons.play_arrow,
+                              color: Colors.grey,
+                              size: 20,
+                            ),
+                          ),
+                          onPressed: () {
+                            _playRecording(widget.path);
+                          },
+                        ),
                   const SizedBox(height: 24),
                   SummaryBreakdown(
                     mealPrep: cartController.mealPrepPrice,

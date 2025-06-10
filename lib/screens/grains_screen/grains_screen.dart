@@ -7,6 +7,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:jara_market/screens/cart_screen/controller/cart_controller.dart';
 import 'package:jara_market/screens/grains_screen/controller/grains_controller.dart';
+import 'package:jara_market/screens/grains_screen/models/models.dart';
 import 'package:pull_to_refresh_flutter3/pull_to_refresh_flutter3.dart';
 import '../../widgets/custom_app_bar.dart';
 import '../grains_detailed_screen/grains_detailed_screen.dart'; // Import GrainsDetailedScreen
@@ -33,6 +34,7 @@ class _GrainsScreenState extends State<GrainsScreen> {
   final List<String> _measurementsRow2 = ['Half Bag', 'One Bag'];
   int _quantity = 1;
   bool _shopWithYourPrice = false;
+  String errorText = '';
   final TextEditingController _priceController = TextEditingController();
   @override
   void initState() {
@@ -139,7 +141,7 @@ class _GrainsScreenState extends State<GrainsScreen> {
                                       backgroundColor: Colors.transparent,
                                       child: Container(
                                         width: double.infinity,
-                                        height: 430,
+                                        height: 420,
                                         decoration: BoxDecoration(
                                             //  color: Colors.grey[400]
                                             ),
@@ -160,10 +162,10 @@ class _GrainsScreenState extends State<GrainsScreen> {
                                                             BorderRadius.only(
                                                                 topLeft: Radius
                                                                     .circular(
-                                                                        10),
+                                                                        20),
                                                                 topRight: Radius
                                                                     .circular(
-                                                                        10)),
+                                                                        20)),
                                                         child:
                                                             CachedNetworkImage(
                                                           imageUrl: ingredient
@@ -200,21 +202,22 @@ class _GrainsScreenState extends State<GrainsScreen> {
                                             ),
                                             Container(
                                               padding: EdgeInsets.all(8),
-                                              height: 220,
+                                              height: 270,
                                               width: double.infinity,
                                               decoration: BoxDecoration(
                                                   borderRadius:
                                                       BorderRadius.only(
                                                           bottomLeft:
                                                               Radius.circular(
-                                                                  10),
+                                                                  20),
                                                           bottomRight:
                                                               Radius.circular(
-                                                                  10)),
+                                                                  20)),
                                                   color: Colors.white),
                                               child: Column(
                                                 mainAxisAlignment:
-                                                    MainAxisAlignment.spaceBetween,
+                                                    MainAxisAlignment
+                                                        .spaceBetween,
                                                 children: [
                                                   Row(
                                                     crossAxisAlignment:
@@ -222,7 +225,16 @@ class _GrainsScreenState extends State<GrainsScreen> {
                                                             .start,
                                                     children: [
                                                       Text(
-                                                          '${ingredient.name}'),
+                                                        '${ingredient.name}',
+                                                        style: TextStyle(
+                                                            color: Color(
+                                                                0xff1F2937),
+                                                            fontFamily: 'Inter',
+                                                            fontSize: 24,
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .w400),
+                                                      ),
                                                       Spacer(),
                                                       Text('2.5k orders'),
                                                     ],
@@ -230,203 +242,275 @@ class _GrainsScreenState extends State<GrainsScreen> {
                                                   SizedBox(
                                                     height: 10,
                                                   ),
-                                                  Align(
-                                                      alignment:
-                                                          Alignment.centerLeft,
-                                                      child:
-                                                          Text('Measurement')),
 
-                                                  //   const SizedBox(height: 8),
-                                                 Row(
-                                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                                  children: [
-                                                  
-                                                  Column(
-                                                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                                                    children: [
-                                                     Row(
-                                                    // crossAxisAlignment: CrossAxisAlignment.start,
-                                                    children:
-                                                        _measurementsRow1.map(
-                                                            (measurement) {
-                                                      final isSelected =
-                                                          measurement ==
-                                                              _selectedMeasurement;
-                                                      return Padding(
-                                                        padding:
-                                                            const EdgeInsets
-                                                                .only(
-                                                                right: 8),
-                                                        child: SizedBox(
-                                                          width: 50,
-                                                          height: 25,
-                                                          child:
-                                                              ElevatedButton(
-                                                            onPressed:
-                                                                _shopWithYourPrice
-                                                                    ? null
-                                                                    : () {
-                                                                        setState(() {
-                                                                          _selectedMeasurement = measurement;
-                                                                        });
-                                                                      },
-                                                            style: ElevatedButton
-                                                                .styleFrom(
-                                                              padding:
-                                                                  EdgeInsets
-                                                                      .zero,
-                                                              foregroundColor: isSelected
-                                                                  ? Colors
-                                                                      .white
-                                                                  : Colors
-                                                                      .black,
-                                                              textStyle:
-                                                                  TextStyle(
-                                                                      fontSize:
-                                                                          8),
-                                                              backgroundColor: isSelected
-                                                                  ? Colors
-                                                                      .orange
-                                                                  : Colors.grey[
-                                                                      200],
-                                                              shape:
-                                                                  RoundedRectangleBorder(
-                                                                borderRadius:
-                                                                    BorderRadius
-                                                                        .circular(8),
-                                                              ),
-                                                            ),
-                                                            child: Text(
-                                                                measurement),
-                                                          ),
-                                                        ),
-                                                      );
-                                                    }).toList(),
-                                                  ),
-                                                  SizedBox(height: 10,),
                                                   Row(
-                                                    //  crossAxisAlignment: CrossAxisAlignment.start,
-                                                    children:
-                                                        _measurementsRow2.map(
-                                                            (measurement) {
-                                                      final isSelected =
-                                                          measurement ==
-                                                              _selectedMeasurement;
-                                                      return Padding(
-                                                        padding:
-                                                            const EdgeInsets
-                                                                .only(
-                                                                right: 8),
-                                                        child: SizedBox(
-                                                          width: 50,
-                                                          height: 25,
-                                                          child:
-                                                              ElevatedButton(
-                                                            onPressed:
-                                                                _shopWithYourPrice
-                                                                    ? null
-                                                                    : () {
-                                                                        setState(() {
-                                                                          _selectedMeasurement = measurement;
-                                                                        });
-                                                                      },
-                                                            style: ElevatedButton
-                                                                .styleFrom(
-                                                              textStyle:
-                                                                  TextStyle(
-                                                                      fontSize:
-                                                                          8),
-                                                              padding:
-                                                                  EdgeInsets
-                                                                      .zero,
-                                                              foregroundColor: isSelected
-                                                                  ? Colors
-                                                                      .white
-                                                                  : Colors
-                                                                      .black,
-                                                              backgroundColor: isSelected
-                                                                  ? Colors
-                                                                      .orange
-                                                                  : Colors.grey[
-                                                                      200],
-                                                              shape:
-                                                                  RoundedRectangleBorder(
-                                                                borderRadius:
-                                                                    BorderRadius
-                                                                        .circular(8),
-                                                              ),
-                                                            ),
-                                                            child: Text(
-                                                                measurement),
-                                                          ),
-                                                        ),
-                                                      );
-                                                    }).toList(),
-                                                  ),
-                                                  ],),
-                                                  Column(children: [Column(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .spaceBetween,
                                                     children: [
-                                                      Text('Quantity'),
-                                                      Row(
+                                                      Column(
+                                                        mainAxisAlignment:
+                                                            MainAxisAlignment
+                                                                .start,
+                                                        crossAxisAlignment:
+                                                            CrossAxisAlignment
+                                                                .start,
                                                         children: [
-                                                          IconButton(
-                                                            icon: const Icon(
-                                                                Icons
-                                                                    .remove_circle_outline),
-                                                            onPressed:
-                                                                _shopWithYourPrice
-                                                                    ? null
-                                                                    : () {
-                                                                        setState(() {
-                                                                          _quantity = (_quantity - 1).clamp(1, 99);
-                                                                        });
-                                                                      },
-                                                            color: _shopWithYourPrice
-                                                                ? Colors
-                                                                    .grey
-                                                                : Colors
-                                                                    .black,
+                                                          Align(
+                                                              alignment: Alignment
+                                                                  .centerLeft,
+                                                              child: Text(
+                                                                'Measurement',
+                                                                style: TextStyle(
+                                                                    color: Color(
+                                                                        0xff1F2937),
+                                                                    fontFamily:
+                                                                        'Inter',
+                                                                    fontSize:
+                                                                        14,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .w400),
+                                                              )),
+                                                          const SizedBox(
+                                                              height: 8),
+                                                          Row(
+                                                            // crossAxisAlignment: CrossAxisAlignment.start,
+                                                            children:
+                                                                _measurementsRow1
+                                                                    .map(
+                                                                        (measurement) {
+                                                              final isSelected =
+                                                                  measurement ==
+                                                                      _selectedMeasurement;
+                                                              return Padding(
+                                                                padding:
+                                                                    const EdgeInsets
+                                                                        .only(
+                                                                        right:
+                                                                            8),
+                                                                child: SizedBox(
+                                                                  width: 50,
+                                                                  height: 25,
+                                                                  child:
+                                                                      ElevatedButton(
+                                                                    onPressed:
+                                                                        _shopWithYourPrice
+                                                                            ? null
+                                                                            : () {
+                                                                                setState(() {
+                                                                                  _selectedMeasurement = measurement;
+                                                                                });
+                                                                              },
+                                                                    style: ElevatedButton
+                                                                        .styleFrom(
+                                                                      padding:
+                                                                          EdgeInsets
+                                                                              .zero,
+                                                                      foregroundColor: isSelected
+                                                                          ? Colors
+                                                                              .white
+                                                                          : Colors
+                                                                              .black,
+                                                                      textStyle:
+                                                                          TextStyle(
+                                                                              fontSize: 8),
+                                                                      backgroundColor: isSelected
+                                                                          ? Colors
+                                                                              .orange
+                                                                          : Colors
+                                                                              .grey[200],
+                                                                      shape:
+                                                                          RoundedRectangleBorder(
+                                                                        borderRadius:
+                                                                            BorderRadius.circular(8),
+                                                                      ),
+                                                                    ),
+                                                                    child: Text(
+                                                                        measurement),
+                                                                  ),
+                                                                ),
+                                                              );
+                                                            }).toList(),
                                                           ),
-                                                          Text(
-                                                            _quantity
-                                                                .toString(),
-                                                            style: const TextStyle(
-                                                                fontSize:
-                                                                    18,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .bold),
+                                                          SizedBox(
+                                                            height: 10,
                                                           ),
-                                                          IconButton(
-                                                            icon: const Icon(
-                                                                Icons
-                                                                    .add_circle_outline),
-                                                            onPressed:
-                                                                _shopWithYourPrice
-                                                                    ? null
-                                                                    : () {
-                                                                        setState(() {
-                                                                          _quantity = (_quantity + 1).clamp(1, 99);
-                                                                        });
-                                                                      },
-                                                            color: _shopWithYourPrice
-                                                                ? Colors
-                                                                    .grey
-                                                                : Colors
-                                                                    .black,
+                                                          Row(
+                                                            //  crossAxisAlignment: CrossAxisAlignment.start,
+                                                            children:
+                                                                _measurementsRow2
+                                                                    .map(
+                                                                        (measurement) {
+                                                              final isSelected =
+                                                                  measurement ==
+                                                                      _selectedMeasurement;
+                                                              return Padding(
+                                                                padding:
+                                                                    const EdgeInsets
+                                                                        .only(
+                                                                        right:
+                                                                            8),
+                                                                child: SizedBox(
+                                                                  width: 50,
+                                                                  height: 25,
+                                                                  child:
+                                                                      ElevatedButton(
+                                                                    onPressed:
+                                                                        _shopWithYourPrice
+                                                                            ? null
+                                                                            : () {
+                                                                                setState(() {
+                                                                                  _selectedMeasurement = measurement;
+                                                                                });
+                                                                              },
+                                                                    style: ElevatedButton
+                                                                        .styleFrom(
+                                                                      textStyle:
+                                                                          TextStyle(
+                                                                              fontSize: 8),
+                                                                      padding:
+                                                                          EdgeInsets
+                                                                              .zero,
+                                                                      foregroundColor: isSelected
+                                                                          ? Colors
+                                                                              .white
+                                                                          : Colors
+                                                                              .black,
+                                                                      backgroundColor: isSelected
+                                                                          ? Colors
+                                                                              .orange
+                                                                          : Colors
+                                                                              .grey[200],
+                                                                      shape:
+                                                                          RoundedRectangleBorder(
+                                                                        borderRadius:
+                                                                            BorderRadius.circular(8),
+                                                                      ),
+                                                                    ),
+                                                                    child: Text(
+                                                                        measurement),
+                                                                  ),
+                                                                ),
+                                                              );
+                                                            }).toList(),
                                                           ),
                                                         ],
                                                       ),
+                                                      Column(
+                                                        crossAxisAlignment: CrossAxisAlignment.end,
+                                                        children: [
+                                                          Column(
+                                                            children: [
+                                                              Text(
+                                                                'Quantity',
+                                                                style: TextStyle(
+                                                                    color: Color(
+                                                                        0xff1F2937),
+                                                                    fontSize:
+                                                                        14,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .w400,
+                                                                    fontFamily:
+                                                                        'Inter'),
+                                                              ),
+                                                              Row(
+                                                                children: [
+                                                                  IconButton(
+                                                                    icon: SvgPicture
+                                                                        .asset(
+                                                                            'assets/images/removepreview.svg'),
+                                                                    //  const Icon(
+                                                                    //     Icons
+                                                                    //         .remove_circle_outline),
+                                                                    onPressed:
+                                                                        _shopWithYourPrice
+                                                                            ? null
+                                                                            : () {
+                                                                                setState(() {
+                                                                                  _quantity = (_quantity - 1).clamp(1, 99);
+                                                                                });
+                                                                              },
+                                                                    color: _shopWithYourPrice
+                                                                        ? Colors
+                                                                            .grey
+                                                                        : Colors
+                                                                            .black,
+                                                                  ),
+                                                                  Container(
+                                                                    padding: EdgeInsets.symmetric(
+                                                                        vertical:
+                                                                            5,
+                                                                        horizontal:
+                                                                            18),
+                                                                    decoration: BoxDecoration(
+                                                                        borderRadius:
+                                                                            BorderRadius.circular(
+                                                                                10),
+                                                                        border: Border.all(
+                                                                            width:
+                                                                                0.5,
+                                                                            color:
+                                                                                Color(0xffF9F9F9))),
+                                                                    child: Text(
+                                                                      _quantity
+                                                                          .toString(),
+                                                                      style: const TextStyle(
+                                                                          color: Color(
+                                                                              0xff262626),
+                                                                          fontSize:
+                                                                              12,
+                                                                          fontFamily:
+                                                                              'Inter',
+                                                                          fontWeight:
+                                                                              FontWeight.w400),
+                                                                    ),
+                                                                  ),
+                                                                  IconButton(
+                                                                    icon: SvgPicture
+                                                                        .asset(
+                                                                            'assets/images/addpreview.svg'),
+                                                                    // const Icon(
+                                                                    //     Icons
+                                                                    //         .add_circle_outline),
+                                                                    onPressed:
+                                                                        _shopWithYourPrice
+                                                                            ? null
+                                                                            : () {
+                                                                                setState(() {
+                                                                                  _quantity = (_quantity + 1).clamp(1, 99);
+                                                                                });
+                                                                              },
+                                                                    color: _shopWithYourPrice
+                                                                        ? Colors
+                                                                            .grey
+                                                                        : Colors
+                                                                            .black,
+                                                                  ),
+                                                                ],
+                                                              ),
+                                                              SizedBox(
+                                                                height: 15,
+                                                              )
+                                                            ],
+                                                          ),
+                                                          Align(
+                                                          alignment: Alignment.centerRight,
+                                                          child: Text('\u20A6${ingredient.price}'))
+                                                        ],
+                                                      )
                                                     ],
-                                                  ),],)
-                                                 ],),
+                                                  ),
                                                   Spacer(),
-                                                  
+
                                                   Row(
-                                                    mainAxisAlignment: MainAxisAlignment.end,
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment.end,
                                                     children: [
                                                       Checkbox(
-                                                        side: BorderSide(width: 1.5),
+                                                        side: BorderSide(
+                                                            width: 1.5),
                                                         value:
                                                             _shopWithYourPrice,
                                                         onChanged: (value) {
@@ -443,86 +527,183 @@ class _GrainsScreenState extends State<GrainsScreen> {
                                                         style: TextStyle(
                                                             fontSize: 10),
                                                       ),
-                                                      SizedBox(width: 7,)
+                                                      SizedBox(
+                                                        width: 7,
+                                                      )
                                                     ],
                                                   ),
-                                                //  const SizedBox(height: 8),
+                                                  //  const SizedBox(height: 8),
                                                   Row(
-                                                    mainAxisAlignment: MainAxisAlignment.center,
-                                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .center,
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .center,
                                                     children: [
-                                                    
-                                                    
-                                                  // const SizedBox(height: 16),
-                                                  
-                                                  Expanded(
-                                                    child: ElevatedButton(
-                                                      onPressed: () {
-                                                        // TODO: Implement add to cart functionality
-                                                      },
-                                                      style: ElevatedButton
-                                                          .styleFrom(
-                                                        backgroundColor:
-                                                            Colors.orange,
-                                                        padding:
-                                                            const EdgeInsets
-                                                                .symmetric(
-                                                                vertical: 16),
-                                                        shape:
-                                                            RoundedRectangleBorder(
-                                                          borderRadius:
-                                                              BorderRadius
-                                                                  .circular(8),
-                                                        ),
-                                                      ),
-                                                      child: const Text(
-                                                        'Add to Cart',
-                                                        style: TextStyle(
-                                                          fontSize: 12,
-                                                          color: Colors.black,
-                                                          fontWeight:
-                                                              FontWeight.bold,
-                                                        ),
-                                                      ),
-                                                    ),
-                                                  ),
-                                                  const SizedBox(width: 10),
-                                                  Expanded(
-                                                    child: SizedBox(
-                                                      height: 35,
-                                                      child: TextField(
-                                                        
-                                                        controller:
-                                                            _priceController,
-                                                        enabled: _shopWithYourPrice,
-                                                        keyboardType:
-                                                            TextInputType.number,
-                                                        decoration: InputDecoration(
-                                                          hintText:
-                                                              'Enter your price',
-                                                          filled: true,
-                                                          hintStyle: TextStyle(fontSize: 12),
-                                                          fillColor:
-                                                              _shopWithYourPrice
-                                                                  ? Colors.white
-                                                                  : Colors
-                                                                      .grey[200],
-                                                          border:
-                                                              OutlineInputBorder(
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(8),
-                                                            borderSide:
-                                                                BorderSide.none,
+                                                      // const SizedBox(height: 16),
+
+                                                      Expanded(
+                                                        child: ElevatedButton(
+                                                          onPressed: () {
+                                                            if (widget
+                                                                .forProduct)
+                                                              widget.ingredients!.add(Ingredients(
+                                                                  id: ingredient
+                                                                      .id!,
+                                                                  createdAt:
+                                                                      ingredient
+                                                                          .createdAt,
+                                                                  description:
+                                                                      ingredient
+                                                                          .description,
+                                                                  imageUrl: ingredient
+                                                                      .imageUrl,
+                                                                  name: ingredient
+                                                                      .name,
+                                                                  price: double.tryParse(ingredient
+                                                                          .price
+                                                                          .toString()) ??
+                                                                      0.0,
+                                                                  basePrice: double.tryParse(ingredient
+                                                                          .price
+                                                                          .toString()) ??
+                                                                      0.0,
+                                                                  quantity:
+                                                                      _quantity));
+                                                            else
+                                                              cartController.addIngredientToCart(Data(
+                                                                  id: ingredient
+                                                                      .id,
+                                                                  createdAt: ingredient
+                                                                      .createdAt,
+                                                                  description:
+                                                                      ingredient
+                                                                          .description,
+                                                                  imageUrl:
+                                                                      ingredient
+                                                                          .imageUrl,
+                                                                  name:
+                                                                      ingredient
+                                                                          .name,
+                                                                  price: _shopWithYourPrice && ingredient.controller.text.isNotEmpty && double.tryParse(ingredient.controller.text) !> (double.tryParse(ingredient.price.toString()) ?? 0.0)  ? double.tryParse(ingredient.controller.text) :
+                                                                      ingredient
+                                                                          .price,
+                                                                  quantity:
+                                                                      _quantity,
+                                                                  stock:
+                                                                      ingredient
+                                                                          .stock,
+                                                                  unit: ingredient
+                                                                      .unit));
+
+                                                            Get.snackbar(
+                                                                'Success',
+                                                                'Item added to cart',
+                                                                colorText:
+                                                                    Colors
+                                                                        .white,
+                                                                backgroundColor:
+                                                                    Colors
+                                                                        .green);
+                                                            Navigator.pop(
+                                                                context);
+                                                          },
+                                                          style: ElevatedButton
+                                                              .styleFrom(
+                                                            backgroundColor:
+                                                                Colors.orange,
+                                                            padding:
+                                                                const EdgeInsets
+                                                                    .symmetric(
+                                                                    vertical:
+                                                                        16),
+                                                            shape:
+                                                                RoundedRectangleBorder(
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          8),
+                                                            ),
+                                                          ),
+                                                          child: const Text(
+                                                            'Add to Cart',
+                                                            style: TextStyle(
+                                                              fontSize: 12,
+                                                              fontFamily:
+                                                                  'Inter',
+                                                              color: Color(
+                                                                  0xff090909),
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w400,
+                                                            ),
                                                           ),
                                                         ),
                                                       ),
-                                                    ),
+                                                      const SizedBox(width: 10),
+                                                      
+                                                      Expanded(
+                                                        child: SizedBox(
+                                                          height: 35,
+                                                          child: TextField(
+                                                            onChanged: (value) {
+                                                             double inPrice = double.parse(value);
+                                                              if(inPrice < ingredient.price!){
+                                                                setState((){
+                                                                  errorText = 'custom price must be greater than default.';
+                                                                });
+                                                              }else {
+                                                                setState((){
+                                                                  errorText = '';
+                                                                });
+                                                              }
+                                                            },
+                                                            
+                                                            controller: ingredient.controller,
+                                                                        //  _priceController,
+                                                            enabled:
+                                                                _shopWithYourPrice,
+                                                            keyboardType:
+                                                                TextInputType
+                                                                    .number,
+                                                            decoration:
+                                                                InputDecoration(
+                                                                 // errorText: errorText,
+                                                              hintText:
+                                                                  'Enter your price',
+                                                              filled: true,
+                                                              hintStyle:
+                                                                  TextStyle(
+                                                                      fontSize:
+                                                                          12),
+                                                              fillColor:
+                                                                  _shopWithYourPrice
+                                                                      ? Colors
+                                                                          .white
+                                                                      : Colors.grey[
+                                                                          200],
+                                                              border:
+                                                                  OutlineInputBorder(
+                                                                borderRadius:
+                                                                    BorderRadius
+                                                                        .circular(
+                                                                            8),
+                                                                borderSide:
+                                                                    BorderSide
+                                                                        .none,
+                                                              ),
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ],
                                                   ),
-                                                  ],)
+                                                  SizedBox(height: 40),
                                                 ],
                                               ),
-                                            )
+                                            ),
+                                            // SizedBox(height: 20),
                                           ],
                                         ),
                                       ),

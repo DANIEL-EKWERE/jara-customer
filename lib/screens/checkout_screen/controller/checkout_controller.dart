@@ -142,6 +142,7 @@ class CheckoutController extends GetxController {
 // };
       buildOrderPayload(
         cartItems: cartController.cartItems,
+        ingredient: cartController.ingredientList,
         orderDate: DateFormat('yyyy-MM-dd').format(DateTime.now()),
         addressId: 1,
         deliveryType: 'pickup',

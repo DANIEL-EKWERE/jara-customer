@@ -35,6 +35,7 @@ class _HomeScreenState extends State<HomeScreen> {
   late Map<String, dynamic> userData;
   bool isSet = false;
   int _currentIndex = 0;
+  int _quantity = 1;
 
   final RefreshController _refreshController =
       RefreshController(initialRefresh: false);
@@ -193,39 +194,60 @@ class _HomeScreenState extends State<HomeScreen> {
                           onRefresh: _onRefresh,
                           child: ListView.separated(
                             physics: BouncingScrollPhysics(),
-                            itemCount: controller.category.length + 1, // Only one section for now, you can add more sections as needed
+                            itemCount: controller.category.length +
+                                1, // Only one section for now, you can add more sections as needed
                             separatorBuilder: (context, index) {
-                               if(index == 0) return SizedBox(
-                                      height: 24,
-                                    );
+                              if (index == 0)
+                                return SizedBox(
+                                  height: 24,
+                                );
                               // ? CustomButton(text: 'text', onPressed: (){}) : index == 2
-                                  
-                                  return Divider(
-                                      height: 24,
-                                      thickness: 0.5,
-                                      color: Colors.grey[400],
-                                    );
+
+                              return Divider(
+                                height: 24,
+                                thickness: 0.5,
+                                color: Colors.grey[400],
+                              );
                             },
 
                             itemBuilder: (context, sectionIndex) {
-                              if(sectionIndex == 0){
+                              if (sectionIndex == 0) {
                                 return Padding(
-                                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 16),
                                   child: SizedBox(
-                                    height: 94,
-                                  
-                                    child: Column(
-                                      children: [
-                                        Text('Shop for fresh ingredients, we deliver in minutes, You can\'t go wrong with Jara.',style: TextStyle(fontFamily: 'Monts', fontSize: 12, fontWeight: FontWeight.w400),),
-                                        SizedBox(height: 10,),
-                                        SizedBox(height: 50,child:  CustomButton(text: 'Shop For Ingredient', onPressed: (){
-                                          Navigator.push(context, CupertinoPageRoute(builder: (context)=> const GrainsScreen(forProduct: false,)));
-                                        })),
-                                      ],
-                                    )),
+                                      height: 94,
+                                      child: Column(
+                                        children: [
+                                          Text(
+                                            'Shop for fresh ingredients, we deliver in minutes, You can\'t go wrong with Jara.',
+                                            style: TextStyle(
+                                                fontFamily: 'Monts',
+                                                fontSize: 12,
+                                                fontWeight: FontWeight.w400),
+                                          ),
+                                          SizedBox(
+                                            height: 10,
+                                          ),
+                                          SizedBox(
+                                              height: 50,
+                                              child: CustomButton(
+                                                  text: 'Shop For Ingredient',
+                                                  onPressed: () {
+                                                    Navigator.push(
+                                                        context,
+                                                        CupertinoPageRoute(
+                                                            builder: (context) =>
+                                                                const GrainsScreen(
+                                                                  forProduct:
+                                                                      false,
+                                                                )));
+                                                  })),
+                                        ],
+                                      )),
                                 );
                               }
-                             return sectionIndex == 3
+                              return sectionIndex == 3
                                   ? Column(
                                       mainAxisAlignment:
                                           MainAxisAlignment.start,
@@ -677,7 +699,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                         )
                                       ],
                                     )
-                                  :  Padding(
+                                  : Padding(
                                       padding: const EdgeInsets.symmetric(
                                           horizontal: 16),
                                       child: Column(
@@ -692,7 +714,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                               children: [
                                                 Text(
                                                   controller
-                                                      .category[sectionIndex -1]
+                                                      .category[
+                                                          sectionIndex - 1]
                                                       .name
                                                       .toString(),
                                                   style: TextStyle(
@@ -704,7 +727,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                                 Spacer(),
                                                 controller
                                                             .category[
-                                                                sectionIndex -1]
+                                                                sectionIndex -
+                                                                    1]
                                                             .products!
                                                             .length <=
                                                         3
@@ -713,12 +737,13 @@ class _HomeScreenState extends State<HomeScreen> {
                                                         onTap: () {
                                                           // Handle "See All" tap
                                                           print(
-                                                              'Tapped on See All for category: ${controller.category[sectionIndex -1].name}');
+                                                              'Tapped on See All for category: ${controller.category[sectionIndex - 1].name}');
                                                           // Navigate to the next screen or perform any action
                                                           Get.to(() => SoupListScreen(
                                                               item: controller
                                                                       .category[
-                                                                  sectionIndex -1]));
+                                                                  sectionIndex -
+                                                                      1]));
                                                         },
                                                         child: Row(
                                                           children: [
@@ -752,7 +777,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                             height: 10,
                                           ),
                                           // Fixed height container for the grid
-                                          controller.category[sectionIndex -1]
+                                          controller.category[sectionIndex - 1]
                                                   .products!.isEmpty
                                               ? Center(
                                                   child: Padding(
@@ -771,7 +796,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                                   // Calculate height based on number of rows needed
                                                   height: (controller
                                                                   .category[
-                                                                      sectionIndex -1]
+                                                                      sectionIndex -
+                                                                          1]
                                                                   .products!
                                                                   .length /
                                                               4)
@@ -782,7 +808,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                                         NeverScrollableScrollPhysics(), // Disable grid scrolling
                                                     itemCount: controller
                                                                     .category[
-                                                                        sectionIndex -1]
+                                                                        sectionIndex -
+                                                                            1]
                                                                     .products!
                                                                     .length -
                                                                 1 >
@@ -790,7 +817,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                                         ? 8
                                                         : controller
                                                             .category[
-                                                                sectionIndex -1]
+                                                                sectionIndex -
+                                                                    1]
                                                             .products!
                                                             .length,
                                                     gridDelegate:
@@ -805,13 +833,294 @@ class _HomeScreenState extends State<HomeScreen> {
                                                       final category =
                                                           controller
                                                               .category[
-                                                                  sectionIndex -1]
+                                                                  sectionIndex -
+                                                                      1]
                                                               .products;
                                                       return GestureDetector(
                                                         onTap: () {
+                                                          // showDialog(
+                                                          //   barrierDismissible:
+                                                          //       false,
+                                                          //   context: context,
+                                                          //   builder:
+                                                          //       (BuildContext
+                                                          //           context) {
+                                                          //     return StatefulBuilder(
+                                                          //       builder: (context,
+                                                          //           setState) {
+                                                          //         return AlertDialog(
+                                                          //           insetPadding:
+                                                          //               EdgeInsets
+                                                          //                   .zero,
+                                                          //           contentPadding: EdgeInsets.only(
+                                                          //               right:
+                                                          //                   16,
+                                                          //               left:
+                                                          //                   24,
+                                                          //               top: 0,
+                                                          //               bottom:
+                                                          //                   16),
+                                                          //           backgroundColor:
+                                                          //               Colors.grey[
+                                                          //                   100],
+                                                          //           title: Row(
+                                                          //             mainAxisAlignment:
+                                                          //                 MainAxisAlignment
+                                                          //                     .spaceBetween,
+                                                          //             children: [
+                                                          //               Align(
+                                                          //                 alignment:
+                                                          //                     Alignment.topLeft,
+                                                          //                 child:
+                                                          //                     Text(
+                                                          //                   category[index].name.toString(),
+                                                          //                   style:
+                                                          //                       TextStyle(
+                                                          //                     fontSize: 14,
+                                                          //                     fontFamily: 'Roboto',
+                                                          //                     fontWeight: FontWeight.w600,
+                                                          //                   ),
+                                                          //                 ),
+                                                          //               ),
+                                                          //               Align(
+                                                          //                   alignment:
+                                                          //                       Alignment.topRight,
+                                                          //                   child: GestureDetector(
+                                                          //                       onTap: () {
+                                                          //                         Navigator.of(context).pop();
+                                                          //                       },
+                                                          //                       child: Icon(Icons.cancel_presentation_rounded))),
+                                                          //             ],
+                                                          //           ),
+                                                          //           content:
+                                                          //               // Text(
+                                                          //               //     "This is a popup modal!"),
+                                                          //               Container(
+                                                          //             height:
+                                                          //                 273,
+                                                          //             decoration:
+                                                          //                 BoxDecoration(
+                                                          //                     //  color: Colors.grey[400]
+                                                          //                     ),
+                                                          //             child:
+                                                          //                 Column(
+                                                          //               mainAxisAlignment:
+                                                          //                   MainAxisAlignment.start,
+                                                          //               children: [
+                                                          //                 Row(
+                                                          //                   mainAxisAlignment:
+                                                          //                       MainAxisAlignment.spaceBetween,
+                                                          //                   crossAxisAlignment:
+                                                          //                       CrossAxisAlignment.center,
+                                                          //                   children: [
+                                                          //                     Align(
+                                                          //                       alignment: Alignment.topLeft,
+                                                          //                       child: Text(
+                                                          //                         "\u20A6${category[index].price}",
+                                                          //                         style: TextStyle(
+                                                          //                           fontSize: 14,
+                                                          //                           fontFamily: 'Roboto',
+                                                          //                           fontWeight: FontWeight.w600,
+                                                          //                         ),
+                                                          //                       ),
+                                                          //                     ),
+                                                          //                     Text(
+                                                          //                       ' Per Portion',
+                                                          //                       style: TextStyle(color: Colors.grey[400], fontSize: 10),
+                                                          //                     ),
+                                                          //                     Spacer(),
+                                                          //                     Align(
+                                                          //                       alignment: Alignment.topRight,
+                                                          //                       child: IconButton(
+                                                          //                           onPressed: () async {
+                                                          //                             if (category[index].isFavorite) {
+                                                          //                               // Remove from favorites
+                                                          //                               controller.removeFavorite(category[index].id!);
+                                                          //                               print('Removing from favorites');
+                                                          //                             }
+                                                          //                             var result = await controller.addFavorite(category[index].id!);
+                                                          //                             setState(() {
+                                                          //                               //isSet = !isSet;
+                                                          //                               category[index].isFavorite = !category[index].isFavorite;
+
+                                                          //                               if (!result) {
+                                                          //                                 category[index].isFavorite = !category[index].isFavorite;
+                                                          //                               }
+                                                          //                             });
+                                                          //                           },
+                                                          //                           icon: category[index].isFavorite ? Icon(Icons.favorite_rounded) : Icon(Icons.favorite_border_rounded)),
+                                                          //                     )
+                                                          //                   ],
+                                                          //                 ),
+                                                          //                 Align(
+                                                          //                   alignment:
+                                                          //                       Alignment.topLeft,
+                                                          //                   child:
+                                                          //                       Text(
+                                                          //                     //"${category[index].stock} Portion Available",
+                                                          //                     "${category[index].ingredients!.length} Ingredients in food",
+
+                                                          //                     style: TextStyle(
+                                                          //                       color: Colors.grey[600],
+                                                          //                       fontSize: 14,
+                                                          //                       fontFamily: 'Roboto',
+                                                          //                       fontWeight: FontWeight.w400,
+                                                          //                     ),
+                                                          //                   ),
+                                                          //                 ),
+                                                          //                 Container(
+                                                          //                   height:
+                                                          //                       150,
+                                                          //                   decoration:
+                                                          //                       BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(20)), border: Border.all(width: 10, color: Colors.white)),
+                                                          //                   child:
+                                                          //                       Container(
+                                                          //                     // widthFactor: 10.5,
+                                                          //                     // heightFactor: 10.5,
+                                                          //                     child: category[index].imageUrl != null
+                                                          //                         ?
+                                                          //                         //  Image.network(
+                                                          //                         //     category[index].imageUrl.toString(),
+                                                          //                         //     fit: BoxFit.cover,
+                                                          //                         //   )
+                                                          //                         ClipRRect(
+                                                          //                             borderRadius: BorderRadius.circular(20),
+                                                          //                             child: CachedNetworkImage(
+                                                          //                               imageUrl: category[index].imageUrl.toString(),
+                                                          //                               placeholder: (context, url) => const Padding(
+                                                          //                                 padding: EdgeInsets.all(8.0),
+                                                          //                                 child: Center(
+                                                          //                                   child: const SpinKitPulse(
+                                                          //                                     color: Colors.amber, // You can use any color
+                                                          //                                     size: 24.0, // Customize size
+                                                          //                                   ),
+                                                          //                                 ),
+                                                          //                               ),
+                                                          //                               errorWidget: (context, url, error) => const Icon(Icons.error),
+                                                          //                               width: context.width * 0.6,
+                                                          //                               height: 40,
+                                                          //                               fit: BoxFit.cover,
+                                                          //                             ))
+                                                          //                         : SvgPicture.asset('assets/images/product_image.svg'),
+                                                          //                   ),
+                                                          //                 ),
+                                                          //                 SizedBox(
+                                                          //                   height:
+                                                          //                       10,
+                                                          //                 ),
+                                                          //                 Container(
+                                                          //                   padding:
+                                                          //                       EdgeInsets.all(8),
+                                                          //                   height:
+                                                          //                       53,
+                                                          //                   decoration:
+                                                          //                       BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(12)), color: Colors.amber[50]),
+                                                          //                   child:
+                                                          //                       Text('*${category[index].description}\n We also Offer meal prep as well!!!'),
+                                                          //                 )
+                                                          //               ],
+                                                          //             ),
+                                                          //           ),
+                                                          //           actions: [
+                                                          //             Row(
+                                                          //               spacing:
+                                                          //                   context.width *
+                                                          //                       0.02,
+                                                          //               children: [
+                                                          //                 SizedBox(
+                                                          //                     height: 40,
+                                                          //                     width: 110,
+                                                          //                     child: ElevatedButton(
+                                                          //                         style: ElevatedButton.styleFrom(
+                                                          //                           elevation: 0,
+                                                          //                           padding: EdgeInsets.symmetric(horizontal: 8, vertical: 6),
+                                                          //                           backgroundColor: Colors.white,
+                                                          //                           foregroundColor: Color(0xffffffff),
+                                                          //                           shape: RoundedRectangleBorder(
+                                                          //                             borderRadius: BorderRadius.circular(4),
+                                                          //                             side: BorderSide(color: Colors.blueGrey),
+                                                          //                           ),
+                                                          //                         ),
+                                                          //                         onPressed: () {
+                                                          //                           // Navigator.of(context).pop();
+                                                          //                           // Navigator.of(context).push(CupertinoPageRoute(
+                                                          //                           //     builder: (context) => FoodDetailScreen(
+                                                          //                           //           item: category[index],
+                                                          //                           //         )));
+                                                          //                           print('Add to cart pressed ${category[index].id}');
+
+                                                          //                           cartController.addToCart(CartItem(
+                                                          //                             id: category[index].id!,
+                                                          //                             name: category[index].name!,
+                                                          //                             description: category[index].description ?? 'N/A',
+                                                          //                             price: double.tryParse(category[index].price!.toString()) ?? 0.0,
+                                                          //                             originalPrice: double.tryParse(category[index].price!.toString()) ?? 0.0,
+                                                          //                             ingredients: category[index]
+                                                          //                                 .ingredients!
+                                                          //                                 .map((ingredient) => Ingredients(
+                                                          //                                       basePrice: double.tryParse(ingredient.price.toString()) ?? 0.0,
+                                                          //                                       id: ingredient.id!,
+                                                          //                                       name: ingredient.name,
+                                                          //                                       description: ingredient.description,
+                                                          //                                       price: double.tryParse(ingredient.price.toString()) ?? 0.0,
+                                                          //                                     ))
+                                                          //                                 .toList(),
+                                                          //                           ));
+                                                          //                           // print(category[index].id!);
+                                                          //                           // print(category[index].name!);
+                                                          //                           // print(category[index].description!);
+                                                          //                           // print(category[index].price!);
+                                                          //                           // Add your add to cart logic here
+                                                          //                         },
+                                                          //                         child: Row(
+                                                          //                           spacing: 4,
+                                                          //                           children: [
+                                                          //                             Icon(
+                                                          //                               Icons.shopping_cart_outlined,
+                                                          //                               color: Colors.blueGrey,
+                                                          //                               size: 16,
+                                                          //                             ),
+                                                          //                             Text(
+                                                          //                               'Add To Cart',
+                                                          //                               style: TextStyle(color: Colors.blueGrey, fontSize: 12),
+                                                          //                             )
+                                                          //                           ],
+                                                          //                         ))),
+                                                          //                 Expanded(
+                                                          //                   child: SizedBox(
+                                                          //                       height: 40,
+                                                          //                       child: ElevatedButton(
+                                                          //                         style: ElevatedButton.styleFrom(
+                                                          //                           padding: EdgeInsets.symmetric(horizontal: 8, vertical: 6),
+                                                          //                           backgroundColor: Color(0xffCC6522),
+                                                          //                           foregroundColor: Color(0xffffffff),
+                                                          //                           shape: RoundedRectangleBorder(
+                                                          //                             borderRadius: BorderRadius.circular(4),
+                                                          //                           ),
+                                                          //                         ),
+                                                          //                         onPressed: () {
+                                                          //                           Navigator.of(context).pop();
+                                                          //                           Navigator.of(context).push(CupertinoPageRoute(
+                                                          //                               builder: (context) => FoodDetailScreen(
+                                                          //                                     item: category[index],
+                                                          //                                   )));
+                                                          //                         },
+                                                          //                         child: Text('GET INGREDIENT', style: TextStyle(color: Colors.white, fontSize: 12)),
+                                                          //                       )),
+                                                          //                 )
+                                                          //               ],
+                                                          //             )
+                                                          //           ],
+                                                          //         );
+                                                          //       },
+                                                          //     );
+                                                          //   },
+                                                          // );
+
+                                                          //TODO: show dialouge here
+
                                                           showDialog(
-                                                            barrierDismissible:
-                                                                false,
+                                                            // barrierDismissible: false,
                                                             context: context,
                                                             builder:
                                                                 (BuildContext
@@ -819,56 +1128,16 @@ class _HomeScreenState extends State<HomeScreen> {
                                                               return StatefulBuilder(
                                                                 builder: (context,
                                                                     setState) {
-                                                                  return AlertDialog(
-                                                                    insetPadding:
-                                                                        EdgeInsets
-                                                                            .zero,
-                                                                    contentPadding: EdgeInsets.only(
-                                                                        right:
-                                                                            16,
-                                                                        left:
-                                                                            24,
-                                                                        top: 0,
-                                                                        bottom:
-                                                                            16),
+                                                                  return Dialog(
                                                                     backgroundColor:
-                                                                        Colors.grey[
-                                                                            100],
-                                                                    title: Row(
-                                                                      mainAxisAlignment:
-                                                                          MainAxisAlignment
-                                                                              .spaceBetween,
-                                                                      children: [
-                                                                        Align(
-                                                                          alignment:
-                                                                              Alignment.topLeft,
-                                                                          child:
-                                                                              Text(
-                                                                            category[index].name.toString(),
-                                                                            style:
-                                                                                TextStyle(
-                                                                              fontSize: 14,
-                                                                              fontFamily: 'Roboto',
-                                                                              fontWeight: FontWeight.w600,
-                                                                            ),
-                                                                          ),
-                                                                        ),
-                                                                        Align(
-                                                                            alignment:
-                                                                                Alignment.topRight,
-                                                                            child: GestureDetector(
-                                                                                onTap: () {
-                                                                                  Navigator.of(context).pop();
-                                                                                },
-                                                                                child: Icon(Icons.cancel_presentation_rounded))),
-                                                                      ],
-                                                                    ),
-                                                                    content:
-                                                                        // Text(
-                                                                        //     "This is a popup modal!"),
+                                                                        Colors
+                                                                            .transparent,
+                                                                    child:
                                                                         Container(
+                                                                      width: double
+                                                                          .infinity,
                                                                       height:
-                                                                          273,
+                                                                          420,
                                                                       decoration:
                                                                           BoxDecoration(
                                                                               //  color: Colors.grey[400]
@@ -878,84 +1147,18 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                         mainAxisAlignment:
                                                                             MainAxisAlignment.start,
                                                                         children: [
-                                                                          Row(
-                                                                            mainAxisAlignment:
-                                                                                MainAxisAlignment.spaceBetween,
-                                                                            crossAxisAlignment:
-                                                                                CrossAxisAlignment.center,
-                                                                            children: [
-                                                                              Align(
-                                                                                alignment: Alignment.topLeft,
-                                                                                child: Text(
-                                                                                  "\u20A6${category[index].price}",
-                                                                                  style: TextStyle(
-                                                                                    fontSize: 14,
-                                                                                    fontFamily: 'Roboto',
-                                                                                    fontWeight: FontWeight.w600,
-                                                                                  ),
-                                                                                ),
-                                                                              ),
-                                                                              Text(
-                                                                                ' Per Portion',
-                                                                                style: TextStyle(color: Colors.grey[400], fontSize: 10),
-                                                                              ),
-                                                                              Spacer(),
-                                                                              Align(
-                                                                                alignment: Alignment.topRight,
-                                                                                child: IconButton(
-                                                                                    onPressed: () async {
-                                                                                      if (category[index].isFavorite) {
-                                                                                        // Remove from favorites
-                                                                                        controller.removeFavorite(category[index].id!);
-                                                                                        print('Removing from favorites');
-                                                                                      }
-                                                                                      var result = await controller.addFavorite(category[index].id!);
-                                                                                      setState(() {
-                                                                                        //isSet = !isSet;
-                                                                                        category[index].isFavorite = !category[index].isFavorite;
-                                              
-                                                                                        if (!result) {
-                                                                                          category[index].isFavorite = !category[index].isFavorite;
-                                                                                        }
-                                                                                      });
-                                                                                    },
-                                                                                    icon: category[index].isFavorite ? Icon(Icons.favorite_rounded) : Icon(Icons.favorite_border_rounded)),
-                                                                              )
-                                                                            ],
-                                                                          ),
-                                                                          Align(
-                                                                            alignment:
-                                                                                Alignment.topLeft,
-                                                                            child:
-                                                                                Text(
-                                                                              //"${category[index].stock} Portion Available",
-                                                                              "${category[index].ingredients!.length} Ingredients in food",
-                                              
-                                                                              style: TextStyle(
-                                                                                color: Colors.grey[600],
-                                                                                fontSize: 14,
-                                                                                fontFamily: 'Roboto',
-                                                                                fontWeight: FontWeight.w400,
-                                                                              ),
-                                                                            ),
-                                                                          ),
                                                                           Container(
+                                                                            decoration:
+                                                                                BoxDecoration(color: Colors.transparent),
+                                                                            width:
+                                                                                double.infinity,
                                                                             height:
                                                                                 150,
-                                                                            decoration:
-                                                                                BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(20)), border: Border.all(width: 10, color: Colors.white)),
                                                                             child:
                                                                                 Container(
-                                                                              // widthFactor: 10.5,
-                                                                              // heightFactor: 10.5,
                                                                               child: category[index].imageUrl != null
-                                                                                  ?
-                                                                                  //  Image.network(
-                                                                                  //     category[index].imageUrl.toString(),
-                                                                                  //     fit: BoxFit.cover,
-                                                                                  //   )
-                                                                                  ClipRRect(
-                                                                                      borderRadius: BorderRadius.circular(20),
+                                                                                  ? ClipRRect(
+                                                                                      borderRadius: BorderRadius.only(topLeft: Radius.circular(20), topRight: Radius.circular(20)),
                                                                                       child: CachedNetworkImage(
                                                                                         imageUrl: category[index].imageUrl.toString(),
                                                                                         placeholder: (context, url) => const Padding(
@@ -968,59 +1171,140 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                                           ),
                                                                                         ),
                                                                                         errorWidget: (context, url, error) => const Icon(Icons.error),
-                                                                                        width: context.width * 0.6,
+                                                                                        width: context.width * 0.9,
                                                                                         height: 40,
                                                                                         fit: BoxFit.cover,
                                                                                       ))
                                                                                   : SvgPicture.asset('assets/images/product_image.svg'),
                                                                             ),
                                                                           ),
-                                                                          SizedBox(
-                                                                            height:
-                                                                                10,
-                                                                          ),
                                                                           Container(
                                                                             padding:
                                                                                 EdgeInsets.all(8),
                                                                             height:
-                                                                                53,
+                                                                                255,
+                                                                            width:
+                                                                                double.infinity,
                                                                             decoration:
-                                                                                BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(12)), color: Colors.amber[50]),
+                                                                                BoxDecoration(borderRadius: BorderRadius.only(bottomLeft: Radius.circular(20), bottomRight: Radius.circular(20)), color: Colors.white),
                                                                             child:
-                                                                                Text('*${category[index].description}\n We also Offer meal prep as well!!!'),
-                                                                          )
-                                                                        ],
-                                                                      ),
-                                                                    ),
-                                                                    actions: [
-                                                                      Row(
-                                                                        spacing:
-                                                                            context.width *
-                                                                                0.02,
-                                                                        children: [
-                                                                          SizedBox(
-                                                                              height: 40,
-                                                                              width: 110,
-                                                                              child: ElevatedButton(
-                                                                                  style: ElevatedButton.styleFrom(
-                                                                                    elevation: 0,
-                                                                                    padding: EdgeInsets.symmetric(horizontal: 8, vertical: 6),
-                                                                                    backgroundColor: Colors.white,
-                                                                                    foregroundColor: Color(0xffffffff),
-                                                                                    shape: RoundedRectangleBorder(
-                                                                                      borderRadius: BorderRadius.circular(4),
-                                                                                      side: BorderSide(color: Colors.blueGrey),
+                                                                                Column(
+                                                                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                                              children: [
+                                                                                Row(
+                                                                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                                                                  children: [
+                                                                                    Text(
+                                                                                      '${category[index].name}',
+                                                                                      style: TextStyle(color: Color(0xff1F2937), fontFamily: 'Inter', fontSize: 24, fontWeight: FontWeight.w400),
                                                                                     ),
-                                                                                  ),
-                                                                                  onPressed: () {
-                                                                                    // Navigator.of(context).pop();
-                                                                                    // Navigator.of(context).push(CupertinoPageRoute(
-                                                                                    //     builder: (context) => FoodDetailScreen(
-                                                                                    //           item: category[index],
-                                                                                    //         )));
-                                                                                    print('Add to cart pressed ${category[index].id}');
-                                              
-                                                                                    cartController.addToCart(CartItem(
+                                                                                    Spacer(),
+                                                                                    Text('2.5k orders'),
+                                                                                  ],
+                                                                                ),
+                                                                                SizedBox(
+                                                                                  height: 10,
+                                                                                ),
+
+                                                                                Row(
+                                                                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                                                  children: [
+                                                                                    
+                                                                                    Column(
+                                                                                      mainAxisAlignment:
+                                                                                          MainAxisAlignment
+                                                                                              .start,
+                                                                                      crossAxisAlignment:
+                                                                                          CrossAxisAlignment
+                                                                                              .start,
+                                                                                      children: [
+                                                                                        Row(
+                                                                                          children:[
+                                                                                             Text(
+                                                                                      '${category[index].ingredients!.length} ingredients',
+                                                                                      style: TextStyle(color: Color(0xff1F2937), fontFamily: 'Inter', fontSize: 14, fontWeight: FontWeight.w400),
+                                                                                    ),
+                                                                                          ]
+                                                                                        ),
+                                                                                        SizedBox(
+                                                                                          height: 10,
+                                                                                        ),
+                                                                                        Row(
+                                                                                          //  crossAxisAlignment: CrossAxisAlignment.start,
+                                                                                          children: [
+                                                                                    // ),
+                                                                                    Text(
+                                                                                      '\u20A6${category[index].price} Per Portion',
+                                                                                      style: TextStyle(color: Color(0xff1F2937), fontFamily: 'Roboto', fontSize: 14, fontWeight: FontWeight.w400),
+                                                                                    ),
+                                                                                          ]
+                                                                                        ),
+                                                                                      ],
+                                                                                    ),
+                                                                                    Column(
+                                                                                      children: [
+                                                                                        Column(
+                                                                                          children: [
+                                                                                            Text(
+                                                                                              'Quantity',
+                                                                                              style: TextStyle(color: Color(0xff1F2937), fontSize: 14, fontWeight: FontWeight.w400, fontFamily: 'Inter'),
+                                                                                            ),
+                                                                                            Row(
+                                                                                              children: [
+                                                                                                IconButton(
+                                                                                                  icon: SvgPicture.asset('assets/images/removepreview.svg'),
+                                                                                                  //  const Icon(
+                                                                                                  //     Icons
+                                                                                                  //         .remove_circle_outline),
+                                                                                                  onPressed: () {
+                                                                                                    setState(() {
+                                                                                                      _quantity = (_quantity - 1).clamp(1, 99);
+                                                                                                    });
+                                                                                                  },
+                                                                                                  color: Colors.black,
+                                                                                                ),
+                                                                                                Container(
+                                                                                                  padding: EdgeInsets.symmetric(vertical: 5, horizontal: 18),
+                                                                                                  decoration: BoxDecoration(borderRadius: BorderRadius.circular(10), border: Border.all(width: 0.5, color: Color(0xffF9F9F9))),
+                                                                                                  child: Text(
+                                                                                                    _quantity.toString(),
+                                                                                                    style: const TextStyle(color: Color(0xff262626), fontSize: 12, fontFamily: 'Inter', fontWeight: FontWeight.w400),
+                                                                                                  ),
+                                                                                                ),
+                                                                                                IconButton(
+                                                                                                  icon: SvgPicture.asset('assets/images/addpreview.svg'),
+                                                                                                  // const Icon(
+                                                                                                  //     Icons
+                                                                                                  //         .add_circle_outline),
+                                                                                                  onPressed: () {
+                                                                                                    setState(() {
+                                                                                                      _quantity = (_quantity + 1).clamp(1, 99);
+                                                                                                    });
+                                                                                                  },
+                                                                                                  color: Colors.black,
+                                                                                                ),
+                                                                                              ],
+                                                                                            ),
+                                                                                            SizedBox(
+                                                                                              height: 15,
+                                                                                            )
+                                                                                          ],
+                                                                                        ),
+                                                                                      ],
+                                                                                    )
+                                                                                  ],
+                                                                                ),
+                                                                                Spacer(),
+                                                                                Row(
+                                                                                  mainAxisAlignment: MainAxisAlignment.center,
+                                                                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                                                                  children: [
+                                                                                    // const SizedBox(height: 16),
+
+                                                                                    Expanded(
+                                                                                      child: ElevatedButton(
+                                                                                        onPressed: () {
+                                                                                          cartController.addToCart(CartItem(
                                                                                       id: category[index].id!,
                                                                                       name: category[index].name!,
                                                                                       description: category[index].description ?? 'N/A',
@@ -1037,51 +1321,77 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                                               ))
                                                                                           .toList(),
                                                                                     ));
-                                                                                    // print(category[index].id!);
-                                                                                    // print(category[index].name!);
-                                                                                    // print(category[index].description!);
-                                                                                    // print(category[index].price!);
-                                                                                    // Add your add to cart logic here
-                                                                                  },
-                                                                                  child: Row(
-                                                                                    spacing: 4,
-                                                                                    children: [
-                                                                                      Icon(
-                                                                                        Icons.shopping_cart_outlined,
-                                                                                        color: Colors.blueGrey,
-                                                                                        size: 16,
+                                                                                          Get.snackbar('Success', 'Item added to cart', colorText: Colors.white, backgroundColor: Colors.green);
+                                                                                          Navigator.pop(context);
+                                                                                        },
+                                                                                        style: ElevatedButton.styleFrom(
+                                                                                          backgroundColor: Colors.orange,
+                                                                                          padding: const EdgeInsets.symmetric(vertical: 16),
+                                                                                          shape: RoundedRectangleBorder(
+                                                                                            borderRadius: BorderRadius.circular(8),
+                                                                                          ),
+                                                                                        ),
+                                                                                        child: const Text(
+                                                                                          'Add to Cart',
+                                                                                          style: TextStyle(
+                                                                                            fontSize: 12,
+                                                                                            fontFamily: 'Inter',
+                                                                                            color: Color(0xff090909),
+                                                                                            fontWeight: FontWeight.w400,
+                                                                                          ),
+                                                                                        ),
                                                                                       ),
-                                                                                      Text(
-                                                                                        'Add To Cart',
-                                                                                        style: TextStyle(color: Colors.blueGrey, fontSize: 12),
-                                                                                      )
-                                                                                    ],
-                                                                                  ))),
-                                                                          Expanded(
-                                                                            child: SizedBox(
-                                                                                height: 40,
-                                                                                child: ElevatedButton(
-                                                                                  style: ElevatedButton.styleFrom(
-                                                                                    padding: EdgeInsets.symmetric(horizontal: 8, vertical: 6),
-                                                                                    backgroundColor: Color(0xffCC6522),
-                                                                                    foregroundColor: Color(0xffffffff),
-                                                                                    shape: RoundedRectangleBorder(
-                                                                                      borderRadius: BorderRadius.circular(4),
                                                                                     ),
-                                                                                  ),
-                                                                                  onPressed: () {
-                                                                                    Navigator.of(context).pop();
-                                                                                    Navigator.of(context).push(CupertinoPageRoute(
-                                                                                        builder: (context) => FoodDetailScreen(
-                                                                                              item: category[index],
-                                                                                            )));
-                                                                                  },
-                                                                                  child: Text('GET INGREDIENT', style: TextStyle(color: Colors.white, fontSize: 12)),
-                                                                                )),
-                                                                          )
+                                                                                    const SizedBox(width: 10),
+                                                                                    Expanded(
+                                                                                      child: ElevatedButton(
+                                                                                        onPressed: () {
+                                                                                          Navigator.of(context).pop();
+                                                                                          Navigator.of(context).push(CupertinoPageRoute(
+                                                                                              builder: (context) => FoodDetailScreen(
+                                                                                                    item: category[index],
+                                                                                                  )));
+                                                                                        },
+                                                                                        style: ElevatedButton.styleFrom(
+                                                                                          backgroundColor: Colors.orange,
+                                                                                          padding: const EdgeInsets.symmetric(vertical: 16),
+                                                                                          shape: RoundedRectangleBorder(
+                                                                                            borderRadius: BorderRadius.circular(8),
+                                                                                          ),
+                                                                                        ),
+                                                                                        child: const Text(
+                                                                                          'GET INGREDIENT',
+                                                                                          style: TextStyle(
+                                                                                            fontSize: 12,
+                                                                                            fontFamily: 'Inter',
+                                                                                            color: Colors.white,
+                                                                                            fontWeight: FontWeight.w400,
+                                                                                          ),
+                                                                                        ),
+                                                                                      ),
+                                                                                    ),
+                                                                                    // Expanded(
+                                                                                    //   child: SizedBox(
+                                                                                    //       height: 40,
+                                                                                    //       child: CustomButton(text: 'GET INGREDIENT', onPressed: (){
+                                                                                    //         Navigator.of(context).pop();
+                                                                                    //                               Navigator.of(context).push(CupertinoPageRoute(
+                                                                                    //                                   builder: (context) => FoodDetailScreen(
+                                                                                    //                                         item: category[index],
+                                                                                    //                                       )));
+                                                                                    //       })
+                                                                                    //       ),
+                                                                                    // )
+                                                                                  ],
+                                                                                ),
+                                                                                SizedBox(height: 40),
+                                                                              ],
+                                                                            ),
+                                                                          ),
+                                                                          // SizedBox(height: 20),
                                                                         ],
-                                                                      )
-                                                                    ],
+                                                                      ),
+                                                                    ),
                                                                   );
                                                                 },
                                                               );
@@ -1091,7 +1401,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                           print(
                                                               'Tapped on category: $category');
                                                           myLog.log(
-                                                              'product image ${category[sectionIndex -1].imageUrl}');
+                                                              'product image ${category[sectionIndex - 1].imageUrl}');
                                                         },
                                                         child: Column(
                                                           children: [

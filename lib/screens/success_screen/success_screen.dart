@@ -6,6 +6,7 @@ import 'package:jara_market/screens/main_screen/main_screen.dart';
 import 'package:jara_market/screens/success_screen/controller/success_controller.dart';
 import 'package:jara_market/widgets/cart_widgets/cart_summary.dart';
 import 'package:jara_market/widgets/cart_widgets/cart_summary_card.dart';
+import 'package:jara_market/widgets/cart_widgets/checkout_summary_cart3.dart';
 // import '../../widgets/cart_product_card.dart';
 
 SuccessController controller = Get.put(SuccessController());
@@ -46,10 +47,91 @@ class _SuccessScreenState extends State<SuccessScreen> {
                 ListView.separated(
                   shrinkWrap: true,
                   physics: NeverScrollableScrollPhysics(),
-                  itemCount: cartController.cartItems.length,
+                  itemCount: cartController.cartItems.length + 1,
                   separatorBuilder: (context, index) =>
                       const Divider(height: 1),
                   itemBuilder: (context, index) {
+                    if(index == cartController.cartItems.length){
+                      return cartController.ingredientList.length == 0 ? SizedBox.shrink() :  Column(children: [
+                        Container(
+                                width: double.infinity,
+                                height: 50,
+                                decoration: BoxDecoration(
+                                  color: Colors.grey.shade200,
+                                  borderRadius: BorderRadius.circular(5),
+                                ),
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    //  const SizedBox(height: 10),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                          crossAxisAlignment: CrossAxisAlignment.center,
+                                      children: [
+                                        
+                                        Text(
+                                          'Ingredients',
+                                          style: TextStyle(
+                                              fontSize: 16,
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                       
+                                      ],
+                                    ),
+                                   
+                                  ],
+                                )),
+                            SizedBox(
+                              height:
+                                  (cartController.ingredientList.length * 110.0)
+                                      .clamp(0.0, 300.0),
+                              child: Column(
+                                children: [
+                                  Expanded(
+                                    child: ListView.separated(
+                                        physics: NeverScrollableScrollPhysics(),
+                                        itemBuilder: (context, index) {
+                                          return CartItemCard3(
+                                            id: cartController
+                                                .ingredientList[index].id!,
+                                            ingredients:
+                                                cartController.ingredientList,
+                                            name: cartController
+                                                .ingredientList[index].name!,
+                                            unit: cartController
+                                                .ingredientList[index]
+                                                .description ?? 'N/A',
+                                            basePrice: cartController
+                                                .ingredientList[index].price!,
+                                            quantity:  cartController
+                                                .ingredientList[index]
+                                                .quantity!,
+                                            textController:
+                                                TextEditingController(
+                                              text: (cartController
+                                                      .ingredientList[index]
+                                                      .quantity)
+                                                  .toString(),
+                                            ),
+                                            isSelected: false,
+                                          );
+                                        },
+                                        separatorBuilder: (context, index) =>
+                                            const Divider(
+                                              height: 0.5,
+                                              color: Color.fromARGB(
+                                                  57, 228, 228, 228),
+                                            ),
+                                        itemCount: cartController
+                                            .ingredientList.length),
+                                  )
+                                ],
+                              ),
+                            ),
+                      ],);
+                    }
                     final item = cartController.cartItems[index];
                     final ingredients = item.ingredients;
                     return CartItemCard2(
@@ -93,11 +175,12 @@ class _SuccessScreenState extends State<SuccessScreen> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       SizedBox(
-                        height: 80,
+                        height: 50,
                         width: 150,
                         child: ElevatedButton.icon(
                           onPressed: () {
                             cartController.cartItems.clear();
+                            cartController.ingredientList.clear();
                             Navigator.push(
                               context,
                               MaterialPageRoute(
@@ -125,12 +208,13 @@ class _SuccessScreenState extends State<SuccessScreen> {
                       ),
                       const SizedBox(width: 15),
                       SizedBox(
-                        height: 80,
+                        height: 50,
                         width: 150,
                         child: ElevatedButton(
                           onPressed: () {
                             // to implement tracking my order here
                             cartController.cartItems.clear();
+                            cartController.ingredientList.clear();
                           },
                           //   : null,
                           child: const Text(

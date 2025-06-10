@@ -59,7 +59,7 @@ class CustomBottomNav extends StatelessWidget {
                 ),
                 showBadge: true,
                 badgeContent: Text(
-                  Get.find<CartController>().cartItems.length.toString(),
+                  (Get.find<CartController>().cartItems.length + Get.find<CartController>().ingredientList.length).toString(),
                   style: const TextStyle(color: Colors.white, fontSize: 12),
                 ),
                 child: const Icon(Icons.shopping_cart_outlined,weight: 0.01,),
@@ -73,7 +73,7 @@ class CustomBottomNav extends StatelessWidget {
                 ),
                 showBadge: true,
                 badgeContent: Text(
-                  Get.find<CartController>().cartItems.length.toString(),
+                  (Get.find<CartController>().cartItems.length + Get.find<CartController>().ingredientList.length).toString(),
                   style: const TextStyle(color: Colors.white, fontSize: 12),
                 ),
                 child: const Icon(Icons.shopping_cart_outlined,weight: 0.01,),

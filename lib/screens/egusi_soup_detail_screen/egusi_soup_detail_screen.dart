@@ -150,7 +150,9 @@ class _FoodDetailScreenState extends State<FoodDetailScreen> {
       appBar: CustomAppBar(
         title: widget.item.name.toString(),
         titleColor: Colors.orange,
-        onBackPressed: () {},
+        onBackPressed: () {
+          Navigator.of(context).pop();
+        },
       ),
       body: SingleChildScrollView(
         child: Column(

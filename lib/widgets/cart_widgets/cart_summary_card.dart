@@ -156,6 +156,7 @@ class _CartItemCardState extends State<CartItemCard2> {
                                       fontFamily: 'Inter',
                                     ),
                                   ),
+                                  Spacer(),Text('Qty: ${widget.ingredients[index].quantity}')
                                 ],
                               ),
                               // Row(
