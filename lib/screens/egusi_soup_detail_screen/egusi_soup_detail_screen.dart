@@ -89,6 +89,7 @@ Get.snackbar('Dowloading', 'Loading...');
 
   // Optional: Open the file (on Android/iOS)
   await OpenFile.open(file.path);
+  Get.snackbar('Dowloading', 'Done!!!!');
 }
 
   @override
