@@ -35,6 +35,9 @@ dependencies:
   cached_network_image: ^3.3.1
   flutter_spinkit: ^5.2.1
   animated_text_kit: ^4.2.3
+  pdf: ^3.11.3
+  open_file: ^3.5.10
+  share_plus: ^11.0.0
 
 dev_dependencies:
   flutter_test:

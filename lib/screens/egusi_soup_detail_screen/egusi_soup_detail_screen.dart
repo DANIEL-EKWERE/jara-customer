@@ -1,3 +1,9 @@
+import 'dart:io';
+import 'package:jara_market/widgets/custom_button.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:pdf/pdf.dart';
+import 'package:pdf/widgets.dart' as pw;
+import 'package:open_file/open_file.dart';
 import 'package:jara_market/screens/cart_screen/models/models.dart';
 // lib/screens/egusi_soup_detail_screen.dart
 import 'package:flutter/material.dart';
@@ -58,6 +64,33 @@ class _FoodDetailScreenState extends State<FoodDetailScreen> {
     'ingredient 9',
     'ingredient 10',
   ];
+
+
+
+
+Future<void> generatePdf(List<String> items) async {
+  final pdf = pw.Document();
+
+  pdf.addPage(
+    pw.Page(
+      build: (pw.Context context) {
+        return pw.Column(
+          crossAxisAlignment: pw.CrossAxisAlignment.start,
+          children: items.map((item) => pw.Text(item)).toList(),
+        );
+      },
+    ),
+  );
+
+  final outputDir = await getApplicationDocumentsDirectory();
+  final file = File("${outputDir.path}/my_list.pdf");
+
+  await file.writeAsBytes(await pdf.save());
+
+  // Optional: Open the file (on Android/iOS)
+  await OpenFile.open(file.path);
+}
+
   @override
   Widget build(BuildContext context) {
     // int selectedCount = ingredientSelected.where((selected) => selected).length;
@@ -278,6 +311,7 @@ class _FoodDetailScreenState extends State<FoodDetailScreen> {
                     color: Color(0xffECECEC),
                   ),
                   const SizedBox(height: 20),
+                  
                   Text(
                     'Steps',
                     style: TextStyle(
@@ -288,10 +322,16 @@ class _FoodDetailScreenState extends State<FoodDetailScreen> {
                   ),
                   const SizedBox(height: 20),
                   ListView.separated(
-                    itemCount: widget.item.preparationSteps!.length,
+                    itemCount: 4,// widget.item.preparationSteps!.length,
                     shrinkWrap: true,
                     physics: const NeverScrollableScrollPhysics(),
                     itemBuilder: (context, index) {
+
+                      if(index == 4){
+                        return CustomButton(text: 'Download Steps', onPressed: () async {
+                          await generatePdf(widget.item.preparationSteps!);
+                        });
+                      }
                       return Text(
                         textAlign: TextAlign.justify,
                         '${index + 1}. ${widget.item.preparationSteps![index]}' +
