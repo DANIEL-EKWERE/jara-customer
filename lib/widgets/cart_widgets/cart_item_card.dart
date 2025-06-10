@@ -2,14 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:jara_market/screens/cart_screen/controller/cart_controller.dart';
 // import 'package:jara_market/screens/home_screen/models/models.dart';
 // import 'package:jara_market/screens/cart_screen/models/models.dart';
 import 'package:jara_market/screens/grains_screen/models/models.dart';
 import 'package:jara_market/widgets/custom_text_field.dart';
 
+var controller = Get.find<CartController>();
+
 class CartItemCard extends StatefulWidget {
   final String name;
   final String unit;
+  final Rx<Data> ingredientObject;
   final double basePrice;
   final double? originalPrice;
   final RxInt quantity;
@@ -17,6 +21,8 @@ class CartItemCard extends StatefulWidget {
   // final Function(int) addQuantity;
   // final Function(int) removeQuantity;
   final Function() addQuantity;
+  final Function() customPrice;
+  final Function() updateUi;
   final Function() removeQuantity;
   final VoidCallback onDeleteConfirmed;
   final TextEditingController textController;
@@ -26,10 +32,13 @@ class CartItemCard extends StatefulWidget {
 
   const CartItemCard({
     Key? key,
+    required this.ingredientObject,
     required this.ingredientLenght,
     required this.name,
     required this.unit,
+    required this.updateUi,
     required this.basePrice,
+    required this.customPrice,
     this.originalPrice,
     required this.quantity,
     required this.addQuantity,
@@ -46,9 +55,10 @@ class CartItemCard extends StatefulWidget {
 }
 
 class _CartItemCardState extends State<CartItemCard> {
-  double get totalPrice => widget.isSelected
+  double get totalPrice => widget.ingredientObject.value.isSelected!.value
       ? double.tryParse(widget.textController.text) ?? 0
-      : widget.basePrice * widget.quantity.value;
+      : widget.ingredientObject.value.price! *
+          widget.ingredientObject.value.quantity!.value;
 
   void _showDeleteConfirmationDialog(BuildContext context) {
     showDialog(
@@ -77,17 +87,19 @@ class _CartItemCardState extends State<CartItemCard> {
       },
     );
   }
- bool isSelected = false;
+
+  //bool isSelected = false;
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(vertical:10),
+      padding: const EdgeInsets.symmetric(vertical: 10),
       decoration: BoxDecoration(
         border: Border(
           bottom: BorderSide(color: Colors.grey.shade200),
         ),
       ),
-      child: Column(
+      child: Obx((){
+        return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           
@@ -98,92 +110,156 @@ class _CartItemCardState extends State<CartItemCard> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                 isSelected ? Text(
-                          //  'N${widget.originalPrice!.toStringAsFixed(0)}',
-                           '\u20A6${totalPrice.toStringAsFixed(0)}',
+                    widget.ingredientObject.value.isSelected!.value
+                        ? Text(
+                            //  'N${widget.originalPrice!.toStringAsFixed(0)}',
+                            '\u20A6${(widget.ingredientObject.value.price! * widget.ingredientObject.value.quantity!.value).toStringAsFixed(0)}',
                             style: TextStyle(
                               color: Colors.grey[500],
                               fontWeight: FontWeight.w800,
                               decoration: TextDecoration.lineThrough,
                               fontSize: 14,
                             ),
-                          ) :   Row(
+                          )
+                        : Row(
+                            children: [
+                              Obx(
+                                () => Row(
+                                  children: [
+                                    Text(
+                                      '\u20A6${totalPrice.toStringAsFixed(0)}',
+                                      style: const TextStyle(
+                                        color: Colors.red,
+                                        fontSize: 14,
+                                        fontFamily: 'Inter',
+                                        fontWeight: FontWeight.w800,
+                                      ),
+
+                                    ),
+                                    SizedBox(width: 7,),
+                                  widget.ingredientObject.value.controller.text.isNotEmpty ?  Text(
+                                  //  'N${widget.originalPrice!.toStringAsFixed(0)}',
+                                  '\u20A6${(widget.ingredientObject.value.basePrice ?? 0.0).toStringAsFixed(0)}',
+                                  style: TextStyle(
+                                    color: Colors.grey[500],
+                                    decoration: TextDecoration.lineThrough,
+                                    fontSize: 14,
+                                  ),
+                                ) : SizedBox.shrink(),
+                                  ],
+                                ),
+                              ),
+                              //if (widget.originalPrice != null) ...[
+                              if (widget
+                                  .ingredientObject.value.isSelected!.value) ...[
+                                const SizedBox(width: 8),
+                                Text(
+                                  //  'N${widget.originalPrice!.toStringAsFixed(0)}',
+                                  '\u20A6${(widget.ingredientObject.value.price! * widget.ingredientObject.value.quantity!.value).toStringAsFixed(0)}',
+                                  style: TextStyle(
+                                    color: Colors.grey[500],
+                                    decoration: TextDecoration.lineThrough,
+                                    fontSize: 14,
+                                  ),
+                                ),
+                              ],
+                            ],
+                          ),
+                    const SizedBox(height: 4),
+                    Row(
                       children: [
-                        Obx(()=> Text(
-                          '\u20A6${totalPrice.toStringAsFixed(0)}',
+                        Text(
+                          widget.name,
                           style: const TextStyle(
-                            color: Colors.red,
                             fontSize: 14,
                             fontFamily: 'Inter',
-                            fontWeight: FontWeight.w800,
+                            fontWeight: FontWeight.w500,
                           ),
-                        ),),
-                        //if (widget.originalPrice != null) ...[
-                        if (isSelected) ...[
-                          const SizedBox(width: 8),
-                          Text(
-                          //  'N${widget.originalPrice!.toStringAsFixed(0)}',
-                           '\u20A6${totalPrice.toStringAsFixed(0)}',
-                            style: TextStyle(
-                              color: Colors.grey[500],
-                              decoration: TextDecoration.lineThrough,
-                              fontSize: 14,
-                            ),
+                        ),
+                        SizedBox(
+                          width: 5,
+                        ),
+                        Text(
+                          widget.unit,
+                          style: TextStyle(
+                            color: Color(0xff868D94),
+                            fontWeight: FontWeight.w400,
+                            fontSize: 12,
+                            fontFamily: 'Inter',
                           ),
-                        ],
+                        ),
                       ],
                     ),
-                    const SizedBox(height: 4),
-                    Row(children: [
-                      Text(
-                      widget.name,
-                      style: const TextStyle(
-                        fontSize: 14,
-                        fontFamily: 'Inter',
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                    SizedBox(width: 5,),
-                    Text(
-                      widget.unit,
-                      style: TextStyle(
-                        color: Color(0xff868D94),
-                        fontWeight: FontWeight.w400,
+                    Row(
+                      children: [
+                        // Checkbox(
+                        //  // fillColor: MaterialStateProperty.all(Colors.green),
+                        //   overlayColor: MaterialStateProperty.all(Colors.grey),
+                        //   focusColor: Colors.grey,
+                        //   activeColor: Colors.black,
+                        //   side: const BorderSide(
+                        //     color: Color(0xff868D94), // Change this to your desired stroke color
+                        //     width: 2,          // Optional: stroke thickness
+                        //   ),
+                        //   checkColor: Colors.white,
+                        //   value: isSelected, onChanged: (bool? value) {
+                        //     widget.onCheckboxChanged(value);
+                        //     setState(() {
+                        //       isSelected = value ?? false;
+                        //     });
+                        //   }),
+                        //SizedBox(width: 2,),
 
-                        fontSize: 12,
-                        fontFamily: 'Inter',
-                      ),
-                    ),
-                    ],),
-                    Row(children: [
-                      Checkbox(
-                       // fillColor: MaterialStateProperty.all(Colors.green),
-                        overlayColor: MaterialStateProperty.all(Colors.grey),
-                        focusColor: Colors.grey,
-                        activeColor: Colors.black,
-                        side: const BorderSide(
-                          color: Color(0xff868D94), // Change this to your desired stroke color
-                          width: 2,          // Optional: stroke thickness
-                        ),
-                        checkColor: Colors.white,
-                        value: isSelected, onChanged: (bool? value) {
-                          widget.onCheckboxChanged(value);
-                          setState(() {
-                            isSelected = value ?? false;
-                          });
+                        Obx(() {
+                          return Checkbox(
+                              // focusColor: widget.ingredients[index].controller.text.isNotEmpty ? Colors.green : Colors.grey,
+                              activeColor: widget
+                                      .ingredientObject.value.controller.text.isEmpty
+                                  ? Colors.black
+                                  : Colors.green,
+                              fillColor: !widget
+                                      .ingredientObject.value.controller.text.isEmpty
+                                  ? WidgetStateProperty.all(Colors.green)
+                                  : null,
+                              side: const BorderSide(
+                                color: Color(
+                                    0xff868D94), // Change this to your desired stroke color
+                                width: 2, // Optional: stroke thickness
+                              ),
+                              checkColor: Colors.white,
+                              value: widget.ingredientObject.value.isSelected!.value,
+                              onChanged: (bool? value) {
+                                widget.onCheckboxChanged(value);
+
+                                setState(() {
+                                  controller.update();
+                                  controller.toggleItemSelectionIngredient(
+                                      widget.ingredientObject.value.id!);
+                                });
+                              });
                         }),
-                      //SizedBox(width: 2,),
-                      Text(
-                        'Custom Price',
-                        style: TextStyle(
-                          color: Colors.grey,
-                          fontWeight: FontWeight.w400,
 
-                        fontSize: 12,
-                        fontFamily: 'Inter',
-                      ),
-                    ),
-                    ],)
+                        !widget.ingredientObject.value.isSelected!.value
+                            ? Text(
+                                'Custom Price',
+                                style: TextStyle(
+                                  color: Colors.grey,
+                                  fontWeight: FontWeight.w400,
+                                  fontSize: 12,
+                                  fontFamily: 'Inter',
+                                ),
+                              )
+                            : Text(
+                                'Click Back to Update',
+                                style: TextStyle(
+                                  color: Colors.grey,
+                                  fontWeight: FontWeight.w400,
+                                  fontSize: 9,
+                                  fontFamily: 'Inter',
+                                ),
+                              )
+                      ],
+                    )
                   ],
                 ),
               ),
@@ -191,9 +267,9 @@ class _CartItemCardState extends State<CartItemCard> {
                 crossAxisAlignment: CrossAxisAlignment.end,
                 //mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                   IconButton(
-                   // icon: const Icon(Icons.delete, color: Colors.red),
-                   icon: SvgPicture.asset('assets/images/delete.svg'),
+                  IconButton(
+                    // icon: const Icon(Icons.delete, color: Colors.red),
+                    icon: SvgPicture.asset('assets/images/delete.svg'),
                     onPressed: () => _showDeleteConfirmationDialog(context),
                   ),
                   Container(
@@ -201,65 +277,92 @@ class _CartItemCardState extends State<CartItemCard> {
                       color: Colors.white,
                       borderRadius: BorderRadius.circular(20),
                     ),
-                    child: isSelected ? Container(
-                      width: 119,
-                      height: 36,
-                      child: CustomTextField(hint: '25000', prefixIcon: Text('\u20A6'),)) : Row(
-                      children: [
-                        GestureDetector(
-                          onTap: () {
-                            if (widget.quantity.value > 1) {
-                            //  widget.removeQuantity(widget.quantity - 1);
-                              widget.removeQuantity();
-                            }
-                          },
-                          child: Obx((){
-                            return Container(
-                            margin: EdgeInsets.all(4),
-                            width: 22,
-                            height: 22,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.all(Radius.circular(3)),
-                              color: widget.quantity.value == 1 ? Colors.grey[100] : Color(0xffFF9F0A)
-                            ),
-                            child: Icon(Icons.remove,size: 15,),
-                          );
-                          })
-                        ),
-                        Obx(() => Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 8),
-                          child: Text(
-                            widget.quantity.value.toString(),
-                            style: const TextStyle(fontSize: 14, fontFamily: 'Inter', fontWeight: FontWeight.w500),
+                    child: widget.ingredientObject.value.isSelected!.value
+                        ? Container(
+                            width: 119,
+                            height: 36,
+                            child: CustomTextField(
+                              controller: widget.ingredientObject.value.controller,
+                              hint: '25000',
+                              prefixIcon: Text('\u20A6'),
+                              onChanged: (p0) {
+                                setState(() {
+                                  controller.update();
+                                 widget.updateUi();
+                                 widget.customPrice();
+
+                                 controller.updateCustomPriceIngredient(
+                                    widget.ingredientObject.value.id!, p0);
+                                });
+                                controller.updateCustomPriceIngredient(
+                                    widget.ingredientObject.value.id!, p0);
+                              },
+                            ))
+                        : Row(
+                            children: [
+                              GestureDetector(onTap: () {
+                                if (widget.quantity.value > 1) {
+                                  //  widget.removeQuantity(widget.quantity - 1);
+                                  widget.removeQuantity();
+                                }
+                              }, child: Obx(() {
+                                return Container(
+                                  margin: EdgeInsets.all(4),
+                                  width: 22,
+                                  height: 22,
+                                  decoration: BoxDecoration(
+                                      borderRadius:
+                                          BorderRadius.all(Radius.circular(3)),
+                                      color: widget.quantity.value == 1
+                                          ? Colors.grey[100]
+                                          : Color(0xffFF9F0A)),
+                                  child: Icon(
+                                    Icons.remove,
+                                    size: 15,
+                                  ),
+                                );
+                              })),
+                              Obx(
+                                () => Padding(
+                                  padding:
+                                      const EdgeInsets.symmetric(horizontal: 8),
+                                  child: Text(
+                                    widget.quantity.value.toString(),
+                                    style: const TextStyle(
+                                        fontSize: 14,
+                                        fontFamily: 'Inter',
+                                        fontWeight: FontWeight.w500),
+                                  ),
+                                ),
+                              ),
+                              GestureDetector(
+                                onTap: () {
+                                  widget.addQuantity();
+                                },
+                                child: Container(
+                                  margin: EdgeInsets.all(4),
+                                  width: 22,
+                                  height: 22,
+                                  decoration: BoxDecoration(
+                                      borderRadius:
+                                          BorderRadius.all(Radius.circular(3)),
+                                      color: Color(0xffFF9F0A)),
+                                  child: Icon(
+                                    Icons.add,
+                                    size: 15,
+                                  ),
+                                ),
+                              ),
+                            ],
                           ),
-                        ),),
-                        GestureDetector(
-                          onTap: (){
-                            widget.addQuantity();
-                          },
-                          child: Container(
-                            margin: EdgeInsets.all(4),
-                            width: 22,
-                            height: 22,
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.all(Radius.circular(3)),
-                              color: Color(0xffFF9F0A)
-                            ),
-                            child: Icon(Icons.add,size: 15,),
-                          ),
-                        ),
-                      ],
-                    ),
                   ),
-                 
                 ],
               ),
             ],
           ),
-         
-          
         ],
-      ),
+      );
+      })
     );
   }
 }

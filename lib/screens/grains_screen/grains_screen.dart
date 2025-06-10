@@ -591,6 +591,7 @@ class _GrainsScreenState extends State<GrainsScreen> {
                                                                           .price,
                                                                   quantity:
                                                                       _quantity,
+                                                                      basePrice: ingredient.price,
                                                                   stock:
                                                                       ingredient
                                                                           .stock,

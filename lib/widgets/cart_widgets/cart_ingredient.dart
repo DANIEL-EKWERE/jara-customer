@@ -17,8 +17,11 @@ class CartItemCard1 extends StatefulWidget {
   final RxDouble basePrice;
   final double? originalPrice;
   final RxInt quantity;
+
+  //final Funtion() updateUi;
   // final Function(int) addQuantity;
   // final Function(int) removeQuantity;
+  final Function() updateUi;
   final Function() addQuantity;
   final Function() removeQuantity;
   final VoidCallback onDeleteConfirmed;
@@ -29,6 +32,7 @@ class CartItemCard1 extends StatefulWidget {
 
   const CartItemCard1({
     Key? key,
+    required this.updateUi,
     required this.id,
     required this.name,
     required this.unit,
@@ -451,6 +455,7 @@ class _CartItemCardState extends State<CartItemCard1> {
                                               .ingredients[index].controller,
                                           onChanged: (p0) {
                                             setState(() {
+                                              widget.updateUi();
                                               controller
                                                   .calculatedServiceCharge;
                                               controller.totalIngredientPrice();

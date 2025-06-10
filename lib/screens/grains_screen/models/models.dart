@@ -40,11 +40,13 @@ class Data {
   String? name;
   String? description;
   double? price;
+  double? basePrice;
   String? unit;
   String? stock;
   String? imageUrl;
   String? createdAt;
   RxInt? quantity = 1.obs;
+  RxBool? isSelected = false.obs;
   TextEditingController controller = TextEditingController();
 
   Data(
@@ -52,11 +54,13 @@ class Data {
       this.name,
       this.description,
       this.price,
+      this.basePrice,
       this.unit,
       this.stock,
       this.imageUrl,
       this.createdAt,
-      int quantity = 1,}): quantity = RxInt(quantity);
+      bool isSelected = false,
+      int quantity = 1,}): quantity = RxInt(quantity), isSelected = RxBool(isSelected);
 
   Data.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -67,6 +71,7 @@ class Data {
     stock = json['stock'];
     imageUrl = json['image_url'];
     createdAt = json['created_at'];
+    basePrice = double.tryParse(json['price'] ?? 0.0);
     
   }
 

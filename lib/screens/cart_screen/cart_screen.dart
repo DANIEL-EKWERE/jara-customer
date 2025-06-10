@@ -237,14 +237,6 @@ class _CartScreenState extends State<CartScreen> {
       if (!_isRecorderInitialized) return;
     }
 
-// _recordDuration = 0;
-//   _timer?.cancel();
-//   _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
-//     setState(() {
-//       _recordDuration++;
-//     });
-//   });
-
     try {
       final directory = await getApplicationDocumentsDirectory();
       _recordingPath =
@@ -419,196 +411,208 @@ class _CartScreenState extends State<CartScreen> {
                       )
                     : controller.cartItems.length == 0 &&
                             controller.ingredientList.length != 0
-                        ? Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 16),
-                            child: Column(
-                              children: [
-                                Container(
-                                    width: double.infinity,
-                                    height: 90,
-                                    decoration: BoxDecoration(
-                                      color: Colors.grey.shade200,
-                                      borderRadius: BorderRadius.circular(5),
-                                    ),
-                                    child: Column(
-                                      children: [
-                                        //  const SizedBox(height: 10),
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceAround,
-                                          children: [
-                                            Obx(() {
-                                              return Text(
-                                                "${controller.ingredientList.length} ingredients",
+                        ? Obx(() {
+                            return Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 16),
+                              child: Column(
+                                children: [
+                                  Container(
+                                      width: double.infinity,
+                                      height: 90,
+                                      decoration: BoxDecoration(
+                                        color: Colors.grey.shade200,
+                                        borderRadius: BorderRadius.circular(5),
+                                      ),
+                                      child: Column(
+                                        children: [
+                                          //  const SizedBox(height: 10),
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceAround,
+                                            children: [
+                                              Obx(() {
+                                                return Text(
+                                                  "${controller.ingredientList.length} ingredients",
+                                                  style: TextStyle(
+                                                    color: Colors.grey[500],
+                                                    fontSize: 14,
+                                                    fontWeight: FontWeight.w500,
+                                                  ),
+                                                );
+                                              }),
+                                              SizedBox(
+                                                width: 15,
+                                              ),
+                                              Text(
+                                                'Ingredients',
                                                 style: TextStyle(
-                                                  color: Colors.grey[500],
-                                                  fontSize: 14,
-                                                  fontWeight: FontWeight.w500,
-                                                ),
-                                              );
-                                            }),
-                                            SizedBox(
-                                              width: 15,
+                                                    fontSize: 16,
+                                                    fontWeight:
+                                                        FontWeight.bold),
+                                              ),
+                                              SizedBox(
+                                                width: 15,
+                                              ),
+                                              IconButton(
+                                                  icon: Icon(
+                                                    Icons.add,
+                                                    weight: 5,
+                                                    color: Colors.green,
+                                                  ), //SvgPicture.asset('assets/images/add.svg'),
+                                                  onPressed: () {
+                                                    showAddConfirmationDialog(
+                                                        context);
+                                                  }
+                                                  // _showAddConfirmationDialog1(context, widget.name),
+                                                  ),
+                                            ],
+                                          ),
+                                          Row(
+                                            children: [
+                                              const SizedBox(width: 10),
+                                              Obx(() {
+                                                return Text(
+                                                  '\u20A6${controller.ingredientList.fold<double>(0.0, (sum, ingredient) {
+                                                    final price = double
+                                                            .tryParse(ingredient
+                                                                .price
+                                                                .toString()) ??
+                                                        0.0;
+                                                    final quantity = ingredient
+                                                            .quantity?.value ??
+                                                        1;
+                                                    return sum +
+                                                        (price * quantity);
+                                                  })}',
+                                                  style: TextStyle(
+                                                    color: Colors.grey[500],
+                                                    fontSize: 14,
+                                                    fontWeight: FontWeight.w500,
+                                                  ),
+                                                );
+                                              }),
+                                              const Spacer(),
+                                              IconButton(
+                                                  icon: SvgPicture.asset(
+                                                      'assets/images/delete.svg'),
+                                                  onPressed: () {
+                                                    showDeleteConfirmationDialog(
+                                                        context);
+                                                  }
+                                                  //   _showDeleteConfirmationDialog1(context, widget.id),
+                                                  ),
+                                              const SizedBox(width: 3),
+                                            ],
+                                          )
+                                        ],
+                                      )),
+                                  SizedBox(
+                                    height:
+                                        (cartController.ingredientList.length *
+                                                110.0)
+                                            .clamp(0.0, 400.0),
+                                    child: ListView.separated(
+                                        shrinkWrap: true,
+                                        //  physics:
+                                        //    NeverScrollableScrollPhysics(),
+                                        itemBuilder: (context, index) {
+                                          return Obx(() {
+                                            return CartItemCard(
+                                              customPrice: () {
+                                                controller
+                                                    .updateCustomPriceIngredient;
+                                              },
+                                              updateUi: () =>
+                                                  controller.updateIngredientUi(
+                                                      cartController
+                                                          .ingredientList[index]
+                                                          .id!,
+                                                      cartController
+                                                              .ingredientList[
+                                                                  index]
+                                                              .quantity!
+                                                              .value +
+                                                          0),
+                                              ingredientObject: controller
+                                                  .ingredientList[index].obs,
+                                              ingredients:
+                                                  controller.ingredientList,
+                                              ingredientLenght: controller
+                                                  .ingredientList.length
+                                                  .toString(),
+                                              name: cartController
+                                                  .ingredientList[index].name!,
+                                              unit: cartController
+                                                  .ingredientList[index].unit!,
+                                              basePrice: double.tryParse(
+                                                      cartController
+                                                          .ingredientList[index]
+                                                          .price
+                                                          .toString()) ??
+                                                  0.0,
+                                              quantity: cartController
+                                                      .ingredientList[index]
+                                                      .quantity ??
+                                                  1.obs,
+                                              // ingredients: cartController
+                                              // .ingredientList,
+                                              // onQuantityChanged: (newQuantity) =>
+                                              //     _updateQuantity(item.id.toString(), newQuantity),
+                                              addQuantity: () => controller
+                                                  .updateIngredientQuantity(
+                                                      cartController
+                                                          .ingredientList[index]
+                                                          .id!,
+                                                      cartController
+                                                              .ingredientList[
+                                                                  index]
+                                                              .quantity!
+                                                              .value +
+                                                          1),
+                                              removeQuantity: () => controller
+                                                  .updateIngredientQuantity(
+                                                      cartController
+                                                          .ingredientList[index]
+                                                          .id!,
+                                                      cartController
+                                                              .ingredientList[
+                                                                  index]
+                                                              .quantity!
+                                                              .value -
+                                                          1),
+                                              onDeleteConfirmed: () =>
+                                                  controller
+                                                      .removeIngredientFromCart(
+                                                          cartController
+                                                              .ingredientList[
+                                                                  index]
+                                                              .id!),
+                                              textController:
+                                                  TextEditingController(
+                                                      text: cartController
+                                                          .ingredientList[index]
+                                                          .quantity
+                                                          .toString()),
+                                              isSelected: false,
+                                              onCheckboxChanged:
+                                                  (bool? value) {},
+                                            );
+                                          });
+                                        },
+                                        separatorBuilder: (context, index) =>
+                                            const Divider(
+                                              height: 0.5,
+                                              color: Color.fromARGB(
+                                                  57, 228, 228, 228),
                                             ),
-                                            Text(
-                                              'Ingredients',
-                                              style: TextStyle(
-                                                  fontSize: 16,
-                                                  fontWeight: FontWeight.bold),
-                                            ),
-                                            SizedBox(
-                                              width: 15,
-                                            ),
-                                            IconButton(
-                                                icon: Icon(
-                                                  Icons.add,
-                                                  weight: 5,
-                                                  color: Colors.green,
-                                                ), //SvgPicture.asset('assets/images/add.svg'),
-                                                onPressed: () {
-                                                  showAddConfirmationDialog(
-                                                      context);
-                                                }
-                                                // _showAddConfirmationDialog1(context, widget.name),
-                                                ),
-                                          ],
-                                        ),
-                                        Row(
-                                          children: [
-                                            const SizedBox(width: 10),
-                                            Obx(() {
-                                              return Text(
-                                                '\u20A6${controller.ingredientList.fold<double>(0.0, (sum, ingredient) {
-                                                  final price = double.tryParse(
-                                                          ingredient.price
-                                                              .toString()) ??
-                                                      0.0;
-                                                  final quantity = ingredient
-                                                          .quantity?.value ??
-                                                      1;
-                                                  return sum +
-                                                      (price * quantity);
-                                                })}',
-                                                style: TextStyle(
-                                                  color: Colors.grey[500],
-                                                  fontSize: 14,
-                                                  fontWeight: FontWeight.w500,
-                                                ),
-                                              );
-                                            }),
-                                            const Spacer(),
-                                            IconButton(
-                                                icon: SvgPicture.asset(
-                                                    'assets/images/delete.svg'),
-                                                onPressed: () {
-                                                  showDeleteConfirmationDialog(
-                                                      context);
-                                                }
-                                                //   _showDeleteConfirmationDialog1(context, widget.id),
-                                                ),
-                                            const SizedBox(width: 3),
-                                          ],
-                                        )
-                                      ],
-                                    )),
-                                SizedBox(
-                                  height:
-                                      (cartController.ingredientList.length *
-                                              110.0)
-                                          .clamp(0.0, 300.0),
-                                  child: Column(
-                                    children: [
-                                      Expanded(
-                                        child: ListView.separated(
-                                            physics:
-                                                NeverScrollableScrollPhysics(),
-                                            itemBuilder: (context, index) {
-                                              return CartItemCard(
-                                                ingredients:
-                                                    controller.ingredientList,
-                                                ingredientLenght: controller
-                                                    .ingredientList.length
-                                                    .toString(),
-                                                name: cartController
-                                                    .ingredientList[index]
-                                                    .name!,
-                                                unit: cartController
-                                                    .ingredientList[index]
-                                                    .unit!,
-                                                basePrice: double.tryParse(
-                                                        cartController
-                                                            .ingredientList[
-                                                                index]
-                                                            .price
-                                                            .toString()) ??
-                                                    0.0,
-                                                quantity: cartController
-                                                        .ingredientList[index]
-                                                        .quantity ??
-                                                    1.obs,
-                                                // ingredients: cartController
-                                                // .ingredientList,
-                                                // onQuantityChanged: (newQuantity) =>
-                                                //     _updateQuantity(item.id.toString(), newQuantity),
-                                                addQuantity: () => controller
-                                                    .updateIngredientQuantity(
-                                                        cartController
-                                                            .ingredientList[
-                                                                index]
-                                                            .id!,
-                                                        cartController
-                                                                .ingredientList[
-                                                                    index]
-                                                                .quantity!
-                                                                .value +
-                                                            1),
-                                                removeQuantity: () => controller
-                                                    .updateIngredientQuantity(
-                                                        cartController
-                                                            .ingredientList[
-                                                                index]
-                                                            .id!,
-                                                        cartController
-                                                                .ingredientList[
-                                                                    index]
-                                                                .quantity!
-                                                                .value -
-                                                            1),
-                                                onDeleteConfirmed: () =>
-                                                    controller
-                                                        .removeIngredientFromCart(
-                                                            cartController
-                                                                .ingredientList[
-                                                                    index]
-                                                                .id!),
-                                                textController:
-                                                    TextEditingController(
-                                                        text: cartController
-                                                            .ingredientList[
-                                                                index]
-                                                            .quantity
-                                                            .toString()),
-                                                isSelected: false,
-                                                onCheckboxChanged:
-                                                    (bool? value) {},
-                                              );
-                                            },
-                                            separatorBuilder:
-                                                (context, index) =>
-                                                    const Divider(
-                                                      height: 0.5,
-                                                      color: Color.fromARGB(
-                                                          57, 228, 228, 228),
-                                                    ),
-                                            itemCount: controller
-                                                .ingredientList.length),
-                                      )
-                                    ],
+                                        itemCount:
+                                            controller.ingredientList.length),
                                   ),
-                                ),
-                              ],
-                            ),
-                          )
+                                ],
+                              ),
+                            );
+                          })
                         : Obx(() {
                             return ListView.separated(
                               padding:
@@ -620,77 +624,6 @@ class _CartScreenState extends State<CartScreen> {
                                 color: Color.fromARGB(57, 228, 228, 228),
                               ),
                               itemBuilder: (context, index) {
-                                // if (index == controller.cartItems.length) {
-                                // if (cartController.ingredientList.isNotEmpty) {
-                                //   return Column(
-                                //     children: [
-                                //       ListView.separated(
-                                //           itemBuilder: (context, index) {
-                                //             return CartItemCard(
-                                //               name: cartController
-                                //                   .ingredientList[index].name!,
-                                //               unit: cartController
-                                //                   .ingredientList[index].unit!,
-                                //               basePrice: cartController
-                                //                   .ingredientList[index].price!,
-                                //               quantity: cartController
-                                //                   .ingredientList[index]
-                                //                   .quantity!,
-                                //               ingredients:
-                                //                   cartController.ingredientList,
-                                //               // onQuantityChanged: (newQuantity) =>
-                                //               //     _updateQuantity(item.id.toString(), newQuantity),
-                                //               addQuantity: () => controller
-                                //                   .updateIngredientQuantity(
-                                //                       cartController
-                                //                           .ingredientList[index]
-                                //                           .id,
-                                //                       cartController
-                                //                               .ingredientList[
-                                //                                   index]
-                                //                               .quantity!
-                                //                               .value +
-                                //                           1),
-                                //               removeQuantity: () => controller
-                                //                   .updateIngredientQuantity(
-                                //                       cartController
-                                //                           .ingredientList[index]
-                                //                           .id,
-                                //                       cartController
-                                //                               .ingredientList[
-                                //                                   index]
-                                //                               .quantity!
-                                //                               .value -
-                                //                           1),
-                                //               onDeleteConfirmed: () => controller
-                                //                   .removeIngredientFromCart(
-                                //                       cartController
-                                //                           .ingredientList[index]
-                                //                           .id),
-                                //               textController:
-                                //                   TextEditingController(
-                                //                       text: cartController
-                                //                           .ingredientList[index]
-                                //                           .quantity
-                                //                           .toString()),
-                                //               isSelected: false,
-                                //               onCheckboxChanged: (bool? value) {},
-                                //             );
-                                //           },
-                                //           separatorBuilder: (context, index) =>
-                                //               const Divider(
-                                //                 height: 0.5,
-                                //                 color: Color.fromARGB(
-                                //                     57, 228, 228, 228),
-                                //               ),
-                                //           itemCount:
-                                //               controller.ingredientList.length)
-                                //     ],
-                                //   );
-                                // }else{
-                                //   SizedBox.shrink();
-                                // }
-                                //} else
                                 if (index == controller.cartItems.length + 1) {
                                   return Padding(
                                     padding: const EdgeInsets.symmetric(
@@ -951,21 +884,7 @@ class _CartScreenState extends State<CartScreen> {
                                                                 width: 10),
                                                             Obx(() {
                                                               return Text(
-                                                                '\u20A6${controller.ingredientList.fold<double>(0.0, (sum, ingredient) {
-                                                                  final price =
-                                                                      double.tryParse(ingredient
-                                                                              .price
-                                                                              .toString()) ??
-                                                                          0.0;
-                                                                  final quantity =
-                                                                      ingredient
-                                                                              .quantity
-                                                                              ?.value ??
-                                                                          1;
-                                                                  return sum +
-                                                                      (price *
-                                                                          quantity);
-                                                                })}',
+                                                                '\u20A6${controller.ingredientList.fold(0.0, (sum, ingredient) => sum + ingredient.price! * ingredient.quantity!.value)}',
                                                                 style:
                                                                     TextStyle(
                                                                   color: Colors
@@ -1012,6 +931,15 @@ class _CartScreenState extends State<CartScreen> {
                                                                     (context,
                                                                         index) {
                                                                   return CartItemCard(
+                                                                    customPrice:
+                                                                        () {
+                                                                      controller
+                                                                          .updateCustomPriceIngredient;
+                                                                    },
+                                                                    ingredientObject:
+                                                                        controller
+                                                                            .ingredientList[index]
+                                                                            .obs,
                                                                     ingredients:
                                                                         controller
                                                                             .ingredientList,
@@ -1036,6 +964,13 @@ class _CartScreenState extends State<CartScreen> {
                                                                             .ingredientList[index]
                                                                             .quantity ??
                                                                         1.obs,
+                                                                    updateUi: () => controller.updateIngredientUi(
+                                                                        cartController
+                                                                            .ingredientList[
+                                                                                index]
+                                                                            .id!,
+                                                                        cartController.ingredientList[index].quantity!.value +
+                                                                            0),
                                                                     // ingredients: cartController
                                                                     // .ingredientList,
                                                                     // onQuantityChanged: (newQuantity) =>
@@ -1168,6 +1103,18 @@ class _CartScreenState extends State<CartScreen> {
                                 //   onCheckboxChanged: (bool? value) {},
                                 // );
                                 return CartItemCard1(
+                                  updateUi: () => controller
+                                              .updateIngredientUi(
+                                                  cartController
+                                                      .ingredientList[
+                                                          index]
+                                                      .id!,
+                                                  cartController
+                                                          .ingredientList[
+                                                              index]
+                                                          .quantity!
+                                                          .value +
+                                                      0),
                                   id: item.id,
                                   ingredients: ingredients,
                                   name: item.name,

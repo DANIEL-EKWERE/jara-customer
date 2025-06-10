@@ -118,6 +118,20 @@ void deleteIngredientList(){
     }
   }
 
+  void updateIngredientUi(int itemId, int quantity) {
+    print(quantity);
+    int index = ingredientList.indexWhere((item) => item.id == itemId);
+    if (index != -1) {
+      if (quantity <= 0) {
+        ingredientList.removeAt(index);
+      } else {
+      //  myLog.log("====================${ingredientList[index].quantity!.value}");
+        ingredientList[index].quantity!.value += quantity;
+        ingredientList[index].quantity!.value -= quantity;
+      }
+    }
+  }
+
   void clearCart() {
     cartItems.clear();
   }
@@ -276,6 +290,21 @@ double get total {
     }
   }
 
+
+  void toggleItemSelectionIngredient(int itemId) {
+    int index = ingredientList.indexWhere((item) => item.id == itemId);
+    if (index != -1) {
+      ingredientList[index].isSelected!.value = !ingredientList[index].isSelected!.value;
+      
+      } else {
+        print('Ingredient with id $itemId not found in item $itemId.');
+      }
+
+      // cartItems[index].isSelected.value = !cartItems[index].isSelected.value;
+    //  print('Toggled selection for item: ${cartItems[index].name}, Selected: ${cartItems[index].isSelected.value}');
+    
+  }
+
   void updateCustomPrice(int id, int id2, String p0) {
      int index = cartItems.indexWhere((item) => item.id == id);
     if (index != -1) {
@@ -295,6 +324,24 @@ double get total {
       } else {
         print('Ingredient with id $id2 not found in item $id.');
       }
+
+  }
+  
+}
+
+
+void updateCustomPriceIngredient(int id, String p0) {
+  print(id);
+  print(p0);
+     int ingredientIndex = ingredientList.indexWhere((item)=> item.id == id);
+    if (ingredientIndex != -1) {
+        double? parsedPrice = double.tryParse(p0);
+
+        if (parsedPrice == null) return;
+        if (ingredientList[ingredientIndex].price != null && parsedPrice < ingredientList[ingredientIndex].basePrice!) return;
+        ingredientList[ingredientIndex].price = parsedPrice;
+        update();
+        refresh();
 
   }
   
