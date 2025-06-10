@@ -70,7 +70,7 @@ class _FoodDetailScreenState extends State<FoodDetailScreen> {
 
 Future<void> generatePdf(List<String> items) async {
   final pdf = pw.Document();
-
+Get.snackbar('Dowloading', 'Loading...');
   pdf.addPage(
     pw.Page(
       build: (pw.Context context) {
