@@ -63,10 +63,10 @@ class FoodCard extends StatelessWidget {
                       ),
                       Row(
                         children: [
-                          const Icon(Icons.star,
-                              color: Colors.orange, size: 12),
-                          Text(' $rating'),
-                          Text(' ($reviews)'),
+                          // const Icon(Icons.star,
+                          //     color: Colors.orange, size: 12),
+                          Text('3.5k Ordered',style: TextStyle(fontSize: 12),),
+                       //   Text(' ($reviews)'),
                         ],
                       ),
                     ],
@@ -74,7 +74,7 @@ class FoodCard extends StatelessWidget {
                 ),
               ],
             ),
-            if (showMostOrdered)
+            if (!showMostOrdered)
               Positioned(
                 top: 4,
                 left: 4,
@@ -96,24 +96,24 @@ class FoodCard extends StatelessWidget {
                   ),
                 ),
               ),
-            Positioned(
-              top: 1,
-              right: 1,
-              child: Container(
+            // Positioned(
+            //   top: 1,
+            //   right: 1,
+            //   child: Container(
 
-                decoration: BoxDecoration(
-                  color: Color(0xffFFFFFF).withValues(alpha: .64),
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                child: IconButton(
-                  icon: Icon(
-                    isFavorite ? Icons.favorite : Icons.favorite_border,
-                    color: isFavorite ? Colors.red : Color(0xff6B7280),
-                  ),
-                  onPressed: onFavoritePressed,
-                ),
-              ),
-            ),
+            //     decoration: BoxDecoration(
+            //       color: Color(0xffFFFFFF).withValues(alpha: .64),
+            //       borderRadius: BorderRadius.circular(20),
+            //     ),
+            //     child: IconButton(
+            //       icon: Icon(
+            //         isFavorite ? Icons.favorite : Icons.favorite_border,
+            //         color: isFavorite ? Colors.red : Color(0xff6B7280),
+            //       ),
+            //       onPressed: onFavoritePressed,
+            //     ),
+            //   ),
+            // ),
           ],
         ),
       ),
