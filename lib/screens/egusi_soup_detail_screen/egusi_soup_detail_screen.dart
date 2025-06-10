@@ -327,7 +327,7 @@ Future<void> generatePdf(List<String> items) async {
                     physics: const NeverScrollableScrollPhysics(),
                     itemBuilder: (context, index) {
 
-                      if(index == 4){
+                      if(index == 3){
                         return CustomButton(text: 'Download Steps', onPressed: () async {
                           await generatePdf(widget.item.preparationSteps!);
                         });
