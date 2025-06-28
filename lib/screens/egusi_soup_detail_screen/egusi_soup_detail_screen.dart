@@ -322,32 +322,35 @@ Get.snackbar('Dowloading', 'Loading...');
                         color: Color(0xff838383)),
                   ),
                   const SizedBox(height: 20),
-                  ListView.separated(
-                    itemCount: 4,// widget.item.preparationSteps!.length,
-                    shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
-                    itemBuilder: (context, index) {
-
-                      if(index == 3){
-                        return CustomButton(text: 'Download Steps', onPressed: () async {
+                  CustomButton(text: 'Download Recipe Steps', onPressed: () async {
                           await generatePdf(widget.item.preparationSteps!);
-                        });
-                      }
-                      return Text(
-                        textAlign: TextAlign.justify,
-                        '${index + 1}. ${widget.item.preparationSteps![index]}' +
-                            '${(widget.item.preparationSteps!.length - 1 == index ? '.' : ',')}',
-                        style: TextStyle(
-                          height: 2,
-                        ),
-                      );
-                    },
-                    separatorBuilder: (context, index) {
-                      return const SizedBox(
-                        height: 20,
-                      );
-                    },
-                  ),
+                        }),
+                  // ListView.separated(
+                  //   itemCount: 4,// widget.item.preparationSteps!.length,
+                  //   shrinkWrap: true,
+                  //   physics: const NeverScrollableScrollPhysics(),
+                  //   itemBuilder: (context, index) {
+
+                  //     if(index == 3){
+                  //       return CustomButton(text: 'Download Steps', onPressed: () async {
+                  //         await generatePdf(widget.item.preparationSteps!);
+                  //       });
+                  //     }
+                  //     return Text(
+                  //       textAlign: TextAlign.justify,
+                  //       '${index + 1}. ${widget.item.preparationSteps![index]}' +
+                  //           '${(widget.item.preparationSteps!.length - 1 == index ? '.' : ',')}',
+                  //       style: TextStyle(
+                  //         height: 2,
+                  //       ),
+                  //     );
+                  //   },
+                  //   separatorBuilder: (context, index) {
+                  //     return const SizedBox(
+                  //       height: 20,
+                  //     );
+                  //   },
+                  // ),
                   //  Text(widget.item.preparationSteps.toString()),
                   const SizedBox(height: 50),
                   // Row(
