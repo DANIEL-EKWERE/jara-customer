@@ -105,6 +105,7 @@ class ReferralScreen extends StatelessWidget {
                         width: 85,
                         child: ElevatedButton(
                           onPressed: () {
+                              Clipboard.setData(ClipboardData(text: data));
                             // TODO: Implement share functionality
                           },
                           style: ElevatedButton.styleFrom(
