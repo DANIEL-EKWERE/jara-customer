@@ -3,8 +3,6 @@ import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jara_market/config/routes.dart';
-import 'package:jara_market/screens/cart_screen/controller/cart_controller.dart';
-import 'package:jara_market/screens/success_screen/success_screen.dart';
 import 'package:jara_market/screens/wallet_screen/controller/wallet_controller.dart';
 
 WalletController walletController = Get.put(WalletController());

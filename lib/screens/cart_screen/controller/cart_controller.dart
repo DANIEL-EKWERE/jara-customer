@@ -8,10 +8,11 @@ import 'package:jara_market/screens/grains_screen/models/models.dart';
 
 ApiService _apiService = ApiService(Duration(seconds: 60 * 5));
 class CartController extends GetxController {
-  
+  TextEditingController messageController = TextEditingController();
 
   RxList<CartItem> cartItems = <CartItem>[].obs;
   RxList<Data> ingredientList = <Data>[].obs;
+
   RxBool isSet = false.obs;
    RxDouble? itemsCost;
   var mealCost = 0.0.obs;
@@ -129,6 +130,26 @@ void deleteIngredientList(){
         ingredientList[index].quantity!.value += quantity;
         ingredientList[index].quantity!.value -= quantity;
       }
+    }
+  }
+
+  void updateCartItemUi(int itemId, int ingredientId, int quantity) {
+    int index = cartItems.indexWhere((item) => item.id == itemId);
+    if (index != -1) {
+      //cartItems[index].ingredients = updatedItem.ingredients;
+    int ingredientIndex = cartItems[index].ingredients.indexWhere((ingredient) => ingredient.id == ingredientId);
+      if (ingredientIndex != -1) {
+        if (quantity <= 0) {
+          cartItems[index].ingredients.removeAt(ingredientIndex);
+        } else {
+          cartItems[index].ingredients[ingredientIndex].quantity!.value += quantity;
+          cartItems[index].ingredients[ingredientIndex].quantity!.value -= quantity;
+        }
+      } else {
+        print('Ingredient with id $ingredientId not found in item $itemId.');
+      }
+    } else {
+      print('Item with id $itemId not found in cart.');
     }
   }
 
@@ -305,6 +326,14 @@ double get total {
     
   }
 
+//   void updateCartItemPrice(int itemId, double newPrice) {
+//   final index = cartItems.indexWhere((item) => item.id == itemId);
+//   if (index != -1) {
+//     cartItems[index]. = newPrice;
+//     cartItems.refresh(); // If using RxList
+//   }
+// }
+
   void updateCustomPrice(int id, int id2, String p0) {
      int index = cartItems.indexWhere((item) => item.id == id);
     if (index != -1) {
@@ -346,6 +375,8 @@ void updateCustomPriceIngredient(int id, String p0) {
   }
   
 }
+
+
 
   Future<dynamic> getCheckoutAddress() async {
     // Implement the logic to retrieve the checkout address

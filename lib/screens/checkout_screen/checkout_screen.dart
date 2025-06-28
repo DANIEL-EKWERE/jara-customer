@@ -54,7 +54,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
     });
   }
 
-  final TextEditingController _messageController = TextEditingController();
+  //final TextEditingController _messageController = TextEditingController();
   final FlutterSoundRecorder _recorder = FlutterSoundRecorder();
   final FlutterSoundPlayer _player = FlutterSoundPlayer();
 
@@ -358,87 +358,98 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                         const Divider(height: 1),
                     itemBuilder: (context, index) {
                       if (index == widget.cartItems.length) {
-                        return cartController.ingredientList.length == 0 ? SizedBox.shrink() : Column(
-                          children: [
-                            Container(
-                                width: double.infinity,
-                                height: 50,
-                                decoration: BoxDecoration(
-                                  color: Colors.grey.shade200,
-                                  borderRadius: BorderRadius.circular(5),
-                                ),
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    //  const SizedBox(height: 10),
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                          crossAxisAlignment: CrossAxisAlignment.center,
+                        return cartController.ingredientList.length == 0
+                            ? SizedBox.shrink()
+                            : Column(
+                                children: [
+                                  Container(
+                                      width: double.infinity,
+                                      height: 50,
+                                      decoration: BoxDecoration(
+                                        color: Colors.grey.shade200,
+                                        borderRadius: BorderRadius.circular(5),
+                                      ),
+                                      child: Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        children: [
+                                          //  const SizedBox(height: 10),
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.center,
+                                            children: [
+                                              Text(
+                                                'Ingredients',
+                                                style: TextStyle(
+                                                    fontSize: 16,
+                                                    fontWeight:
+                                                        FontWeight.bold),
+                                              ),
+                                            ],
+                                          ),
+                                        ],
+                                      )),
+                                  SizedBox(
+                                    height:
+                                        (cartController.ingredientList.length *
+                                                110.0)
+                                            .clamp(0.0, 300.0),
+                                    child: Column(
                                       children: [
-                                        
-                                        Text(
-                                          'Ingredients',
-                                          style: TextStyle(
-                                              fontSize: 16,
-                                              fontWeight: FontWeight.bold),
-                                        ),
-                                       
+                                        Expanded(
+                                          child: ListView.separated(
+                                              physics:
+                                                  NeverScrollableScrollPhysics(),
+                                              itemBuilder: (context, index) {
+                                                return CartItemCard3(
+                                                  id: cartController
+                                                      .ingredientList[index]
+                                                      .id!,
+                                                  ingredients: cartController
+                                                      .ingredientList,
+                                                  name: cartController
+                                                      .ingredientList[index]
+                                                      .name!,
+                                                  unit: cartController
+                                                          .ingredientList[index]
+                                                          .description ??
+                                                      'N/A',
+                                                  basePrice: cartController
+                                                      .ingredientList[index]
+                                                      .price!,
+                                                  quantity: cartController
+                                                      .ingredientList[index]
+                                                      .quantity!,
+                                                  textController:
+                                                      TextEditingController(
+                                                    text: (cartController
+                                                            .ingredientList[
+                                                                index]
+                                                            .quantity)
+                                                        .toString(),
+                                                  ),
+                                                  isSelected: false,
+                                                );
+                                              },
+                                              separatorBuilder:
+                                                  (context, index) =>
+                                                      const Divider(
+                                                        height: 0.5,
+                                                        color: Color.fromARGB(
+                                                            57, 228, 228, 228),
+                                                      ),
+                                              itemCount: cartController
+                                                  .ingredientList.length),
+                                        )
                                       ],
                                     ),
-                                   
-                                  ],
-                                )),
-                            SizedBox(
-                              height:
-                                  (cartController.ingredientList.length * 110.0)
-                                      .clamp(0.0, 300.0),
-                              child: Column(
-                                children: [
-                                  Expanded(
-                                    child: ListView.separated(
-                                        physics: NeverScrollableScrollPhysics(),
-                                        itemBuilder: (context, index) {
-                                          return CartItemCard3(
-                                            id: cartController
-                                                .ingredientList[index].id!,
-                                            ingredients:
-                                                cartController.ingredientList,
-                                            name: cartController
-                                                .ingredientList[index].name!,
-                                            unit: cartController
-                                                .ingredientList[index]
-                                                .description ?? 'N/A',
-                                            basePrice: cartController
-                                                .ingredientList[index].price!,
-                                            quantity:  cartController
-                                                .ingredientList[index]
-                                                .quantity!,
-                                            textController:
-                                                TextEditingController(
-                                              text: (cartController
-                                                      .ingredientList[index]
-                                                      .quantity)
-                                                  .toString(),
-                                            ),
-                                            isSelected: false,
-                                          );
-                                        },
-                                        separatorBuilder: (context, index) =>
-                                            const Divider(
-                                              height: 0.5,
-                                              color: Color.fromARGB(
-                                                  57, 228, 228, 228),
-                                            ),
-                                        itemCount: cartController
-                                            .ingredientList.length),
-                                  )
+                                  ),
                                 ],
-                              ),
-                            ),
-                          ],
-                        );
+                              );
                       }
                       final item = cartController.cartItems[index];
                       final ingredients = item.ingredients;
@@ -489,6 +500,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                   (widget.balance < widget.totalAmount)
                       ? AbsorbPointer(
                           child: CheckoutButtonPaystack(
+                            audio: widget.path,
                             color: Colors.grey[400],
                             title: 'Insufficient Balance ${widget.balance}',
                             amount: widget.totalAmount,
@@ -496,6 +508,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                         )
                       : Obx(() {
                           return CheckoutButtonPaystack(
+                            audio: widget.path,
                             title: controller.isLoading.value
                                 ? 'Initializing Payment...'
                                 : 'Check Out',

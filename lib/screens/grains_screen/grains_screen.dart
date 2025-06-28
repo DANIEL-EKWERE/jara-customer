@@ -33,6 +33,7 @@ class _GrainsScreenState extends State<GrainsScreen> {
   final List<String> _measurementsRow1 = ['Cup', 'Quarter Bag'];
   final List<String> _measurementsRow2 = ['Half Bag', 'One Bag'];
   int _quantity = 1;
+  bool isSelected = true;
   bool _shopWithYourPrice = false;
   String errorText = '';
   final TextEditingController _priceController = TextEditingController();
@@ -220,22 +221,29 @@ class _GrainsScreenState extends State<GrainsScreen> {
                                                         .spaceBetween,
                                                 children: [
                                                   Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .spaceBetween,
                                                     crossAxisAlignment:
                                                         CrossAxisAlignment
                                                             .start,
                                                     children: [
-                                                      Text(
-                                                        '${ingredient.name}',
-                                                        style: TextStyle(
-                                                            color: Color(
-                                                                0xff1F2937),
-                                                            fontFamily: 'Inter',
-                                                            fontSize: 24,
-                                                            fontWeight:
-                                                                FontWeight
-                                                                    .w400),
+                                                      Expanded(
+                                                        //  flex: 1,
+                                                        child: Text(
+                                                          '${ingredient.name}',
+                                                          style: TextStyle(
+                                                              color: Color(
+                                                                  0xff1F2937),
+                                                              fontFamily:
+                                                                  'Inter',
+                                                              fontSize: 18,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w600),
+                                                        ),
                                                       ),
-                                                      Spacer(),
+                                                      // Spacer(),
                                                       Text('2.5k orders'),
                                                     ],
                                                   ),
@@ -274,131 +282,183 @@ class _GrainsScreenState extends State<GrainsScreen> {
                                                               )),
                                                           const SizedBox(
                                                               height: 8),
-                                                          Row(
-                                                            // crossAxisAlignment: CrossAxisAlignment.start,
-                                                            children:
-                                                                _measurementsRow1
-                                                                    .map(
-                                                                        (measurement) {
-                                                              final isSelected =
-                                                                  measurement ==
-                                                                      _selectedMeasurement;
-                                                              return Padding(
-                                                                padding:
-                                                                    const EdgeInsets
-                                                                        .only(
-                                                                        right:
-                                                                            8),
-                                                                child: SizedBox(
-                                                                  width: 50,
-                                                                  height: 25,
-                                                                  child:
-                                                                      ElevatedButton(
-                                                                    onPressed:
-                                                                        _shopWithYourPrice
-                                                                            ? null
-                                                                            : () {
-                                                                                setState(() {
-                                                                                  _selectedMeasurement = measurement;
-                                                                                });
-                                                                              },
-                                                                    style: ElevatedButton
-                                                                        .styleFrom(
-                                                                      padding:
-                                                                          EdgeInsets
-                                                                              .zero,
-                                                                      foregroundColor: isSelected
-                                                                          ? Colors
-                                                                              .white
-                                                                          : Colors
-                                                                              .black,
-                                                                      textStyle:
-                                                                          TextStyle(
-                                                                              fontSize: 8),
-                                                                      backgroundColor: isSelected
-                                                                          ? Colors
-                                                                              .orange
-                                                                          : Colors
-                                                                              .grey[200],
-                                                                      shape:
-                                                                          RoundedRectangleBorder(
-                                                                        borderRadius:
-                                                                            BorderRadius.circular(8),
-                                                                      ),
-                                                                    ),
-                                                                    child: Text(
-                                                                        measurement),
-                                                                  ),
-                                                                ),
-                                                              );
-                                                            }).toList(),
-                                                          ),
+                                                          // Row(
+                                                          //   // crossAxisAlignment: CrossAxisAlignment.start,
+                                                          //   children:
+                                                          //       _measurementsRow1
+                                                          //           .map(
+                                                          //               (measurement) {
+                                                          //     final isSelected =
+                                                          //         measurement ==
+                                                          //             _selectedMeasurement;
+                                                          //     return Padding(
+                                                          //       padding:
+                                                          //           const EdgeInsets
+                                                          //               .only(
+                                                          //               right:
+                                                          //                   8),
+                                                          //       child: SizedBox(
+                                                          //         width: 50,
+                                                          //         height: 25,
+                                                          //         child:
+                                                          //             ElevatedButton(
+                                                          //           onPressed:
+                                                          //               _shopWithYourPrice
+                                                          //                   ? null
+                                                          //                   : () {
+                                                          //                       setState(() {
+                                                          //                         _selectedMeasurement = measurement;
+                                                          //                       });
+                                                          //                     },
+                                                          //           style: ElevatedButton
+                                                          //               .styleFrom(
+                                                          //             padding:
+                                                          //                 EdgeInsets
+                                                          //                     .zero,
+                                                          //             foregroundColor: isSelected
+                                                          //                 ? Colors
+                                                          //                     .white
+                                                          //                 : Colors
+                                                          //                     .black,
+                                                          //             textStyle:
+                                                          //                 TextStyle(
+                                                          //                     fontSize: 8),
+                                                          //             backgroundColor: isSelected
+                                                          //                 ? Colors
+                                                          //                     .orange
+                                                          //                 : Colors
+                                                          //                     .grey[200],
+                                                          //             shape:
+                                                          //                 RoundedRectangleBorder(
+                                                          //               borderRadius:
+                                                          //                   BorderRadius.circular(8),
+                                                          //             ),
+                                                          //           ),
+                                                          //           child: Text(
+                                                          //               measurement),
+                                                          //         ),
+                                                          //       ),
+                                                          //     );
+                                                          //   }).toList(),
+                                                          // ),
                                                           SizedBox(
                                                             height: 10,
                                                           ),
-                                                          Row(
-                                                            //  crossAxisAlignment: CrossAxisAlignment.start,
-                                                            children:
-                                                                _measurementsRow2
-                                                                    .map(
-                                                                        (measurement) {
-                                                              final isSelected =
-                                                                  measurement ==
-                                                                      _selectedMeasurement;
-                                                              return Padding(
-                                                                padding:
-                                                                    const EdgeInsets
-                                                                        .only(
-                                                                        right:
-                                                                            8),
-                                                                child: SizedBox(
-                                                                  width: 50,
-                                                                  height: 25,
-                                                                  child:
-                                                                      ElevatedButton(
-                                                                    onPressed:
-                                                                        _shopWithYourPrice
-                                                                            ? null
-                                                                            : () {
-                                                                                setState(() {
-                                                                                  _selectedMeasurement = measurement;
-                                                                                });
-                                                                              },
-                                                                    style: ElevatedButton
-                                                                        .styleFrom(
-                                                                      textStyle:
-                                                                          TextStyle(
-                                                                              fontSize: 8),
-                                                                      padding:
-                                                                          EdgeInsets
-                                                                              .zero,
-                                                                      foregroundColor: isSelected
-                                                                          ? Colors
-                                                                              .white
-                                                                          : Colors
-                                                                              .black,
-                                                                      backgroundColor: isSelected
-                                                                          ? Colors
-                                                                              .orange
-                                                                          : Colors
-                                                                              .grey[200],
-                                                                      shape:
-                                                                          RoundedRectangleBorder(
-                                                                        borderRadius:
-                                                                            BorderRadius.circular(8),
-                                                                      ),
-                                                                    ),
-                                                                    child: Text(
-                                                                        measurement),
+                                                          Padding(
+                                                            padding:
+                                                                const EdgeInsets
+                                                                    .only(
+                                                                    right: 8),
+                                                            child: SizedBox(
+                                                              width: 50,
+                                                              height: 25,
+                                                              child:
+                                                                  ElevatedButton(
+                                                                onPressed:
+                                                                    _shopWithYourPrice
+                                                                        ? null
+                                                                        : () {
+                                                                            // setState(() {
+                                                                            //   _selectedMeasurement = measurement;
+                                                                            // });
+                                                                          },
+                                                                style: ElevatedButton
+                                                                    .styleFrom(
+                                                                  textStyle:
+                                                                      TextStyle(
+                                                                          fontSize:
+                                                                              8),
+                                                                  padding:
+                                                                      EdgeInsets
+                                                                          .zero,
+                                                                  foregroundColor: isSelected
+                                                                      ? Colors
+                                                                          .white
+                                                                      : Colors
+                                                                          .black,
+                                                                  backgroundColor: isSelected
+                                                                      ? Colors
+                                                                          .orange
+                                                                      : Colors.grey[
+                                                                          200],
+                                                                  shape:
+                                                                      RoundedRectangleBorder(
+                                                                    borderRadius:
+                                                                        BorderRadius
+                                                                            .circular(8),
                                                                   ),
                                                                 ),
-                                                              );
-                                                            }).toList(),
-                                                          ),
+                                                                child: Text(ingredient
+                                                                        .unit ??
+                                                                    'Half Bag'),
+                                                              ),
+                                                            ),
+                                                          )
+                                                          // Row(
+                                                          //   //  crossAxisAlignment: CrossAxisAlignment.start,
+                                                          //   children:
+                                                          //       _measurementsRow2
+                                                          //           .map(
+                                                          //               (measurement) {
+                                                          //     final isSelected =
+                                                          //         measurement ==
+                                                          //             _selectedMeasurement;
+                                                          //     return Padding(
+                                                          //       padding:
+                                                          //           const EdgeInsets
+                                                          //               .only(
+                                                          //               right:
+                                                          //                   8),
+                                                          //       child: SizedBox(
+                                                          //         width: 50,
+                                                          //         height: 25,
+                                                          //         child:
+                                                          //             ElevatedButton(
+                                                          //           onPressed:
+                                                          //               _shopWithYourPrice
+                                                          //                   ? null
+                                                          //                   : () {
+                                                          //                       setState(() {
+                                                          //                         _selectedMeasurement = measurement;
+                                                          //                       });
+                                                          //                     },
+                                                          //           style: ElevatedButton
+                                                          //               .styleFrom(
+                                                          //             textStyle:
+                                                          //                 TextStyle(
+                                                          //                     fontSize: 8),
+                                                          //             padding:
+                                                          //                 EdgeInsets
+                                                          //                     .zero,
+                                                          //             foregroundColor: isSelected
+                                                          //                 ? Colors
+                                                          //                     .white
+                                                          //                 : Colors
+                                                          //                     .black,
+                                                          //             backgroundColor: isSelected
+                                                          //                 ? Colors
+                                                          //                     .orange
+                                                          //                 : Colors
+                                                          //                     .grey[200],
+                                                          //             shape:
+                                                          //                 RoundedRectangleBorder(
+                                                          //               borderRadius:
+                                                          //                   BorderRadius.circular(8),
+                                                          //             ),
+                                                          //           ),
+                                                          //           child: Text(
+                                                          //               measurement),
+                                                          //         ),
+                                                          //       ),
+                                                          //     );
+                                                          //   }).toList(),
+                                                          // ),
                                                         ],
                                                       ),
                                                       Column(
-                                                        crossAxisAlignment: CrossAxisAlignment.end,
+                                                        crossAxisAlignment:
+                                                            CrossAxisAlignment
+                                                                .end,
                                                         children: [
                                                           Column(
                                                             children: [
@@ -496,8 +556,17 @@ class _GrainsScreenState extends State<GrainsScreen> {
                                                             ],
                                                           ),
                                                           Align(
-                                                          alignment: Alignment.centerRight,
-                                                          child: Text('\u20A6${ingredient.price}'))
+                                                            alignment: Alignment
+                                                                .centerRight,
+                                                            child:
+                                                                !_shopWithYourPrice
+                                                                    ? Text(
+                                                                        '\u20A6${((ingredient.price ?? 0.0) * _quantity)}')
+                                                                    : Container(
+                                                                        child: Text(
+                                                                            '\u20A6${(double.tryParse(ingredient.controller.text) ?? 0.0) * _quantity}'),
+                                                                      ),
+                                                          ),
                                                         ],
                                                       )
                                                     ],
@@ -542,127 +611,341 @@ class _GrainsScreenState extends State<GrainsScreen> {
                                                             .center,
                                                     children: [
                                                       // const SizedBox(height: 16),
+                                          
+                                                      !( _shopWithYourPrice  )
+                                                          ? Expanded(
+                                                              child:
+                                                                  ElevatedButton(
+                                                                onPressed: () {
+                                                                  if (widget
+                                                                      .forProduct)
+                                                                    widget.ingredients!.add(Ingredients(
+                                                                        id: ingredient
+                                                                            .id!,
+                                                                        createdAt:
+                                                                            ingredient
+                                                                                .createdAt,
+                                                                        description:
+                                                                            ingredient
+                                                                                .description,
+                                                                        imageUrl:
+                                                                            ingredient
+                                                                                .imageUrl,
+                                                                        name: ingredient
+                                                                            .name,
+                                                                        price: double.tryParse(ingredient.price.toString()) ??
+                                                                            0.0,
+                                                                        basePrice:
+                                                                            double.tryParse(ingredient.price.toString()) ??
+                                                                                0.0,
+                                                                        quantity:
+                                                                            _quantity));
+                                                                  else
+                                                                    cartController.addIngredientToCart(Data(
+                                                                        id: ingredient
+                                                                            .id,
+                                                                        createdAt: ingredient
+                                                                            .createdAt,
+                                                                        description: ingredient
+                                                                            .description,
+                                                                        imageUrl:
+                                                                            ingredient
+                                                                                .imageUrl,
+                                                                        name: ingredient
+                                                                            .name,
+                                                                        price: _shopWithYourPrice && ingredient.controller.text.isNotEmpty && double.tryParse(ingredient.controller.text)! > (double.tryParse(ingredient.price.toString()) ?? 0.0)
+                                                                            ? double.tryParse(ingredient
+                                                                                .controller.text)
+                                                                            : ingredient
+                                                                                .price,
+                                                                        quantity:
+                                                                            _quantity,
+                                                                        basePrice:
+                                                                            ingredient
+                                                                                .price,
+                                                                        stock: ingredient
+                                                                            .stock,
+                                                                        unit: ingredient
+                                                                            .unit));
 
-                                                      Expanded(
-                                                        child: ElevatedButton(
-                                                          onPressed: () {
-                                                            if (widget
-                                                                .forProduct)
-                                                              widget.ingredients!.add(Ingredients(
-                                                                  id: ingredient
-                                                                      .id!,
-                                                                  createdAt:
+                                                                  Get.snackbar(
+                                                                      'Success',
+                                                                      'Item added to cart',
+                                                                      colorText:
+                                                                          Colors
+                                                                              .white,
+                                                                      backgroundColor:
+                                                                          Colors
+                                                                              .green);
+                                                                  Navigator.pop(
+                                                                      context);
+                                                                },
+                                                                style: ElevatedButton
+                                                                    .styleFrom(
+                                                                  backgroundColor:
+                                                                      Colors
+                                                                          .orange,
+                                                                  padding: const EdgeInsets
+                                                                      .symmetric(
+                                                                      vertical:
+                                                                          16),
+                                                                  shape:
+                                                                      RoundedRectangleBorder(
+                                                                    borderRadius:
+                                                                        BorderRadius
+                                                                            .circular(8),
+                                                                  ),
+                                                                ),
+                                                                child:
+                                                                    const Text(
+                                                                  'Add to Cart',
+                                                                  style:
+                                                                      TextStyle(
+                                                                    fontSize:
+                                                                        12,
+                                                                    fontFamily:
+                                                                        'Inter',
+                                                                    color: Color(
+                                                                        0xff090909),
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .w400,
+                                                                  ),
+                                                                ),
+                                                              ),
+                                                            )
+                                                          // : Expanded(
+                                                          //   child:
+                                                          //       ElevatedButton(
+                                                          //     onPressed:// null,
+                                                          //        () {
+                                                          //       if (widget
+                                                          //           .forProduct)
+                                                          //         widget.ingredients!.add(Ingredients(
+                                                          //             id: ingredient
+                                                          //                 .id!,
+                                                          //             createdAt: ingredient
+                                                          //                 .createdAt,
+                                                          //             description: ingredient
+                                                          //                 .description,
+                                                          //             imageUrl: ingredient
+                                                          //                 .imageUrl,
+                                                          //             name: ingredient
+                                                          //                 .name,
+                                                          //             price: double.tryParse(ingredient.price.toString()) ??
+                                                          //                 0.0,
+                                                          //             basePrice: double.tryParse(ingredient.price.toString()) ??
+                                                          //                 0.0,
+                                                          //             quantity:
+                                                          //                 _quantity));
+                                                          //       else
+                                                          //         cartController.addIngredientToCart(Data(
+                                                          //             id: ingredient
+                                                          //                 .id,
+                                                          //             createdAt: ingredient
+                                                          //                 .createdAt,
+                                                          //             description: ingredient
+                                                          //                 .description,
+                                                          //             imageUrl: ingredient
+                                                          //                 .imageUrl,
+                                                          //             name: ingredient
+                                                          //                 .name,
+                                                          //             price: _shopWithYourPrice && ingredient.controller.text.isNotEmpty && double.tryParse(ingredient.controller.text)! > (double.tryParse(ingredient.price.toString()) ?? 0.0)
+                                                          //                 ? double.tryParse(ingredient
+                                                          //                     .controller.text)
+                                                          //                 : ingredient
+                                                          //                     .price,
+                                                          //             quantity:
+                                                          //                 _quantity,
+                                                          //             basePrice: ingredient
+                                                          //                 .price,
+                                                          //             stock: ingredient
+                                                          //                 .stock,
+                                                          //             unit:
+                                                          //                 ingredient.unit));
+                                                          
+                                                          //       Get.snackbar(
+                                                          //           'Success',
+                                                          //           'Item added to cart',
+                                                          //           colorText:
+                                                          //               Colors
+                                                          //                   .white,
+                                                          //           backgroundColor:
+                                                          //               Colors.green);
+                                                          //       Navigator.pop(
+                                                          //           context);
+                                                          //    },
+                                                          //     style: ElevatedButton
+                                                          //         .styleFrom(
+                                                          //       backgroundColor:
+                                                          //           Colors.grey[
+                                                          //               300],
+                                                          //       padding: const EdgeInsets
+                                                          //           .symmetric(
+                                                          //           vertical:
+                                                          //               16),
+                                                          //       shape:
+                                                          //           RoundedRectangleBorder(
+                                                          //         borderRadius:
+                                                          //             BorderRadius.circular(
+                                                          //                 8),
+                                                          //       ),
+                                                          //     ),
+                                                          //     child:
+                                                          //         const Text(
+                                                          //       'Add to Cart',
+                                                          //       style:
+                                                          //           TextStyle(
+                                                          //         fontSize:
+                                                          //             12,
+                                                          //         fontFamily:
+                                                          //             'Inter',
+                                                          //         color: Color(
+                                                          //             0xff090909),
+                                                          //         fontWeight:
+                                                          //             FontWeight
+                                                          //                 .w400,
+                                                          //       ),
+                                                          //     ),
+                                                          //   ),
+                                                          // ),
+                                                          : SizedBox.shrink(),
+                                                        if ( _shopWithYourPrice &&
+                                                              ingredient
+                                                                  .controller
+                                                                  .text
+                                                                  .isNotEmpty &&
+                                                              double.tryParse(
                                                                       ingredient
+                                                                          .controller
+                                                                          .text)! >
+                                                                  (double.tryParse(ingredient
+                                                                          .price
+                                                                          .toString()) ??
+                                                                      0.0))
+                                                          Expanded(
+                                                            child:
+                                                                ElevatedButton(
+                                                              onPressed:// null,
+                                                                 () {
+                                                                if (widget
+                                                                    .forProduct)
+                                                                  widget.ingredients!.add(Ingredients(
+                                                                      id: ingredient
+                                                                          .id!,
+                                                                      createdAt: ingredient
                                                                           .createdAt,
-                                                                  description:
-                                                                      ingredient
+                                                                      description: ingredient
                                                                           .description,
-                                                                  imageUrl: ingredient
-                                                                      .imageUrl,
-                                                                  name: ingredient
-                                                                      .name,
-                                                                  price: double.tryParse(ingredient
-                                                                          .price
-                                                                          .toString()) ??
-                                                                      0.0,
-                                                                  basePrice: double.tryParse(ingredient
-                                                                          .price
-                                                                          .toString()) ??
-                                                                      0.0,
-                                                                  quantity:
-                                                                      _quantity));
-                                                            else
-                                                              cartController.addIngredientToCart(Data(
-                                                                  id: ingredient
-                                                                      .id,
-                                                                  createdAt: ingredient
-                                                                      .createdAt,
-                                                                  description:
-                                                                      ingredient
-                                                                          .description,
-                                                                  imageUrl:
-                                                                      ingredient
+                                                                      imageUrl: ingredient
                                                                           .imageUrl,
-                                                                  name:
-                                                                      ingredient
+                                                                      name: ingredient
                                                                           .name,
-                                                                  price: _shopWithYourPrice && ingredient.controller.text.isNotEmpty && double.tryParse(ingredient.controller.text) !> (double.tryParse(ingredient.price.toString()) ?? 0.0)  ? double.tryParse(ingredient.controller.text) :
-                                                                      ingredient
+                                                                      price: double.tryParse(ingredient.price.toString()) ??
+                                                                          0.0,
+                                                                      basePrice: double.tryParse(ingredient.price.toString()) ??
+                                                                          0.0,
+                                                                      quantity:
+                                                                          _quantity));
+                                                                else
+                                                                  cartController.addIngredientToCart(Data(
+                                                                      id: ingredient
+                                                                          .id,
+                                                                      createdAt: ingredient
+                                                                          .createdAt,
+                                                                      description: ingredient
+                                                                          .description,
+                                                                      imageUrl: ingredient
+                                                                          .imageUrl,
+                                                                      name: ingredient
+                                                                          .name,
+                                                                      price: _shopWithYourPrice && ingredient.controller.text.isNotEmpty && double.tryParse(ingredient.controller.text)! > (double.tryParse(ingredient.price.toString()) ?? 0.0)
+                                                                          ? double.tryParse(ingredient
+                                                                              .controller.text)
+                                                                          : ingredient
+                                                                              .price,
+                                                                      quantity:
+                                                                          _quantity,
+                                                                      basePrice: ingredient
                                                                           .price,
-                                                                  quantity:
-                                                                      _quantity,
-                                                                      basePrice: ingredient.price,
-                                                                  stock:
-                                                                      ingredient
+                                                                      stock: ingredient
                                                                           .stock,
-                                                                  unit: ingredient
-                                                                      .unit));
-
-                                                            Get.snackbar(
-                                                                'Success',
-                                                                'Item added to cart',
-                                                                colorText:
-                                                                    Colors
-                                                                        .white,
+                                                                      unit:
+                                                                          ingredient.unit));
+                                                          
+                                                                Get.snackbar(
+                                                                    'Success',
+                                                                    'Item added to cart',
+                                                                    colorText:
+                                                                        Colors
+                                                                            .white,
+                                                                    backgroundColor:
+                                                                        Colors.green);
+                                                                Navigator.pop(
+                                                                    context);
+                                                             },
+                                                              style: ElevatedButton
+                                                                  .styleFrom(
                                                                 backgroundColor:
-                                                                    Colors
-                                                                        .green);
-                                                            Navigator.pop(
-                                                                context);
-                                                          },
-                                                          style: ElevatedButton
-                                                              .styleFrom(
-                                                            backgroundColor:
-                                                                Colors.orange,
-                                                            padding:
-                                                                const EdgeInsets
+                                                                    Colors.orange,
+                                                                padding: const EdgeInsets
                                                                     .symmetric(
                                                                     vertical:
                                                                         16),
-                                                            shape:
-                                                                RoundedRectangleBorder(
-                                                              borderRadius:
-                                                                  BorderRadius
-                                                                      .circular(
+                                                                shape:
+                                                                    RoundedRectangleBorder(
+                                                                  borderRadius:
+                                                                      BorderRadius.circular(
                                                                           8),
+                                                                ),
+                                                              ),
+                                                              child:
+                                                                  const Text(
+                                                                'Add to Cart',
+                                                                style:
+                                                                    TextStyle(
+                                                                  fontSize:
+                                                                      12,
+                                                                  fontFamily:
+                                                                      'Inter',
+                                                                  color: Color(
+                                                                      0xff090909),
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .w400,
+                                                                ),
+                                                              ),
                                                             ),
                                                           ),
-                                                          child: const Text(
-                                                            'Add to Cart',
-                                                            style: TextStyle(
-                                                              fontSize: 12,
-                                                              fontFamily:
-                                                                  'Inter',
-                                                              color: Color(
-                                                                  0xff090909),
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .w400,
-                                                            ),
-                                                          ),
-                                                        ),
-                                                      ),
                                                       const SizedBox(width: 10),
-                                                      
+
                                                       Expanded(
                                                         child: SizedBox(
                                                           height: 35,
                                                           child: TextField(
                                                             onChanged: (value) {
-                                                             double inPrice = double.parse(value);
-                                                              if(inPrice < ingredient.price!){
-                                                                setState((){
-                                                                  errorText = 'custom price must be greater than default.';
+                                                              double inPrice =
+                                                                  double.parse(
+                                                                      value);
+                                                              if (inPrice <
+                                                                  ingredient
+                                                                      .price!) {
+                                                                setState(() {
+                                                                  errorText =
+                                                                      'custom price must be greater than default.';
                                                                 });
-                                                              }else {
-                                                                setState((){
-                                                                  errorText = '';
+                                                              } else {
+                                                                setState(() {
+                                                                  errorText =
+                                                                      '';
                                                                 });
                                                               }
                                                             },
-                                                            
-                                                            controller: ingredient.controller,
-                                                                        //  _priceController,
+
+                                                            controller:
+                                                                ingredient
+                                                                    .controller,
+                                                            //  _priceController,
                                                             enabled:
                                                                 _shopWithYourPrice,
                                                             keyboardType:
@@ -670,7 +953,19 @@ class _GrainsScreenState extends State<GrainsScreen> {
                                                                     .number,
                                                             decoration:
                                                                 InputDecoration(
-                                                                 // errorText: errorText,
+                                                              //  errorText: errorText,
+                                                              //     helperText: 'Price must be greater than default price',
+                                                              //   helperStyle: TextStyle(
+                                                              //   fontSize: 10,
+                                                              // color: Colors.red),
+
+                                                              contentPadding:
+                                                                  const EdgeInsets
+                                                                      .symmetric(
+                                                                      horizontal:
+                                                                          10,
+                                                                      vertical:
+                                                                          10),
                                                               hintText:
                                                                   'Enter your price',
                                                               filled: true,
@@ -708,222 +1003,6 @@ class _GrainsScreenState extends State<GrainsScreen> {
                                           ],
                                         ),
                                       ),
-                                      // actions: [
-                                      //   Row(
-                                      //     spacing: context.width * 0.02,
-                                      //     children: [
-                                      //       Expanded(
-                                      //         child: SizedBox(
-                                      //             height: 40,
-                                      //             //   width: 110,
-                                      //             child: ElevatedButton(
-                                      //                 style: ElevatedButton
-                                      //                     .styleFrom(
-                                      //                   elevation: 0,
-                                      //                   padding: EdgeInsets
-                                      //                       .symmetric(
-                                      //                           horizontal: 8,
-                                      //                           vertical: 6),
-                                      //                   backgroundColor:
-                                      //                       Colors.white,
-                                      //                   foregroundColor:
-                                      //                       Color(0xffffffff),
-                                      //                   shape:
-                                      //                       RoundedRectangleBorder(
-                                      //                     borderRadius:
-                                      //                         BorderRadius
-                                      //                             .circular(4),
-                                      //                     side: BorderSide(
-                                      //                         color: Colors
-                                      //                             .blueGrey),
-                                      //                   ),
-                                      //                 ),
-                                      //                 onPressed: () {
-                                      //                   // Navigator.of(context).pop();
-                                      //                   // Navigator.of(context).push(CupertinoPageRoute(
-                                      //                   //     builder: (context) => FoodDetailScreen(
-                                      //                   //           item: category[index],
-                                      //                   //         )));
-                                      //                   print(
-                                      //                       'Add to cart pressed ${ingredient.name}');
-                                      //                   //TODO: implemet popping back to ingredient in food or just ingredient
-                                      //                   // cartController.addToCart(CartItem(
-                                      //                   //   id: category[index].id!,
-                                      //                   //   name: category[index].name!,
-                                      //                   //   description: category[index]
-                                      //                   //           .description ??
-                                      //                   //       'N/A',
-                                      //                   //   price: double.tryParse(
-                                      //                   //           category[index]
-                                      //                   //               .price!
-                                      //                   //               .toString()) ??
-                                      //                   //       0.0,
-                                      //                   //   originalPrice: double.tryParse(
-                                      //                   //           category[index]
-                                      //                   //               .price!
-                                      //                   //               .toString()) ??
-                                      //                   //       0.0,
-                                      //                   //   ingredients: category[index]
-                                      //                   //       .ingredients!
-                                      //                   //       .map((ingredient) =>
-                                      //                   //           Ingredients(
-                                      //                   //             id: ingredient.id!,
-                                      //                   //             name: ingredient.name,
-                                      //                   //             description:
-                                      //                   //                 ingredient
-                                      //                   //                     .description,
-                                      //                   //             price: double.tryParse(
-                                      //                   //                     ingredient
-                                      //                   //                         .price
-                                      //                   //                         .toString()) ??
-                                      //                   //                 0.0,
-                                      //                   //           ))
-                                      //                   //       .toList(),
-                                      //                   // ));
-                                      //                   if (widget.forProduct)
-                                      //                     widget.ingredients!.add(Ingredients(
-                                      //                         id: ingredient
-                                      //                             .id!,
-                                      //                         createdAt: ingredient
-                                      //                             .createdAt,
-                                      //                         description:
-                                      //                             ingredient
-                                      //                                 .description,
-                                      //                         imageUrl:
-                                      //                             ingredient
-                                      //                                 .imageUrl,
-                                      //                         name: ingredient
-                                      //                             .name,
-                                      //                         price: double.tryParse(
-                                      //                                 ingredient
-                                      //                                     .price
-                                      //                                     .toString()) ??
-                                      //                             0.0,
-                                      //                         basePrice: double.tryParse(
-                                      //                                 ingredient
-                                      //                                     .price
-                                      //                                     .toString()) ??
-                                      //                             0.0,
-                                      //                         quantity: 1));
-                                      //                   else
-                                      //                     cartController
-                                      //                         .addIngredientToCart(
-                                      //                             ingredient);
-                                      //                   // ingredientList.map((e) {
-                                      //                   //   Ingredients(id: DateTime.now().millisecondsSinceEpoch,
-                                      //                   //   price: e.price,
-                                      //                   //   description: e.description,
-                                      //                   //   name: e.name,
-                                      //                   //   );
-                                      //                   // });
-                                      //                   // cartController.addToCart(CartItem(id: 110, name: 'Ingredients',originalPrice: 0.0, description: 'ingredient shoping', price: 0.0, ingredients: ingredientShoping.map((e){
-                                      //                   //   return Ingredients(
-                                      //                   //     id: e.id,
-                                      //                   //     //createdAt: e.createdAt,
-                                      //                   //     description: e.description,
-                                      //                   //     //imageUrl: e.imageUrl,
-                                      //                   //     name: e.name,
-                                      //                   //     price: e.price,
-                                      //                   //    // quantity: e.quantity,
-                                      //                   //    // unit: e.unit,
-                                      //                   //   );
-                                      //                   // }).toList())); //add(ingredient)));
-                                      //                   // cartController.addToCart(CartItem(
-                                      //                   //                                               id: category[index].id!,
-                                      //                   //                                               name: category[index].name!,
-                                      //                   //                                               description: category[index].description ?? 'N/A',
-                                      //                   //                                               price: double.tryParse(category[index].price!.toString()) ?? 0.0,
-                                      //                   //                                               originalPrice: double.tryParse(category[index].price!.toString()) ?? 0.0,
-                                      //                   //                                               ingredients: category[index]
-                                      //                   //                                                   .ingredients!
-                                      //                   //                                                   .map((ingredient) => Ingredients(
-                                      //                   //                                                         id: ingredient.id!,
-                                      //                   //                                                         name: ingredient.name,
-                                      //                   //                                                         description: ingredient.description,
-                                      //                   //                                                         price: double.tryParse(ingredient.price.toString()) ?? 0.0,
-                                      //                   //                                                       ))
-                                      //                   //                                                   .toList(),
-                                      //                   //                                             ));
-                                      //                   //  myLog.log('added to cart ${widget.ingredients!.toList()}');
-                                      //                   Get.snackbar('Success',
-                                      //                       'Item added to cart',
-                                      //                       colorText:
-                                      //                           Colors.white,
-                                      //                       backgroundColor:
-                                      //                           Colors.green);
-                                      //                   Navigator.pop(context);
-                                      //                 },
-                                      //                 child: Row(
-                                      //                   spacing: 4,
-                                      //                   children: [
-                                      //                     Icon(
-                                      //                       Icons
-                                      //                           .shopping_cart_outlined,
-                                      //                       color:
-                                      //                           Colors.blueGrey,
-                                      //                       size: 16,
-                                      //                     ),
-                                      //                     Text(
-                                      //                       'Add To Cart',
-                                      //                       style: TextStyle(
-                                      //                           color: Colors
-                                      //                               .blueGrey,
-                                      //                           fontSize: 12),
-                                      //                     )
-                                      //                   ],
-                                      //                 ))),
-                                      //       ),
-                                      //       widget.forProduct
-                                      //           ? SizedBox.shrink()
-                                      //           : Expanded(
-                                      //               child: SizedBox(
-                                      //                   height: 40,
-                                      //                   child: ElevatedButton(
-                                      //                     style: ElevatedButton
-                                      //                         .styleFrom(
-                                      //                       padding: EdgeInsets
-                                      //                           .symmetric(
-                                      //                               horizontal:
-                                      //                                   8,
-                                      //                               vertical:
-                                      //                                   6),
-                                      //                       backgroundColor:
-                                      //                           Color(
-                                      //                               0xffCC6522),
-                                      //                       foregroundColor:
-                                      //                           Color(
-                                      //                               0xffffffff),
-                                      //                       shape:
-                                      //                           RoundedRectangleBorder(
-                                      //                         borderRadius:
-                                      //                             BorderRadius
-                                      //                                 .circular(
-                                      //                                     4),
-                                      //                       ),
-                                      //                     ),
-                                      //                     onPressed: () {
-                                      //                       Navigator.of(
-                                      //                               context)
-                                      //                           .pop();
-                                      //                       Navigator.of(context).push(
-                                      //                           CupertinoPageRoute(
-                                      //                               builder: (context) =>
-                                      //                                   GrainsDetailedScreen(
-                                      //                                       // item: category[index],
-                                      //                                       )));
-                                      //                     },
-                                      //                     child: Text(
-                                      //                         'GET INGREDIENT',
-                                      //                         style: TextStyle(
-                                      //                             color: Colors
-                                      //                                 .white,
-                                      //                             fontSize:
-                                      //                                 12)),
-                                      //                   )),
-                                      //             )
-                                      //     ],
-                                      //   )
-                                      // ],
                                     );
                                   },
                                 );

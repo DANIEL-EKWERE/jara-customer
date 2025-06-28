@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:jara_market/screens/referral_screen/controller/referral_controller.dart';
+import 'package:jara_market/screens/referral_screen/models/models.dart';
 
 ReferralController controller = Get.put(ReferralController());
 
@@ -118,16 +119,7 @@ class ReferralScreen extends StatelessWidget {
                 ],
               ),
             ),
-            // const Padding(
-            //   padding: EdgeInsets.all(16),
-            //   child: TextField(
-            //     decoration: InputDecoration(
-            //       hintText: 'Invite a friend',
-            //       prefixIcon: Icon(Icons.search),
-            //       border: OutlineInputBorder(),
-            //     ),
-            //   ),
-            // ),
+           
             Container(
               height: 430,
               decoration: BoxDecoration(
@@ -151,17 +143,19 @@ class ReferralScreen extends StatelessWidget {
                       ],
                     ),
                   ),
-                  ListView.builder(
+                  Obx(() {
+                    return controller.isLoading.value ? Center(child: CircularProgressIndicator(color: Colors.amber,),) : controller.data.isEmpty ? Center(child: Text('You don\'t have any referals yet'),) : ListView.builder(
                     shrinkWrap: true,
                     physics: BouncingScrollPhysics(),
-                    itemCount: 5,
+                    itemCount: controller.data.length,
                     itemBuilder: (context, index) {
                       return _buildFriendItem(
-                        name: names[index],
+                        name: controller.data[index],
                         isInvited: index > 1,
                       );
                     },
-                  ),
+                  );
+                  },)
                 ],
               ),
             ),
@@ -172,7 +166,7 @@ class ReferralScreen extends StatelessWidget {
   }
 
   Widget _buildFriendItem({
-    required String name,
+    required Data name,
     required bool isInvited,
   }) {
     return Padding(
@@ -183,7 +177,7 @@ class ReferralScreen extends StatelessWidget {
           child: const Icon(Icons.person, color: Colors.grey),
         ),
         title: Text(
-          name,
+          name.name!,
           style: const TextStyle(
             fontWeight: FontWeight.w500,
           ),

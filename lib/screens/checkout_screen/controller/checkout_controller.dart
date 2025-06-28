@@ -100,7 +100,7 @@ class CheckoutController extends GetxController {
 
   CartController cartController = Get.find<CartController>();
 
-  Future<void> createOrder() async {
+  Future<void> createOrder(String? audio) async {
     isLoading.value = true;
 
     try {
@@ -149,6 +149,8 @@ class CheckoutController extends GetxController {
         shippingFee: 2000,
         serviceCharge: 1000,
         vat: 0,
+        remarks: cartController.messageController.text.isNotEmpty ? cartController.messageController.text : 'This is a sample order',
+        audio_url: audio ?? null,
       );
 
 // Send payload to backend

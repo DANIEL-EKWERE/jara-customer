@@ -22,6 +22,7 @@ class CartItemCard1 extends StatefulWidget {
   // final Function(int) addQuantity;
   // final Function(int) removeQuantity;
   final Function() updateUi;
+  final Function() updateCustomPrice;
   final Function() addQuantity;
   final Function() removeQuantity;
   final VoidCallback onDeleteConfirmed;
@@ -33,6 +34,7 @@ class CartItemCard1 extends StatefulWidget {
   const CartItemCard1({
     Key? key,
     required this.updateUi,
+    required this.updateCustomPrice,
     required this.id,
     required this.name,
     required this.unit,
@@ -454,8 +456,11 @@ class _CartItemCardState extends State<CartItemCard1> {
                                           controller: widget
                                               .ingredients[index].controller,
                                           onChanged: (p0) {
+                                            print(p0);
                                             setState(() {
-                                              widget.updateUi();
+                                              widget.updateCustomPrice();
+                                              controller.update();
+                                            //  widget.updateUi();
                                               controller
                                                   .calculatedServiceCharge;
                                               controller.totalIngredientPrice();
@@ -463,11 +468,12 @@ class _CartItemCardState extends State<CartItemCard1> {
                                                   .calculatedServiceChargeForIngredient;
                                               controller.total;
                                               controller.totalItems.value;
-                                            });
-                                            controller.updateCustomPrice(
+                                              controller.updateCustomPrice(
                                                 widget.id,
                                                 widget.ingredients[index].id,
                                                 p0);
+                                            });
+                                            
                                           },
                                           hint: '25000',
                                           prefixIcon: Text('\u20A6'),

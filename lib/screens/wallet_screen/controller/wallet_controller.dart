@@ -66,14 +66,10 @@ class WalletController extends GetxController {
     if (response.statusCode == 200 || response.statusCode == 201) {
       isLoading.value = false;
       walletModel = walletModelFromJson(response.body);
-      // Get.snackbar('Success', 'Wallet updated successfully',
-      //     colorText: Colors.white,
-      //     backgroundColor: Colors.green,
-      //     icon: Icon(
-      //       Icons.check,
-      //       color: Colors.white,
-      //     ));
-          return double.tryParse(walletModel.data!.balance.toString()) ?? 0.0;
+      myLog.log('printing wallet balance: ${walletModel.data!.balance}',
+          name: 'Wallet Balance');
+      final cleanedBalanceStr = walletModel.data!.balance.toString().replaceAll(',', '');
+      return double.tryParse(cleanedBalanceStr) ?? -1;
     }
     return -1;
   }

@@ -382,7 +382,11 @@ class _CartScreenState extends State<CartScreen> {
   @override
   Widget build(BuildContext context) {
     bool isCartEmpty = controller.cartItems.isEmpty;
-    bool isCheckoutEnabled = !isCartEmpty && controller.total > 0;
+    bool isIngredientEmpty = controller.ingredientList.isEmpty;
+    bool isCheckoutEnabled = (!isCartEmpty && controller.total > 0) ||
+        (!isIngredientEmpty &&
+            controller.totalIngredientPriceForIngredient() > 0 &&
+            controller.ingredientList.isNotEmpty);
 
     return SafeArea(
       child: Scaffold(
@@ -509,7 +513,7 @@ class _CartScreenState extends State<CartScreen> {
                                       )),
                                   SizedBox(
                                     height:
-                                        (cartController.ingredientList.length *
+                                        (controller.ingredientList.length *
                                                 110.0)
                                             .clamp(0.0, 400.0),
                                     child: ListView.separated(
@@ -525,10 +529,10 @@ class _CartScreenState extends State<CartScreen> {
                                               },
                                               updateUi: () =>
                                                   controller.updateIngredientUi(
-                                                      cartController
+                                                      controller
                                                           .ingredientList[index]
                                                           .id!,
-                                                      cartController
+                                                      controller
                                                               .ingredientList[
                                                                   index]
                                                               .quantity!
@@ -541,30 +545,30 @@ class _CartScreenState extends State<CartScreen> {
                                               ingredientLenght: controller
                                                   .ingredientList.length
                                                   .toString(),
-                                              name: cartController
+                                              name: controller
                                                   .ingredientList[index].name!,
-                                              unit: cartController
+                                              unit: controller
                                                   .ingredientList[index].unit!,
                                               basePrice: double.tryParse(
-                                                      cartController
+                                                      controller
                                                           .ingredientList[index]
                                                           .price
                                                           .toString()) ??
                                                   0.0,
-                                              quantity: cartController
+                                              quantity: controller
                                                       .ingredientList[index]
                                                       .quantity ??
                                                   1.obs,
-                                              // ingredients: cartController
+                                              // ingredients: controller
                                               // .ingredientList,
                                               // onQuantityChanged: (newQuantity) =>
                                               //     _updateQuantity(item.id.toString(), newQuantity),
                                               addQuantity: () => controller
                                                   .updateIngredientQuantity(
-                                                      cartController
+                                                      controller
                                                           .ingredientList[index]
                                                           .id!,
-                                                      cartController
+                                                      controller
                                                               .ingredientList[
                                                                   index]
                                                               .quantity!
@@ -572,10 +576,10 @@ class _CartScreenState extends State<CartScreen> {
                                                           1),
                                               removeQuantity: () => controller
                                                   .updateIngredientQuantity(
-                                                      cartController
+                                                      controller
                                                           .ingredientList[index]
                                                           .id!,
-                                                      cartController
+                                                      controller
                                                               .ingredientList[
                                                                   index]
                                                               .quantity!
@@ -584,13 +588,13 @@ class _CartScreenState extends State<CartScreen> {
                                               onDeleteConfirmed: () =>
                                                   controller
                                                       .removeIngredientFromCart(
-                                                          cartController
+                                                          controller
                                                               .ingredientList[
                                                                   index]
                                                               .id!),
                                               textController:
                                                   TextEditingController(
-                                                      text: cartController
+                                                      text: controller
                                                           .ingredientList[index]
                                                           .quantity
                                                           .toString()),
@@ -811,9 +815,9 @@ class _CartScreenState extends State<CartScreen> {
                                       color: Color.fromARGB(57, 228, 228, 228),
                                     ),
                                     Obx(() {
-                                      return (cartController
+                                      return (controller
                                                   .ingredientList.isNotEmpty &&
-                                              cartController.isSet.value)
+                                              controller.isSet.value)
                                           ? Column(
                                               children: [
                                                 Container(
@@ -915,7 +919,7 @@ class _CartScreenState extends State<CartScreen> {
                                                       ],
                                                     )),
                                                 SizedBox(
-                                                  height: (cartController
+                                                  height: (controller
                                                               .ingredientList
                                                               .length *
                                                           110.0)
@@ -947,54 +951,54 @@ class _CartScreenState extends State<CartScreen> {
                                                                         .ingredientList
                                                                         .length
                                                                         .toString(),
-                                                                    name: cartController
+                                                                    name: controller
                                                                         .ingredientList[
                                                                             index]
                                                                         .name!,
-                                                                    unit: cartController
+                                                                    unit: controller
                                                                         .ingredientList[
                                                                             index]
                                                                         .unit!,
-                                                                    basePrice: double.tryParse(cartController
+                                                                    basePrice: double.tryParse(controller
                                                                             .ingredientList[index]
                                                                             .price
                                                                             .toString()) ??
                                                                         0.0,
-                                                                    quantity: cartController
+                                                                    quantity: controller
                                                                             .ingredientList[index]
                                                                             .quantity ??
                                                                         1.obs,
                                                                     updateUi: () => controller.updateIngredientUi(
-                                                                        cartController
+                                                                        controller
                                                                             .ingredientList[
                                                                                 index]
                                                                             .id!,
-                                                                        cartController.ingredientList[index].quantity!.value +
+                                                                        controller.ingredientList[index].quantity!.value +
                                                                             0),
-                                                                    // ingredients: cartController
+                                                                    // ingredients: controller
                                                                     // .ingredientList,
                                                                     // onQuantityChanged: (newQuantity) =>
                                                                     //     _updateQuantity(item.id.toString(), newQuantity),
                                                                     addQuantity: () => controller.updateIngredientQuantity(
-                                                                        cartController
+                                                                        controller
                                                                             .ingredientList[
                                                                                 index]
                                                                             .id!,
-                                                                        cartController.ingredientList[index].quantity!.value +
+                                                                        controller.ingredientList[index].quantity!.value +
                                                                             1),
                                                                     removeQuantity: () => controller.updateIngredientQuantity(
-                                                                        cartController
+                                                                        controller
                                                                             .ingredientList[
                                                                                 index]
                                                                             .id!,
-                                                                        cartController.ingredientList[index].quantity!.value -
+                                                                        controller.ingredientList[index].quantity!.value -
                                                                             1),
-                                                                    onDeleteConfirmed: () => controller.removeIngredientFromCart(cartController
+                                                                    onDeleteConfirmed: () => controller.removeIngredientFromCart(controller
                                                                         .ingredientList[
                                                                             index]
                                                                         .id!),
                                                                     textController: TextEditingController(
-                                                                        text: cartController
+                                                                        text: controller
                                                                             .ingredientList[index]
                                                                             .quantity
                                                                             .toString()),
@@ -1038,7 +1042,7 @@ class _CartScreenState extends State<CartScreen> {
                                     padding: const EdgeInsets.symmetric(
                                         vertical: 20),
                                     child: MessageBox(
-                                      controller: _messageController,
+                                      controller: controller.messageController,
                                       hintText: 'Add a message...',
                                       isPaused: _isPaused,
                                       isPlayed: isPlayed,
@@ -1102,41 +1106,43 @@ class _CartScreenState extends State<CartScreen> {
                                 //   isSelected: false,
                                 //   onCheckboxChanged: (bool? value) {},
                                 // );
-                                return CartItemCard1(
-                                  updateUi: () => controller
-                                              .updateIngredientUi(
-                                                  cartController
-                                                      .ingredientList[
-                                                          index]
-                                                      .id!,
-                                                  cartController
-                                                          .ingredientList[
-                                                              index]
-                                                          .quantity!
-                                                          .value +
-                                                      0),
-                                  id: item.id,
-                                  ingredients: ingredients,
-                                  name: item.name,
-                                  unit: item.description,
-                                  basePrice: item.price.obs,
-                                  quantity: item.quantity,
-                                  addQuantity: () {
-                                    controller.updateItemQuantity(
-                                        item.id, item.quantity.value + 1);
-                                  },
-                                  removeQuantity: () {
-                                    controller.updateItemQuantity(
-                                        item.id, item.quantity.value - 1);
-                                  },
-                                  onDeleteConfirmed: () {
-                                    controller.removeFromCart(item.id);
-                                  },
-                                  textController: TextEditingController(
-                                      text: item.quantity.toString()),
-                                  isSelected: false,
-                                  onCheckboxChanged: (bool? value) {},
-                                );
+                                return Obx(() {
+                                  return CartItemCard1(
+                                    updateCustomPrice: () {
+                                      controller.updateCustomPrice;
+                                    },
+                                    updateUi: (){
+                                        controller.updateIngredientUi(
+                                            controller
+                                                .ingredientList[index].id!,
+                                            controller.ingredientList[index]
+                                                    .quantity!.value +
+                                                0);
+                                                controller.updateCartItemUi(item.id, controller.ingredientList[index].id!,  item.quantity.value + 0);
+                                                },
+                                    id: item.id,
+                                    ingredients: ingredients,
+                                    name: item.name,
+                                    unit: item.description,
+                                    basePrice: item.price.obs,
+                                    quantity: item.quantity,
+                                    addQuantity: () {
+                                      controller.updateItemQuantity(
+                                          item.id, item.quantity.value + 1);
+                                    },
+                                    removeQuantity: () {
+                                      controller.updateItemQuantity(
+                                          item.id, item.quantity.value - 1);
+                                    },
+                                    onDeleteConfirmed: () {
+                                      controller.removeFromCart(item.id);
+                                    },
+                                    textController: TextEditingController(
+                                        text: item.quantity.toString()),
+                                    isSelected: false,
+                                    onCheckboxChanged: (bool? value) {},
+                                  );
+                                });
                               },
                             );
                           })),

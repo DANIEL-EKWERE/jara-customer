@@ -64,7 +64,7 @@ class _CheckoutButtonState extends State<CheckoutButton> {
                     ),
                   );
                 } else {
-                                  var balance = await walletController.fetchBalance();
+                var balance = await walletController.fetchBalance();
                 if(balance == -1) return;  
                   // Handle empty state
                   Navigator.push(

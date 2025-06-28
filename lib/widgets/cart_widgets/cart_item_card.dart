@@ -286,6 +286,7 @@ class _CartItemCardState extends State<CartItemCard> {
                               hint: '25000',
                               prefixIcon: Text('\u20A6'),
                               onChanged: (p0) {
+                                
                                 setState(() {
                                   controller.update();
                                  widget.updateUi();

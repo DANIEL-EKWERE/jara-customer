@@ -9,6 +9,8 @@ Map<String, dynamic> buildOrderPayload({
   required double shippingFee,
   required double serviceCharge,
   required double vat,
+  required String remarks,
+  String? audio_url,
 }) {
   // Extract product list
   List<Map<String, dynamic>> products = cartItems.map((item) {
@@ -58,5 +60,7 @@ Map<String, dynamic> buildOrderPayload({
     "ingredients": ingredients,
     "vat": vat,
     "total": total,
+    "remarks": remarks,
+    "audio_url": audio_url,
   };
 }

@@ -5,12 +5,12 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jara_market/screens/signup_screen/controller/signup_controller.dart';
-import 'package:jara_market/services/api_service.dart';
+//import 'package:jara_market/services/api_service.dart';
 import '../../widgets/register_button.dart';
 import '../../widgets/custom_text_field.dart';
-import '../legal/terms_of_service_screen.dart';
-import '../legal/privacy_policy_screen.dart';
-import '../email_verification/email_verification.dart';
+// import '../legal/terms_of_service_screen.dart';
+// import '../legal/privacy_policy_screen.dart';
+// import '../email_verification/email_verification.dart';
 import '../../widgets/social_button.dart'; // Import SocialButton
 
 SignupController controller = Get.put(SignupController());

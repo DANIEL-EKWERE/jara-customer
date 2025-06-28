@@ -8,9 +8,10 @@ class CheckoutButtonPaystack extends StatelessWidget {
  final String title;
  final double amount;
  final Color? color;
+  final String? audio;
 
   const CheckoutButtonPaystack(
-      {super.key,required this.title, required this.amount, this.color
+      {super.key,required this.title, required this.amount, this.color, required this.audio
       });
 
   @override
@@ -31,7 +32,7 @@ class CheckoutButtonPaystack extends StatelessWidget {
           // );
 
         //  checkoutController.initializeCheckout(amount);
-        checkoutController.createOrder();
+        checkoutController.createOrder(audio);
           print('paystack calling here');
         },
         style: ElevatedButton.styleFrom(
