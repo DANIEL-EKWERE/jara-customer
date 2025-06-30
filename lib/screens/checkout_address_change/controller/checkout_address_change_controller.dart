@@ -6,6 +6,7 @@ import 'package:jara_market/screens/checkout_address_change/models/lga_model.dar
 import 'package:jara_market/screens/checkout_address_change/models/state_model.dart';
 import 'package:jara_market/screens/profile_screen/controller/profile_controller.dart';
 import 'package:jara_market/services/api_service.dart';
+import 'package:overlay_kit/overlay_kit.dart';
 
 class CheckoutAddressChangeController extends GetxController {
   ApiService _apiService = ApiService(Duration(seconds: 60 * 5));
@@ -113,62 +114,64 @@ class CheckoutAddressChangeController extends GetxController {
     }
   }
 
-  processUpdateCheckoutAddress() {
-    if (isValid()) {
-      isLoading.value = true;
-      final Map<String, dynamic> addressData = {
-        'country_id': selectedCountryId,
-        'state_id': selectedStateId,
-        'lga_id': selectedLGAId,
-        'contact_address': contactAddressController.text,
-        'phone_number': contactNumberController.text,
-        'is_default': isDefault.value,
-      };
+ Future<Map<dynamic, dynamic>> processUpdateCheckoutAddress() async {
+  OverlayLoadingProgress.start(circularProgressColor: Colors.amber);
+  if (isValid()) {
+    isLoading.value = true;
 
-      myLog.log('Updating address data: $addressData');
-      _apiService.updateCheckoutAddress(addressData).then((response) {
-        isLoading.value = false;
-        if (response.statusCode == 200 || response.statusCode == 201) {
-          myLog.log('Address updated successfully: ${response.body}');
-          Get.snackbar('Success', 'Address updated successfully.',
-              backgroundColor: Colors.green, colorText: Colors.white);
+    final Map<String, dynamic> addressData = {
+      'country_id': selectedCountryId,
+      'state_id': selectedStateId,
+      'lga_id': selectedLGAId,
+      'contact_address': contactAddressController.text,
+      'phone_number': contactNumberController.text,
+      'is_default': isDefault.value,
+    };
 
-          if (Navigator.canPop(Get.context!)) {
-            print('Can pop the current route');
-            //     Get.back(result: {
-            //   'country': selectedCountry1,
-            //   'state': selectedState1,
-            //   'lga': selectedLGA1,
-            //   'contact_address': contactAddressController.text,
-            //   'phone_number': contactNumberController.text,
-            //   'is_default': isDefault.value.toString(),
-            // });
-            Get.back(result: addressData);
-            Navigator.pop(Get.context!, {
-              'country': selectedCountry1,
-              'state': selectedState1,
-              'lga': selectedLGA1,
-              'contact_address': contactAddressController.text,
-              'phone_number': contactNumberController.text,
-              'is_default': isDefault.value.toString(),
-            });
-          } else {
-            print('Cannot pop the current route');
-          }
-        } else {
-          Get.snackbar('Error', 'Failed to update address: ${response.body}',
-              backgroundColor: Colors.red, colorText: Colors.white);
-        }
-      }).catchError((error) {
-        isLoading.value = false;
-        Get.snackbar('Error', 'An error occurred: $error',
+    myLog.log('Updating address data: $addressData');
+
+    try {
+      final response = await _apiService.addCheckoutAddress(addressData);
+      isLoading.value = false;
+
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        OverlayLoadingProgress.stop();
+        myLog.log('Address updated successfully: ${response.body}');
+        Get.snackbar('Success', 'Address updated successfully.',
+            backgroundColor: Colors.green, colorText: Colors.white);
+
+        contactAddressController.text = '';
+        contactNumberController.text = '';
+        var result = {
+          'country': selectedCountry1,
+          'state': selectedState1,
+          'lga': selectedLGA1,
+          'contact_address': contactAddressController.text,
+          'phone_number': contactNumberController.text,
+          'is_default': isDefault.value.toString(),
+        };
+        return result;
+      } else {
+        OverlayLoadingProgress.stop();
+        Get.snackbar('Error', 'Failed to update address: ${response.body}',
             backgroundColor: Colors.red, colorText: Colors.white);
-      });
-    } else {
-      Get.snackbar('Error', 'Please select a country, state, and LGA.',
+        return {};
+      }
+    } catch (error) {
+      OverlayLoadingProgress.stop();
+      isLoading.value = false;
+      Get.snackbar('Error', 'An error occurred: $error',
           backgroundColor: Colors.red, colorText: Colors.white);
+      return {};
     }
+  } else {
+    OverlayLoadingProgress.stop();
+    Get.snackbar('Error', 'Please select a country, state, and LGA.',
+        backgroundColor: Colors.red, colorText: Colors.white);
+    return {};
   }
+}
+
 
   storeAddress() {
     // Store the address data in shared preferences or any local storage

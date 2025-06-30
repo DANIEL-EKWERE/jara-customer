@@ -45,7 +45,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
   String _selectedPaymentMethod = '';
 
   String fullName = 'Jacob Peter';
-  Map<String, dynamic> result = {};
+  Map<dynamic, dynamic> result = {};
 
   getName() async {
     var name = await dataBase.getFullName();
@@ -612,12 +612,6 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                               : 'Set Address to recieve your order.',
                           onChangePressed: () async {
                             print('change address pressed');
-                            //Get.toNamed(AppRoutes.checkoutAddressChange);
-                            // Navigator.of(context).push(
-                            //   CupertinoPageRoute(
-                            //     builder: (context) => CheckoutAddressChangeScreen(),
-                            //   ),
-                            // );
                             result = await Get.toNamed(
                                 AppRoutes.checkoutAddressChange,
                                 arguments: {

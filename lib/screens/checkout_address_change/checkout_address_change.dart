@@ -45,8 +45,8 @@ class _CheckoutAddressChangeScreenState
           padding: const EdgeInsets.all(16.0),
           child: CustomButton(
             text: 'Save Address',
-            onPressed: () {
-              if (controller.isValid()) {
+            onPressed: () async {
+              if (controller.isValid())  {
                
                 // Get.snackbar('Success', 'Address changed successfully',
                 //     backgroundColor: Colors.green, colorText: Colors.white);
@@ -61,8 +61,11 @@ class _CheckoutAddressChangeScreenState
                   controller.storeAddress();
                  // Get.back(result: {'country':'nigeria'});
                 } else {
-               //   Get.back(result: {'country':'nigeria'});
-                  controller.processUpdateCheckoutAddress();
+                  // Get.back(result: {'country':'nigeria'});
+                  var result = await controller.processUpdateCheckoutAddress();
+                  myLog.log('Result from processUpdateCheckoutAddress: $result');
+                  Get.back(result: result);
+                  Navigator.pop(Get.context!, result);
                   // Get.snackbar('Success', 'is not from profile',
                   //     backgroundColor: Colors.blueGrey,
                   //     colorText: Colors.white,

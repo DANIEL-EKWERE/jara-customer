@@ -234,7 +234,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                               child: CustomButton(
                                                   text: 'Shop For Ingredient',
                                                   onPressed: () async {
-                                                  //  await dataBase.logOut();
+                                                  var token =  await dataBase.getToken();
+                                                  print(token);
                                                     Navigator.push(
                                                         context,
                                                         CupertinoPageRoute(
