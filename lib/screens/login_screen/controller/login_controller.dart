@@ -60,7 +60,7 @@ LoginData data = LoginData();
         await dataBase.saveRefererId(data.referrerId ?? 'N/A');
 
          emailController.dispose();
-    passwordController.dispose();
+          passwordController.dispose();
         ScaffoldMessenger.of(Get.context!).showSnackBar(
           SnackBar(
             content: Text('Success: ${loginModel.message}'),
@@ -71,7 +71,7 @@ LoginData data = LoginData();
       } else {
         ScaffoldMessenger.of(Get.context!).showSnackBar(
           SnackBar(
-            content: Text('Login failed: ${response.body}'),
+            content: Text('Login failed: ${jsonDecode(response.body)['data']}'),
             backgroundColor: Colors.red,
           ),
         );

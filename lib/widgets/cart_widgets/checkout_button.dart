@@ -75,7 +75,7 @@ class _CheckoutButtonState extends State<CheckoutButton> {
                         cartItems: widget.cartItems,
                         orderAddress: {},
                         balance: balance,
-                        path: widget.path!,
+                        path: widget.path ?? '',
                       ),
                     ),
                   );

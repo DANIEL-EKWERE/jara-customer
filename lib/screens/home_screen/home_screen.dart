@@ -233,7 +233,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                               height: 50,
                                               child: CustomButton(
                                                   text: 'Shop For Ingredient',
-                                                  onPressed: () {
+                                                  onPressed: () async {
+                                                  //  await dataBase.logOut();
                                                     Navigator.push(
                                                         context,
                                                         CupertinoPageRoute(
@@ -242,6 +243,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                   forProduct:
                                                                       false,
                                                                 )));
+
                                                   })),
                                         ],
                                       )),
