@@ -27,7 +27,7 @@ class _OrderReceiptScreenState extends State<OrderReceiptScreen> {
 
   Future<void> _fetchOrderReceipt() async {
     final response = await http.get(Uri.parse(
-        'https://admin.jaramarket.com.ng/api/orders/${widget.orderId}/receipt'));
+        'https://ryda.com.ng/api/orders/${widget.orderId}/receipt'));
 
     if (response.statusCode == 200) {
       setState(() {
@@ -40,7 +40,7 @@ class _OrderReceiptScreenState extends State<OrderReceiptScreen> {
 
   Future<void> _cancelOrder() async {
     final response = await http.post(Uri.parse(
-        'https://admin.jaramarket.com.ng/api/orders/${widget.orderId}/cancel'));
+        'https://ryda.com.ng/api/orders/${widget.orderId}/cancel'));
 
     if (response.statusCode == 200) {
       setState(() {

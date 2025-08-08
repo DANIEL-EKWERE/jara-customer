@@ -27,7 +27,7 @@ class _OrderSummaryScreenState extends State<OrderSummaryScreen> {
 
   Future<void> _fetchOrderSummary() async {
     final response = await http.get(Uri.parse(
-        'https://admin.jaramarket.com.ng/api/orders/${widget.orderId}'));
+        'https://ryda.com.ng/api/orders/${widget.orderId}'));
 
     if (response.statusCode == 200) {
       setState(() {

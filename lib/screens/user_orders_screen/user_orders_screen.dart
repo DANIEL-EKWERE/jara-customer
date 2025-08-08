@@ -27,7 +27,7 @@ class _UserOrdersScreenState extends State<UserOrdersScreen> {
 
   Future<void> _fetchUserOrders() async {
     final response = await http.get(Uri.parse(
-        'https://admin.jaramarket.com.ng/api/users/${widget.userId}/orders'));
+        'https://ryda.com.ng/api/users/${widget.userId}/orders'));
 
     if (response.statusCode == 200) {
       setState(() {
