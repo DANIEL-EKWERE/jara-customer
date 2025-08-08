@@ -17,7 +17,7 @@ class ApiService extends GetConnect {
 
   ApiService(this.timeout) : super(timeout: timeout);
 
-   var baseUrl = 'https://admin.jaramarket.com.ng/api/jaram';
+   var baseUrl = 'https://ryda.com.ng/api/jaram';
   static const int maxRetries = 3;
   static const Duration retryDelay = Duration(seconds: 2);
 
